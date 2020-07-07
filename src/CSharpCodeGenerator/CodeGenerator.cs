@@ -20,7 +20,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(generateOption));
             }
 
-            var codeBuilder = new CodeBuilder(pocoClass)
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = generateOption.IndentStyle,
                 IndentSize = generateOption.IndentSize,
@@ -36,7 +36,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             }
 
             // class declaration (start)
-            if (!string.IsNullOrEmpty(pocoClass.XmlComment))
+            if (pocoClass.XmlComment != null)
             {
                 codeBuilder.AppendIndent().AppendXmlComment(pocoClass.XmlComment).AppendLine();
             }
@@ -47,7 +47,22 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             // Properties
             if (pocoClass.Properties.Any())
             {
-                codeBuilder.AppendIndent().AppendProperties().AppendLine();
+                var count = pocoClass.Properties.Count;
+
+                foreach (var (property, index) in pocoClass.Properties.Select((p, i) => (p, i)))
+                {
+                    if (property.XmlComment != null)
+                    {
+                        codeBuilder.AppendIndent().AppendXmlComment(property.XmlComment).AppendLine();
+                    }
+
+                    codeBuilder.AppendIndent().AppendProperty(property).AppendLine();
+
+                    if (count != index + 1)
+                    {
+                        codeBuilder.AppendLine();
+                    }
+                }
             }
 
             // class declaration (end)

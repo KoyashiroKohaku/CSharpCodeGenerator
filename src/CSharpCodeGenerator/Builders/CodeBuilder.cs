@@ -7,15 +7,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public class CodeBuilder
     {
-        private readonly POCOClass _pocoClass;
         private readonly StringBuilder _builder = new StringBuilder();
         private IndentStyle _indentStyle = IndentStyle.Space;
         private int _indentSize = 4;
-
-        public CodeBuilder(POCOClass pocoClass)
-        {
-            _pocoClass = pocoClass;
-        }
 
         public IndentStyle IndentStyle
         {
@@ -218,61 +212,18 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public CodeBuilder AppendProperties()
+        public CodeBuilder AppendProperty(ClassProperty property)
         {
-            if (!_pocoClass.Properties.Any())
+            if (property == null)
             {
-                return this;
+                throw new ArgumentNullException(nameof(property));
             }
 
-            var lines = _builder.ToString().Split(GetEndOfLineString());
-            var hasIndent = lines.Any() && lines.Last() == GetIndentString();
-
-            int count = _pocoClass.Properties.Count;
-
-            foreach ((var property, int index) in _pocoClass.Properties.Select((p, i) => (p, i)))
-            {
-                if (index == 0)
-                {
-                    if (!string.IsNullOrEmpty(property.XmlComment))
-                    {
-                        AppendXmlComment(property.XmlComment).AppendLine();
-
-                        if (hasIndent)
-                        {
-                            AppendIndent();
-                        }
-                    }
-                }
-                else
-                {
-                    if (hasIndent)
-                    {
-                        AppendIndent();
-                    }
-
-                    if (!string.IsNullOrEmpty(property.XmlComment))
-                    {
-                        AppendXmlComment(property.XmlComment).AppendLine();
-
-                        if (hasIndent)
-                        {
-                            AppendIndent();
-                        }
-                    }
-                }
-
-                Append("public ")
+            Append("public ")
                     .Append(TypeResolver.GetTypeAlias(property.PropertyType))
                     .Append(" ")
                     .Append(property.PropertyName)
                     .Append(" { get; set; }");
-
-                if (index + 1 < count)
-                {
-                    AppendLine().AppendLine();
-                }
-            }
 
             return this;
         }

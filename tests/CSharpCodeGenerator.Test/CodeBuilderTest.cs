@@ -9,23 +9,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void ConstructorTest()
         {
-            var pocoClass = new POCOClass("TestClass")
-            {
-                Namepace = "TestOrganization.TestProduct",
-                XmlComment = "TestClass XML Comment"
-            };
-
-            pocoClass.Properties.Add(new ClassProperty("TestProperty01", typeof(int))
-            {
-                XmlComment = "TestProperty01 XML Comment"
-            });
-
-            pocoClass.Properties.Add(new ClassProperty("TestProperty02", typeof(string))
-            {
-                XmlComment = "TestProperty02 XML Comment"
-            });
-
-            var codeBuilder = new CodeBuilder(pocoClass);
+            var codeBuilder = new CodeBuilder();
 
             Assert.AreEqual(IndentStyle.Space, codeBuilder.IndentStyle);
             Assert.AreEqual(4, codeBuilder.IndentSize);
@@ -35,7 +19,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void IndentStyleTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4
@@ -70,7 +54,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void IndentSizeTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4
@@ -105,7 +89,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void DownIndentAndUpIndentTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             Assert.AreEqual(0, codeBuilder.IndentDepth);
 
@@ -141,7 +125,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void GetIndentStringTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             /* 4 Spaces */
 
@@ -200,7 +184,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void GetEndOfLineStringTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             /* CR */
 
@@ -223,7 +207,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         {
             var appendString = "test string";
 
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             codeBuilder.Append(appendString);
 
@@ -238,7 +222,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         {
             var appendLineString = "test string";
 
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             codeBuilder.AppendLine();
             codeBuilder.AppendLine(appendLineString);
@@ -253,7 +237,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void AppendIndentTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+            var codeBuilder = new CodeBuilder();
 
             codeBuilder.AppendIndent().Append("A");
             codeBuilder.DownIndent();
@@ -274,7 +258,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void CurlyBracketTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4,
@@ -298,7 +282,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void AppendXmlCommentTest()
         {
-            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4,
@@ -336,12 +320,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         {
             var testNamespace = "TestOrganization.TestProduct";
 
-            var pocoClass = new POCOClass("TestClass")
-            {
-                Namepace = testNamespace
-            };
-
-            var codeBuilder = new CodeBuilder(pocoClass)
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4,
@@ -362,7 +341,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         {
             var testClassName = "TestClass";
 
-            var codeBuilder = new CodeBuilder(new POCOClass(testClassName))
+            var codeBuilder = new CodeBuilder()
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4,
@@ -379,7 +358,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
-        public void AppendPropertiesTest()
+        public void AppendPropertyTest()
         {
             var pocoClass = new POCOClass("TestClass");
 
@@ -391,24 +370,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             pocoClass.Properties.AddRange(testProperties);
 
-            var codeBuilder = new CodeBuilder(pocoClass);
+            var codeBuilder = new CodeBuilder();
 
-            codeBuilder.AppendIndent().AppendProperties().AppendLine();
-            codeBuilder.DownIndent();
-            codeBuilder.AppendIndent().AppendProperties().AppendLine();
-            codeBuilder.UpIndent();
-            codeBuilder.AppendIndent().AppendProperties().AppendLine();
+            codeBuilder.AppendProperty(new ClassProperty("TestProperty01", typeof(int))).AppendLine();
+            codeBuilder.AppendProperty(new ClassProperty("TestProperty02", typeof(string)));
 
             var expected = $@"public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
 
-public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-    public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-
-    public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-
-public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-";
+public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}";
 
             var actual = codeBuilder.ToString();
 
