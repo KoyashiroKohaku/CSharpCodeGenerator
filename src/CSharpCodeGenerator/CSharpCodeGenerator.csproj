@@ -6,9 +6,11 @@
     <Authors>Koyashiro Kohaku</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/KoyashiroKohaku/CSharpCodeGenerator</PackageProjectUrl>
-    <RepositoryUrl>CSharpCodeGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/KoyashiroKohaku/CSharpCodeGenerator</RepositoryUrl>
     <Nullable>enable</Nullable>
     <RootNamespace>KoyashiroKohaku.CSharpCodeGenerator</RootNamespace>
+    <NeutralLanguage>en-us</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
