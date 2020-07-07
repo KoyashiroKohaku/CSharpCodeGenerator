@@ -22,33 +22,31 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {
-                codeBuilder.AppendNamespaceDeclaration();
-
-                codeBuilder.AppendCurlyBracket(CurlyBracket.Left);
-
-                codeBuilder.DownIndent();
+                codeBuilder
+                    .AppendNamespaceDeclaration()
+                    .AppendCurlyBracket(CurlyBracket.Left)
+                    .DownIndent();
             }
 
-            codeBuilder.AppendClassDeclaration();
-
-            codeBuilder.AppendCurlyBracket(CurlyBracket.Left);
-
-            codeBuilder.DownIndent();
+            codeBuilder
+                .AppendClassDeclaration()
+                .AppendCurlyBracket(CurlyBracket.Left)
+                .DownIndent();
 
             if (pocoClass.Properties.Any())
             {
                 codeBuilder.AppendProperties();
             }
 
-            codeBuilder.UpIndent();
-
-            codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
+            codeBuilder
+                .UpIndent()
+                .AppendCurlyBracket(CurlyBracket.Right);
 
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {
-                codeBuilder.UpIndent();
-
-                codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
+                codeBuilder
+                    .UpIndent()
+                    .AppendCurlyBracket(CurlyBracket.Right);
             }
 
             return codeBuilder.ToString();

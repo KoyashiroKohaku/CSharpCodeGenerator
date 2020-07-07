@@ -25,20 +25,24 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         public int IndentDepth { get; private set; } = 0;
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
-        public void DownIndent()
+        public CodeBuilder DownIndent()
         {
             if (IndentDepth < int.MaxValue)
             {
                 IndentDepth++;
             }
+
+            return this;
         }
 
-        public void UpIndent()
+        public CodeBuilder UpIndent()
         {
             if (IndentDepth > 0)
             {
                 IndentDepth--;
             }
+
+            return this;
         }
 
         public string GetIndentString()
