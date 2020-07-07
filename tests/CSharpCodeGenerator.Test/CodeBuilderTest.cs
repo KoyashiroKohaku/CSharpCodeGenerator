@@ -33,6 +33,76 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
+        public void IndentStyleTest()
+        {
+            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            {
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4
+            };
+
+            Assert.AreEqual(IndentStyle.Space, codeBuilder.IndentStyle);
+            Assert.AreEqual(4, codeBuilder.IndentSize);
+
+            codeBuilder.AppendIndent().Append("A").AppendLine();
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("B").AppendLine();
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("C").AppendLine();
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("D").AppendLine();
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("E");
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+
+            codeBuilder.IndentStyle = IndentStyle.Tab;
+            Assert.AreEqual(IndentStyle.Tab, codeBuilder.IndentStyle);
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}\tB{codeBuilder.GetEndOfLineString()}\t\tC{codeBuilder.GetEndOfLineString()}\tD{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+
+            codeBuilder.IndentStyle = IndentStyle.Space;
+            Assert.AreEqual(IndentStyle.Space, codeBuilder.IndentStyle);
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+        }
+
+        [TestMethod]
+        public void IndentSizeTest()
+        {
+            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
+            {
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4
+            };
+
+            Assert.AreEqual(IndentStyle.Space, codeBuilder.IndentStyle);
+            Assert.AreEqual(4, codeBuilder.IndentSize);
+
+            codeBuilder.AppendIndent().Append("A").AppendLine();
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("B").AppendLine();
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("C").AppendLine();
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("D").AppendLine();
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("E");
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+
+            codeBuilder.IndentSize = 2;
+            Assert.AreEqual(2, codeBuilder.IndentSize);
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}  B{codeBuilder.GetEndOfLineString()}    C{codeBuilder.GetEndOfLineString()}  D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+
+            codeBuilder.IndentSize = 8;
+            Assert.AreEqual(8, codeBuilder.IndentSize);
+
+            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}        B{codeBuilder.GetEndOfLineString()}                C{codeBuilder.GetEndOfLineString()}        D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+        }
+
+        [TestMethod]
         public void DownIndentAndUpIndentTest()
         {
             var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
@@ -149,6 +219,59 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
+        public void AppendTest()
+        {
+            var appendString = "test string";
+
+            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+
+            codeBuilder.Append(appendString);
+
+            var expected = appendString;
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AppendLineTest()
+        {
+            var appendLineString = "test string";
+
+            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+
+            codeBuilder.AppendLine();
+            codeBuilder.AppendLine(appendLineString);
+            codeBuilder.AppendLine();
+
+            var expected = $"{codeBuilder.GetEndOfLineString()}{appendLineString}{codeBuilder.GetEndOfLineString()}{codeBuilder.GetEndOfLineString()}";
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AppendIndentTest()
+        {
+            var codeBuilder = new CodeBuilder(new POCOClass("TestClass"));
+
+            codeBuilder.AppendIndent().Append("A");
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("B");
+            codeBuilder.DownIndent();
+            codeBuilder.AppendIndent().Append("C");
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("D");
+            codeBuilder.UpIndent();
+            codeBuilder.AppendIndent().Append("E");
+
+            var expected = $"A    B        C    DE";
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void CurlyBracketTest()
         {
             var codeBuilder = new CodeBuilder(new POCOClass("TestClass"))
@@ -160,10 +283,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             codeBuilder.AppendCurlyBracket(CurlyBracket.Left);
             codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
-            codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
             codeBuilder.AppendCurlyBracket(CurlyBracket.Left);
+            codeBuilder.AppendCurlyBracket(CurlyBracket.Left);
+            codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
+            codeBuilder.AppendCurlyBracket(CurlyBracket.Right);
 
-            var expected = "{\r\n}\r\n}\r\n{\r\n";
+            var expected = "{}{{}}";
 
             var actual = codeBuilder.ToString();
 
@@ -180,15 +305,15 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 EndOfLine = EndOfLine.CRLF
             };
 
-            codeBuilder.AppendXmlComment("Test XML Comment 01");
+            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 01").AppendLine();
 
             codeBuilder.DownIndent();
 
-            codeBuilder.AppendXmlComment("Test XML Comment 02");
+            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 02").AppendLine();
 
             codeBuilder.UpIndent();
 
-            codeBuilder.AppendXmlComment("Test XML Comment 03");
+            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 03").AppendLine();
 
             var expected = @"/// <summary>
 /// Test XML Comment 01
@@ -224,12 +349,36 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             };
 
             codeBuilder.AppendNamespaceDeclaration();
-            codeBuilder.DownIndent();
-            codeBuilder.AppendNamespaceDeclaration();
-            codeBuilder.UpIndent();
-            codeBuilder.AppendNamespaceDeclaration();
 
-            var expected = $"namespace {testNamespace}\r\n    namespace {testNamespace}\r\nnamespace {testNamespace}\r\n";
+            var expected = $"namespace {testNamespace}";
+
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AppendClassXmlCommentTest()
+        {
+            var testClassXmlComment = "TestClass XML Comment";
+
+            var pocoClass = new POCOClass("TestClass")
+            {
+                XmlComment = testClassXmlComment
+            };
+
+            var codeBuilder = new CodeBuilder(pocoClass)
+            {
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4,
+                EndOfLine = EndOfLine.CRLF
+            };
+
+            codeBuilder.AppendClassXmlComment();
+
+            var expected = $@"/// <summary>
+/// TestClass XML Comment
+/// </summary>";
 
             var actual = codeBuilder.ToString();
 
@@ -249,12 +398,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             };
 
             codeBuilder.AppendClassDeclaration();
-            codeBuilder.DownIndent();
-            codeBuilder.AppendClassDeclaration();
-            codeBuilder.UpIndent();
-            codeBuilder.AppendClassDeclaration();
 
-            var expected = $"public class {testClassName}\r\n    public class {testClassName}\r\npublic class {testClassName}\r\n";
+            var expected = $"public class {testClassName}";
 
             var actual = codeBuilder.ToString();
 
@@ -276,11 +421,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             var codeBuilder = new CodeBuilder(pocoClass);
 
-            codeBuilder.AppendProperties();
+            codeBuilder.AppendIndent().AppendProperties().AppendLine();
             codeBuilder.DownIndent();
-            codeBuilder.AppendProperties();
+            codeBuilder.AppendIndent().AppendProperties().AppendLine();
             codeBuilder.UpIndent();
-            codeBuilder.AppendProperties();
+            codeBuilder.AppendIndent().AppendProperties().AppendLine();
 
             var expected = $@"public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
 

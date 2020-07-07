@@ -9,6 +9,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
     {
         private readonly POCOClass _pocoClass;
         private readonly StringBuilder _builder = new StringBuilder();
+        private IndentStyle _indentStyle = IndentStyle.Space;
         private int _indentSize = 4;
 
         public CodeBuilder(POCOClass pocoClass)
@@ -16,13 +17,51 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             _pocoClass = pocoClass;
         }
 
-        public IndentStyle IndentStyle { get; set; } = IndentStyle.Space;
+        public IndentStyle IndentStyle
+        {
+            get => _indentStyle;
+            set
+            {
+                var oldValue = IndentStyle switch
+                {
+                    IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
+                    IndentStyle.Tab => "\t",
+                    _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
+                };
+
+                var newValue = value switch
+                {
+                    IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
+                    IndentStyle.Tab => "\t",
+                    _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
+                };
+
+                _builder.Replace(oldValue, newValue);
+
+                _indentStyle = value;
+            }
+        }
+
         public int IndentSize
         {
             get => _indentSize;
-            set => _indentSize = value < 0 ? 0 : value;
+            set
+            {
+                if (IndentStyle == IndentStyle.Space)
+                {
+                    var oldValue = string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " "));
+
+                    var newValue = string.Join(string.Empty, Enumerable.Range(0, value).Select(x => " "));
+
+                    _builder.Replace(oldValue, newValue);
+                }
+
+                _indentSize = value < 0 ? 0 : value;
+            }
         }
+
         public int IndentDepth { get; private set; } = 0;
+
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
         public CodeBuilder DownIndent()
@@ -68,6 +107,44 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             };
         }
 
+        public CodeBuilder Append(string value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            _builder.Append(value);
+
+            return this;
+        }
+
+        public CodeBuilder AppendLine()
+        {
+            _builder.Append(GetEndOfLineString());
+
+            return this;
+        }
+
+        public CodeBuilder AppendLine(string value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            _builder.Append(value).Append(GetEndOfLineString());
+
+            return this;
+        }
+
+        public CodeBuilder AppendIndent()
+        {
+            _builder.Append(GetIndentString());
+
+            return this;
+        }
+
         public CodeBuilder AppendCurlyBracket(CurlyBracket curlyBracket)
         {
             if (!Enum.IsDefined(typeof(CurlyBracket), curlyBracket))
@@ -77,8 +154,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             _ = curlyBracket switch
             {
-                CurlyBracket.Left => _builder.Append(GetIndentString()).Append("{").Append(GetEndOfLineString()),
-                CurlyBracket.Right => _builder.Append(GetIndentString()).Append("}").Append(GetEndOfLineString()),
+                CurlyBracket.Left => Append("{"),
+                CurlyBracket.Right => Append("}"),
                 _ => throw new InvalidEnumArgumentException(nameof(curlyBracket), (int)curlyBracket, typeof(CurlyBracket))
             };
 
@@ -92,24 +169,27 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(xmlComment));
             }
 
-            _builder
-                .Append(GetIndentString())
-                .Append("/// <summary>")
-                .Append(GetEndOfLineString());
+            var lines = _builder.ToString().Split(GetEndOfLineString());
+            var hasIndent = lines.Any() && lines.Last() == GetIndentString();
 
-            foreach (var line in xmlComment.Replace("\r\n", "\r", StringComparison.Ordinal).Split("\r"))
+            Append("/// <summary>").AppendLine();
+
+            foreach (var line in xmlComment.Split(GetIndentString()))
             {
-                _builder
-                    .Append(GetIndentString())
-                    .Append("/// ")
-                    .Append(line)
-                    .Append(GetEndOfLineString());
+                if (hasIndent)
+                {
+                    AppendIndent();
+                }
+
+                Append("/// ").Append(line).AppendLine();
             }
 
-            _builder
-                .Append(GetIndentString())
-                .Append("/// </summary>")
-                .Append(GetEndOfLineString());
+            if (hasIndent)
+            {
+                AppendIndent();
+            }
+
+            Append("/// </summary>");
 
             return this;
         }
@@ -121,27 +201,24 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
-            _builder
-                .Append(GetIndentString())
-                .Append("namespace ")
-                .Append(_pocoClass.Namepace)
-                .Append(GetEndOfLineString());
+            Append("namespace ").Append(_pocoClass.Namepace);
 
             return this;
         }
 
-        public CodeBuilder AppendClassDeclaration()
+        public CodeBuilder AppendClassXmlComment()
         {
             if (!string.IsNullOrEmpty(_pocoClass.XmlComment))
             {
                 AppendXmlComment(_pocoClass.XmlComment);
             }
 
-            _builder
-                .Append(GetIndentString())
-                .Append("public class ")
-                .Append(_pocoClass.ClassName)
-                .Append(GetEndOfLineString());
+            return this;
+        }
+
+        public CodeBuilder AppendClassDeclaration()
+        {
+            Append("public class ").Append(_pocoClass.ClassName);
 
             return this;
         }
@@ -153,27 +230,52 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
+            var lines = _builder.ToString().Split(GetEndOfLineString());
+            var hasIndent = lines.Any() && lines.Last() == GetIndentString();
+
             int count = _pocoClass.Properties.Count;
 
             foreach ((var property, int index) in _pocoClass.Properties.Select((p, i) => (p, i)))
             {
-                if (!string.IsNullOrEmpty(property.XmlComment))
+                if (index == 0)
                 {
-                    AppendXmlComment(property.XmlComment);
+                    if (!string.IsNullOrEmpty(property.XmlComment))
+                    {
+                        AppendXmlComment(property.XmlComment).AppendLine();
+
+                        if (hasIndent)
+                        {
+                            AppendIndent();
+                        }
+                    }
+                }
+                else
+                {
+                    if (hasIndent)
+                    {
+                        AppendIndent();
+                    }
+
+                    if (!string.IsNullOrEmpty(property.XmlComment))
+                    {
+                        AppendXmlComment(property.XmlComment).AppendLine();
+
+                        if (hasIndent)
+                        {
+                            AppendIndent();
+                        }
+                    }
                 }
 
-                _builder
-                    .Append(GetIndentString())
-                    .Append("public ")
+                Append("public ")
                     .Append(TypeResolver.GetTypeAlias(property.PropertyType))
                     .Append(" ")
                     .Append(property.PropertyName)
-                    .Append(" { get; set; }")
-                    .Append(GetEndOfLineString());
+                    .Append(" { get; set; }");
 
                 if (index + 1 < count)
                 {
-                    _builder.Append(GetEndOfLineString());
+                    AppendLine().AppendLine();
                 }
             }
 
