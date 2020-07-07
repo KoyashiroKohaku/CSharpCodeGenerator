@@ -16,7 +16,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public string? XmlComment { get; set; }
 
-        public string? NameSpace { get; set; }
+        public string? Namepace { get; set; }
 
         public List<ClassProperty> Properties { get; } = new List<ClassProperty>();
     }
