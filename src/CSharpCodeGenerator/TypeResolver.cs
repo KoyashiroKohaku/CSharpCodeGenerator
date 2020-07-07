@@ -27,7 +27,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 Type _ when typeof(System.Int16).IsAssignableFrom(type) => "short",
                 Type _ when typeof(System.UInt16).IsAssignableFrom(type) => "ushort",
                 Type _ when typeof(System.String).IsAssignableFrom(type) => "string",
-                _ => throw new ArgumentOutOfRangeException(nameof(type)),
+                _ => type.ToString(),
             };
         }
     }
