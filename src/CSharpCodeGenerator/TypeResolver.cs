@@ -4,7 +4,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 {
     public static class TypeResolver
     {
-        public static string GetTypeName(Type type)
+        public static string GetTypeAlias(Type type)
         {
             if (type == null)
             {
