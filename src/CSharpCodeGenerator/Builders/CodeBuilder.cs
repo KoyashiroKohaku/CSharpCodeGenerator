@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator
+namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public class CodeBuilder
     {

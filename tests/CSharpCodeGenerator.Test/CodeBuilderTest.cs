@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using KoyashiroKohaku.CSharpCodeGenerator.Builders;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {
