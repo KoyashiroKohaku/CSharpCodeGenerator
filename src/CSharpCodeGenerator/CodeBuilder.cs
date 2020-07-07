@@ -20,7 +20,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         public int IndentDepth { get; private set; } = 0;
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
-        internal CodeBuilder(POCOClass pocoClass)
+        public CodeBuilder(POCOClass pocoClass)
         {
             _pocoClass = pocoClass;
         }
