@@ -156,7 +156,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 _builder
                     .Append(GetIndentString(_indentCount))
                     .Append("public ")
-                    .Append(property.PropertyType)
+                    .Append(TypeResolver.GetTypeName(property.PropertyType))
                     .Append(" ")
                     .Append(property.PropertyName)
                     .Append(" { get; set; }")
