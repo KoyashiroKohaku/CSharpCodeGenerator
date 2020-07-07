@@ -14,32 +14,36 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 XmlComment = "TestClass XML Comment"
             };
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty01", typeof(int))
+            var testProperties = new ClassProperty[]
             {
-                XmlComment = "TestProperty01 XML Comment"
-            });
+                new ClassProperty("TestProperty01", typeof(int))
+                {
+                    XmlComment = "TestProperty01 XML Comment"
+                },
+                new ClassProperty("TestProperty02", typeof(string))
+                {
+                    XmlComment = "TestProperty02 XML Comment"
+                },
+            };
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty02", typeof(string))
-            {
-                XmlComment = "TestProperty02 XML Comment"
-            });
+            pocoClass.Properties.AddRange(testProperties);
 
-            var expected = $@"namespace TestOrganization.TestProduct
+            var expected = $@"namespace {pocoClass.Namepace}
 {{
     /// <summary>
-    /// TestClass XML Comment
+    /// {pocoClass.XmlComment}
     /// </summary>
-    public class TestClass
+    public class {pocoClass.ClassName}
     {{
         /// <summary>
-        /// TestProperty01 XML Comment
+        /// {testProperties[0].XmlComment}
         /// </summary>
-        public int TestProperty01 {{ get; set; }}
+        public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
 
         /// <summary>
-        /// TestProperty02 XML Comment
+        /// {testProperties[1].XmlComment}
         /// </summary>
-        public string TestProperty02 {{ get; set; }}
+        public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
     }}
 }}
 ";
