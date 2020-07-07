@@ -1,12 +1,15 @@
+using KoyashiroKohaku.CSharpCodeGenerator.Builders;
 using System;
 using System.Linq;
-using KoyashiroKohaku.CSharpCodeGenerator.Builders;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
 {
     public static class CodeGenerator
     {
-        public static string Generate(POCOClass pocoClass) => Generate(pocoClass, new GenerateOption());
+        public static string Generate(POCOClass pocoClass)
+        {
+            return Generate(pocoClass, new GenerateOption());
+        }
 
         public static string Generate(POCOClass pocoClass, GenerateOption generateOption)
         {

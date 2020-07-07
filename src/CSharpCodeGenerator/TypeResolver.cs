@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
@@ -27,21 +26,21 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             {
                 return type switch
                 {
-                    Type _ when typeof(System.Boolean).IsAssignableFrom(type) => "bool",
-                    Type _ when typeof(System.Byte).IsAssignableFrom(type) => "byte",
-                    Type _ when typeof(System.SByte).IsAssignableFrom(type) => "sbyte",
-                    Type _ when typeof(System.Char).IsAssignableFrom(type) => "char",
-                    Type _ when typeof(System.Decimal).IsAssignableFrom(type) => "decimal",
-                    Type _ when typeof(System.Double).IsAssignableFrom(type) => "double",
-                    Type _ when typeof(System.Single).IsAssignableFrom(type) => "float",
-                    Type _ when typeof(System.Int32).IsAssignableFrom(type) => "int",
-                    Type _ when typeof(System.UInt32).IsAssignableFrom(type) => "uint",
-                    Type _ when typeof(System.Int64).IsAssignableFrom(type) => "long",
-                    Type _ when typeof(System.UInt64).IsAssignableFrom(type) => "ulong",
-                    Type _ when typeof(System.Int16).IsAssignableFrom(type) => "short",
-                    Type _ when typeof(System.UInt16).IsAssignableFrom(type) => "ushort",
-                    Type _ when typeof(System.String).IsAssignableFrom(type) => "string",
-                    Type _ when typeof(System.Object).IsAssignableFrom(type) => "object",
+                    Type _ when typeof(bool).IsAssignableFrom(type) => "bool",
+                    Type _ when typeof(byte).IsAssignableFrom(type) => "byte",
+                    Type _ when typeof(sbyte).IsAssignableFrom(type) => "sbyte",
+                    Type _ when typeof(char).IsAssignableFrom(type) => "char",
+                    Type _ when typeof(decimal).IsAssignableFrom(type) => "decimal",
+                    Type _ when typeof(double).IsAssignableFrom(type) => "double",
+                    Type _ when typeof(float).IsAssignableFrom(type) => "float",
+                    Type _ when typeof(int).IsAssignableFrom(type) => "int",
+                    Type _ when typeof(uint).IsAssignableFrom(type) => "uint",
+                    Type _ when typeof(long).IsAssignableFrom(type) => "long",
+                    Type _ when typeof(ulong).IsAssignableFrom(type) => "ulong",
+                    Type _ when typeof(short).IsAssignableFrom(type) => "short",
+                    Type _ when typeof(ushort).IsAssignableFrom(type) => "ushort",
+                    Type _ when typeof(string).IsAssignableFrom(type) => "string",
+                    Type _ when typeof(object).IsAssignableFrom(type) => "object",
                     _ => type.Name,
                 };
             }
