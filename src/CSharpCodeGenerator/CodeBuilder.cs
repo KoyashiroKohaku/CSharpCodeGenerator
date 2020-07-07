@@ -16,7 +16,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         public int IndentSize
         {
             get => _indentSize;
-            set =>  _indentSize = value < 0 ? 0 : value;
+            set => _indentSize = value < 0 ? 0 : value;
         }
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
@@ -98,9 +98,25 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             _ = curlyBracket switch
             {
                 CurlyBracket.Left => _builder.Append(GetIndentString(_indentCount)).Append("{").Append(GetEndOfLineString()),
-                CurlyBracket.Right => _builder.Append(GetIndentString(_indentCount)).Append("{").Append(GetEndOfLineString()),
+                CurlyBracket.Right => _builder.Append(GetIndentString(_indentCount)).Append("}").Append(GetEndOfLineString()),
                 _ => throw new InvalidEnumArgumentException(nameof(curlyBracket), (int)curlyBracket, typeof(CurlyBracket))
             };
+
+            return this;
+        }
+
+        public CodeBuilder AppendNamespaceDeclaration()
+        {
+            if (string.IsNullOrEmpty(_pocoClass.Namepace))
+            {
+                return this;
+            }
+
+            _builder
+                .Append(GetIndentString(_indentCount))
+                .Append("namespace ")
+                .Append(_pocoClass.Namepace)
+                .Append(GetEndOfLineString());
 
             return this;
         }
@@ -113,6 +129,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             }
 
             _builder
+                .Append(GetIndentString(_indentCount))
                 .Append("public class ")
                 .Append(_pocoClass.ClassName)
                 .Append(GetEndOfLineString());
@@ -122,7 +139,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public CodeBuilder AppendProperties()
         {
-            if (_pocoClass.Properties.Any())
+            if (!_pocoClass.Properties.Any())
             {
                 return this;
             }
@@ -137,6 +154,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 }
 
                 _builder
+                    .Append(GetIndentString(_indentCount))
                     .Append("public ")
                     .Append(property.PropertyType)
                     .Append(" ")
@@ -144,7 +162,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                     .Append(" { get; set; }")
                     .Append(GetEndOfLineString());
 
-                if (index + 1 > count)
+                if (index + 1 < count)
                 {
                     _builder.Append(GetEndOfLineString());
                 }
