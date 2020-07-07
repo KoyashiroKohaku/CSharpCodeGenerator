@@ -24,7 +24,29 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 XmlComment = "TestProperty02 XML Comment"
             });
 
-            var code = CodeGenerator.Generate(pocoClass);
+            var expected = $@"namespace TestOrganization.TestProduct
+{{
+    /// <summary>
+    /// TestClass XML Comment
+    /// </summary>
+    public class TestClass
+    {{
+        /// <summary>
+        /// TestProperty01 XML Comment
+        /// </summary>
+        public int TestProperty01 {{ get; set; }}
+
+        /// <summary>
+        /// TestProperty02 XML Comment
+        /// </summary>
+        public string TestProperty02 {{ get; set; }}
+    }}
+}}
+";
+
+            var actual = CodeGenerator.Generate(pocoClass);
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }
