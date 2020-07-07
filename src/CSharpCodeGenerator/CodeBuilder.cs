@@ -8,18 +8,21 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
     public class CodeBuilder
     {
         private readonly POCOClass _pocoClass;
-        private readonly StringBuilder _builder;
-        private int _indentCount;
+        private readonly StringBuilder _builder = new StringBuilder();
+        private int _indentSize = 4;
+        private int _indentCount = 0;
 
         public IndentStyle IndentStyle { get; set; } = IndentStyle.Space;
-        public int IndentSize { get; set; } = 4;
+        public int IndentSize
+        {
+            get => _indentSize;
+            set =>  _indentSize = value < 0 ? 0 : value;
+        }
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
         internal CodeBuilder(POCOClass pocoClass)
         {
             _pocoClass = pocoClass;
-            _builder = new StringBuilder();
-            _indentCount = 0;
         }
 
         private string GetIndentString(int indentCount)
