@@ -6,7 +6,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 {
     public static class CodeGenerator
     {
-        public static string Generate(POCOClass pocoClass)
+        public static string Generate
+        (
+            POCOClass pocoClass,
+            IndentStyle indentStyle = IndentStyle.Space,
+            int indentSize = 4,
+            EndOfLine endOfLine = EndOfLine.CRLF
+        )
         {
             if (pocoClass == null)
             {
@@ -15,9 +21,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
             var codeBuilder = new CodeBuilder(pocoClass)
             {
-                IndentStyle = IndentStyle.Space,
-                IndentSize = 4,
-                EndOfLine = EndOfLine.CRLF
+                IndentStyle = indentStyle,
+                IndentSize = indentSize,
+                EndOfLine = endOfLine
             };
 
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
