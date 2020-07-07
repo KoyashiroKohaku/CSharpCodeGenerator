@@ -376,7 +376,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.AppendProperty(new ClassProperty("TestProperty02", typeof(string)));
 
             var expected = $@"public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-
 public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}";
 
             var actual = codeBuilder.ToString();
