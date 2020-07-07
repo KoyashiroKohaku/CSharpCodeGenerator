@@ -11,6 +11,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         private readonly StringBuilder _builder = new StringBuilder();
         private int _indentSize = 4;
 
+        public CodeBuilder(POCOClass pocoClass)
+        {
+            _pocoClass = pocoClass;
+        }
+
         public IndentStyle IndentStyle { get; set; } = IndentStyle.Space;
         public int IndentSize
         {
@@ -19,11 +24,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         }
         public int IndentDepth { get; private set; } = 0;
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
-
-        public CodeBuilder(POCOClass pocoClass)
-        {
-            _pocoClass = pocoClass;
-        }
 
         public void DownIndent()
         {
