@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using KoyashiroKohaku.CSharpCodeGenerator.Builders;
+using System.Collections.Generic;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {
@@ -360,23 +361,34 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void AppendPropertyTest()
         {
-            var pocoClass = new POCOClass("TestClass");
-
             var testProperties = new ClassProperty[]
             {
                 new ClassProperty("TestProperty01", typeof(int)),
-                new ClassProperty("TestProperty02", typeof(string))
+                new ClassProperty("TestProperty02", typeof(string)),
+                new ClassProperty("TestProperty03", typeof(int[])),
+                new ClassProperty("TestProperty04", typeof(string[])),
+                new ClassProperty("TestProperty05", typeof(List<int>)),
+                new ClassProperty("TestProperty06", typeof(List<string>)),
+                new ClassProperty("TestProperty07", typeof(Dictionary<int, string>))
             };
-
-            pocoClass.Properties.AddRange(testProperties);
 
             var codeBuilder = new CodeBuilder();
 
-            codeBuilder.AppendProperty(new ClassProperty("TestProperty01", typeof(int))).AppendLine();
-            codeBuilder.AppendProperty(new ClassProperty("TestProperty02", typeof(string)));
+            codeBuilder.AppendProperty(testProperties[0]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[1]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[2]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[3]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[4]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[5]).AppendLine();
+            codeBuilder.AppendProperty(testProperties[6]);
 
             var expected = $@"public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}";
+public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeAlias(testProperties[2].PropertyType)} {testProperties[2].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeAlias(testProperties[3].PropertyType)} {testProperties[3].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeAlias(testProperties[4].PropertyType)} {testProperties[4].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeAlias(testProperties[5].PropertyType)} {testProperties[5].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeAlias(testProperties[6].PropertyType)} {testProperties[6].PropertyName} {{ get; set; }}";
 
             var actual = codeBuilder.ToString();
 

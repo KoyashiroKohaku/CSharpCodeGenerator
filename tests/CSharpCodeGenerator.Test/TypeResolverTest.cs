@@ -22,7 +22,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             Assert.AreEqual("short", TypeResolver.GetTypeAlias(typeof(System.Int16)));
             Assert.AreEqual("ushort", TypeResolver.GetTypeAlias(typeof(System.UInt16)));
             Assert.AreEqual("string", TypeResolver.GetTypeAlias(typeof(System.String)));
-            Assert.AreEqual(typeof(System.Object).ToString(), TypeResolver.GetTypeAlias(typeof(System.Object)));
+            Assert.AreEqual("int[]", TypeResolver.GetTypeAlias(typeof(System.Int32[])));
+            Assert.AreEqual("string[]", TypeResolver.GetTypeAlias(typeof(System.String[])));
+            Assert.AreEqual("List<int>", TypeResolver.GetTypeAlias(typeof(System.Collections.Generic.List<int>)));
+            Assert.AreEqual("List<string>", TypeResolver.GetTypeAlias(typeof(System.Collections.Generic.List<string>)));
+            Assert.AreEqual("Dictionary<int, string>", TypeResolver.GetTypeAlias(typeof(System.Collections.Generic.Dictionary<int, string>)));
+            Assert.AreEqual("object", TypeResolver.GetTypeAlias(typeof(System.Object)));
         }
     }
 }
