@@ -12,7 +12,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(pocoClass));
             }
 
-            CodeBuilder? codeBuilder = new CodeBuilder(pocoClass)
+            var codeBuilder = new CodeBuilder(pocoClass)
             {
                 IndentStyle = IndentStyle.Space,
                 IndentSize = 4,

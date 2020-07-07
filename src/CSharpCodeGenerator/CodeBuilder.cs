@@ -27,7 +27,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         private string GetIndentString(int indentCount)
         {
-            string? indentString = IndentStyle switch
+            var indentString = IndentStyle switch
             {
                 IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
                 IndentStyle.Tab => "\t",
@@ -55,7 +55,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 .Append("/// <summary>")
                 .Append(GetEndOfLineString());
 
-            foreach (string? line in xmlComment.Replace("\r\n", "\r", StringComparison.Ordinal).Split("\r"))
+            foreach (var line in xmlComment.Replace("\r\n", "\r", StringComparison.Ordinal).Split("\r"))
             {
                 _builder
                     .Append(GetIndentString(_indentCount))
@@ -146,7 +146,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
             int count = _pocoClass.Properties.Count;
 
-            foreach ((ClassProperty property, int index) in _pocoClass.Properties.Select((p, i) => (p, i)))
+            foreach ((var property, int index) in _pocoClass.Properties.Select((p, i) => (p, i)))
             {
                 if (!string.IsNullOrEmpty(property.XmlComment))
                 {
