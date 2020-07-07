@@ -30,14 +30,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             // namespace declaration (start)
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {
-                codeBuilder.AppendIndent().AppendNamespaceDeclaration().AppendLine();
+                codeBuilder.AppendIndent().AppendNamespaceDeclaration(pocoClass.Namepace).AppendLine();
                 codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
                 codeBuilder.DownIndent();
             }
 
             // class declaration (start)
-            codeBuilder.AppendIndent().AppendClassXmlComment().AppendLine();
-            codeBuilder.AppendIndent().AppendClassDeclaration().AppendLine();
+            if (!string.IsNullOrEmpty(pocoClass.XmlComment))
+            {
+                codeBuilder.AppendIndent().AppendXmlComment(pocoClass.XmlComment).AppendLine();
+            }
+            codeBuilder.AppendIndent().AppendClassDeclaration(pocoClass.ClassName).AppendLine();
             codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
             codeBuilder.DownIndent();
 

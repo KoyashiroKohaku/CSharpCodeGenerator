@@ -348,37 +348,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 EndOfLine = EndOfLine.CRLF
             };
 
-            codeBuilder.AppendNamespaceDeclaration();
+            codeBuilder.AppendNamespaceDeclaration(testNamespace);
 
             var expected = $"namespace {testNamespace}";
-
-            var actual = codeBuilder.ToString();
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void AppendClassXmlCommentTest()
-        {
-            var testClassXmlComment = "TestClass XML Comment";
-
-            var pocoClass = new POCOClass("TestClass")
-            {
-                XmlComment = testClassXmlComment
-            };
-
-            var codeBuilder = new CodeBuilder(pocoClass)
-            {
-                IndentStyle = IndentStyle.Space,
-                IndentSize = 4,
-                EndOfLine = EndOfLine.CRLF
-            };
-
-            codeBuilder.AppendClassXmlComment();
-
-            var expected = $@"/// <summary>
-/// TestClass XML Comment
-/// </summary>";
 
             var actual = codeBuilder.ToString();
 
@@ -397,7 +369,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 EndOfLine = EndOfLine.CRLF
             };
 
-            codeBuilder.AppendClassDeclaration();
+            codeBuilder.AppendClassDeclaration(testClassName);
 
             var expected = $"public class {testClassName}";
 

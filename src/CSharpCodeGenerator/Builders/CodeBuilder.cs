@@ -194,31 +194,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public CodeBuilder AppendNamespaceDeclaration()
+        public CodeBuilder AppendNamespaceDeclaration(string namespaceName)
         {
-            if (string.IsNullOrEmpty(_pocoClass.Namepace))
+            if (string.IsNullOrEmpty(namespaceName))
             {
                 return this;
             }
 
-            Append("namespace ").Append(_pocoClass.Namepace);
+            Append("namespace ").Append(namespaceName);
 
             return this;
         }
 
-        public CodeBuilder AppendClassXmlComment()
+        public CodeBuilder AppendClassDeclaration(string className)
         {
-            if (!string.IsNullOrEmpty(_pocoClass.XmlComment))
+            if (string.IsNullOrEmpty(className))
             {
-                AppendXmlComment(_pocoClass.XmlComment);
+                return this;
             }
 
-            return this;
-        }
-
-        public CodeBuilder AppendClassDeclaration()
-        {
-            Append("public class ").Append(_pocoClass.ClassName);
+            Append("public class ").Append(className);
 
             return this;
         }
