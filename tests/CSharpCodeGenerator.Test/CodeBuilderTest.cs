@@ -29,13 +29,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             Assert.AreEqual(4, codeBuilder.IndentSize);
 
             codeBuilder.AppendIndent().Append("A").AppendLine();
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("B").AppendLine();
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("C").AppendLine();
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("D").AppendLine();
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("E");
 
             Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
@@ -64,13 +64,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             Assert.AreEqual(4, codeBuilder.IndentSize);
 
             codeBuilder.AppendIndent().Append("A").AppendLine();
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("B").AppendLine();
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("C").AppendLine();
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("D").AppendLine();
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("E");
 
             Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
@@ -87,38 +87,38 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
-        public void DownIndentAndUpIndentTest()
+        public void IndentAndDeindentTest()
         {
             var codeBuilder = new CodeBuilder();
 
             Assert.AreEqual(0, codeBuilder.IndentDepth);
 
-            /* Indent Down */
+            /* Indent */
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual(1, codeBuilder.IndentDepth);
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual(2, codeBuilder.IndentDepth);
 
-            /* Indent Up */
+            /* Unindent */
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(1, codeBuilder.IndentDepth);
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(0, codeBuilder.IndentDepth);
 
-            /* Indent Down (Max) */
+            /* Indent (Max) */
 
             codeBuilder.GetType().GetProperty(nameof(codeBuilder.IndentDepth)).SetValue(codeBuilder, int.MaxValue);
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual(int.MaxValue, codeBuilder.IndentDepth);
 
-            /* Indent Up (Min) */
+            /* Unindent (Min) */
 
             codeBuilder.GetType().GetProperty(nameof(codeBuilder.IndentDepth)).SetValue(codeBuilder, 0);
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(0, codeBuilder.IndentDepth);
         }
 
@@ -133,16 +133,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.IndentSize = 4;
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("    ", codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("        ", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual("    ", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
 
             /* 2 Spaces */
@@ -151,16 +151,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.IndentSize = 2;
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("  ", codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("    ", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual("  ", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
 
             /* Tab */
@@ -168,16 +168,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.IndentStyle = IndentStyle.Tab;
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("\t", codeBuilder.GetIndentString());
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             Assert.AreEqual("\t\t", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual("\t", codeBuilder.GetIndentString());
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
         }
 
@@ -240,13 +240,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             var codeBuilder = new CodeBuilder();
 
             codeBuilder.AppendIndent().Append("A");
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("B");
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
             codeBuilder.AppendIndent().Append("C");
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("D");
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("E");
 
             var expected = $"A    B        C    DE";
@@ -291,11 +291,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 01").AppendLine();
 
-            codeBuilder.DownIndent();
+            codeBuilder.Indent();
 
             codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 02").AppendLine();
 
-            codeBuilder.UpIndent();
+            codeBuilder.Unindent();
 
             codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 03").AppendLine();
 

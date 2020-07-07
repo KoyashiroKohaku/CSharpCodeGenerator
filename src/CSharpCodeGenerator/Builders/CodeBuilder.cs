@@ -58,7 +58,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
-        public CodeBuilder DownIndent()
+        public CodeBuilder Indent()
         {
             if (IndentDepth < int.MaxValue)
             {
@@ -68,7 +68,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public CodeBuilder UpIndent()
+        public CodeBuilder Unindent()
         {
             if (IndentDepth > 0)
             {
