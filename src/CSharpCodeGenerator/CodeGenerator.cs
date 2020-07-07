@@ -26,6 +26,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 EndOfLine = endOfLine
             };
 
+            // namespace declaration (start)
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {
                 codeBuilder
@@ -34,20 +35,24 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                     .DownIndent();
             }
 
+            // class declaration (start)
             codeBuilder
                 .AppendClassDeclaration()
                 .AppendCurlyBracket(CurlyBracket.Left)
                 .DownIndent();
 
+            // Properties
             if (pocoClass.Properties.Any())
             {
                 codeBuilder.AppendProperties();
             }
 
+            // class declaration (end)
             codeBuilder
                 .UpIndent()
                 .AppendCurlyBracket(CurlyBracket.Right);
 
+            // namespace declaration (end)
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {
                 codeBuilder
