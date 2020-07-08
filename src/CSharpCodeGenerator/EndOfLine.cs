@@ -2,8 +2,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 {
     public enum EndOfLine
     {
-        CR,
         LF,
+        CR,
         CRLF
     }
 }

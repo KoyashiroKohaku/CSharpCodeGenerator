@@ -288,7 +288,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         private static string[] SplitOnEndOfLine(string value)
         {
-            return Regex.Split(value, "\r\n|\n|\r");
+            return Regex.Split(value, "\n|\r|\r\n");
         }
     }
 }
