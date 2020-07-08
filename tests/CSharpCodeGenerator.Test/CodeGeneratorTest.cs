@@ -1,4 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {
@@ -14,40 +17,67 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 XmlComment = "TestClass XML Comment"
             };
 
-            var testProperties = new ClassProperty[]
+            pocoClass.Properties.Add(new ClassProperty("TestProperty01", typeof(int))
             {
-                new ClassProperty("TestProperty01", typeof(int))
-                {
-                    XmlComment = "TestProperty01 XML Comment"
-                },
-                new ClassProperty("TestProperty02", typeof(string))
-                {
-                    XmlComment = "TestProperty02 XML Comment"
-                },
-            };
+                XmlComment = "TestProperty01 XML Comment"
+            });
 
-            pocoClass.Properties.AddRange(testProperties);
+            pocoClass.Properties.Add(new ClassProperty("TestProperty02", typeof(string))
+            {
+                XmlComment = "TestProperty02 XML Comment"
+            });
 
-            var expected = $@"using System;
+            pocoClass.Properties.Add(new ClassProperty("TestProperty03", typeof(int[]))
+            {
+                XmlComment = "TestProperty03 XML Comment"
+            });
 
-namespace {pocoClass.Namepace}
-{{
+            pocoClass.Properties.Add(new ClassProperty("TestProperty04", typeof(List<string>))
+            {
+                XmlComment = "TestProperty04 XML Comment"
+            });
+
+            pocoClass.Properties.Add(new ClassProperty("TestProperty05", typeof(DateTime))
+            {
+                XmlComment = "TestProperty05 XML Comment"
+            });
+
+            var expected = @"using System;
+using System.Collections.Generic;
+
+namespace TestOrganization.TestProduct
+{
     /// <summary>
-    /// {pocoClass.XmlComment}
+    /// TestClass XML Comment
     /// </summary>
-    public class {pocoClass.ClassName}
-    {{
+    public class TestClass
+    {
         /// <summary>
-        /// {testProperties[0].XmlComment}
+        /// TestProperty01 XML Comment
         /// </summary>
-        public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
+        public int TestProperty01 { get; set; }
 
         /// <summary>
-        /// {testProperties[1].XmlComment}
+        /// TestProperty02 XML Comment
         /// </summary>
-        public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-    }}
-}}
+        public string TestProperty02 { get; set; }
+
+        /// <summary>
+        /// TestProperty03 XML Comment
+        /// </summary>
+        public int[] TestProperty03 { get; set; }
+
+        /// <summary>
+        /// TestProperty04 XML Comment
+        /// </summary>
+        public List<string> TestProperty04 { get; set; }
+
+        /// <summary>
+        /// TestProperty05 XML Comment
+        /// </summary>
+        public DateTime TestProperty05 { get; set; }
+    }
+}
 ";
 
             var actual = CodeGenerator.Generate(pocoClass);
