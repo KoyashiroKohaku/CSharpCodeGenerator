@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -241,6 +242,18 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
+        public CodeBuilder AppendUsingDirective(string namespaceString)
+        {
+            if (namespaceString == null)
+            {
+                throw new ArgumentNullException(nameof(namespaceString));
+            }
+
+            Append("using ").Append(namespaceString).Append(";");
+
+            return this;
+        }
+
         public CodeBuilder AppendNamespaceDeclaration(string namespaceName)
         {
             if (string.IsNullOrEmpty(namespaceName))
@@ -289,6 +302,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         private static string[] SplitOnEndOfLine(string value)
         {
             return Regex.Split(value, "\n|\r|\r\n");
+        }
+
+        public static IEnumerable<string> ExtractNamespace(IEnumerable<ClassProperty> properties)
+        {
+            if (properties == null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            return properties.Select(p => p.PropertyType.Namespace).Distinct();
         }
     }
 }

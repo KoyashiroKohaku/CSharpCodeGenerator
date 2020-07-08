@@ -29,6 +29,18 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 EndOfLine = generateOption.EndOfLine
             };
 
+            // using directive
+            var namespaces = CodeBuilder.ExtractNamespace(pocoClass.Properties).OrderBy(s => s);
+            if (namespaces.Any())
+            {
+                foreach (var namespaceString in namespaces)
+                {
+                    codeBuilder.AppendIndent().AppendUsingDirective(namespaceString).AppendLine();
+                }
+
+                codeBuilder.AppendLine();
+            }
+
             // namespace declaration (start)
             if (!string.IsNullOrEmpty(pocoClass.Namepace))
             {

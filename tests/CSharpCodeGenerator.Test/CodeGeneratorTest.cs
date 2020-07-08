@@ -28,7 +28,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             pocoClass.Properties.AddRange(testProperties);
 
-            var expected = $@"namespace {pocoClass.Namepace}
+            var expected = $@"using System;
+
+namespace {pocoClass.Namepace}
 {{
     /// <summary>
     /// {pocoClass.XmlComment}

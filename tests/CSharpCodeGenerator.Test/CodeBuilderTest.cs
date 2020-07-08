@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {
@@ -316,6 +318,35 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
+        public void AppendUsingDirectiveTest()
+        {
+            var namespaces = new string[]
+            {
+                "System",
+                "System.Collections.Generic",
+                "System.Text"
+            };
+
+            var codeBuilder = new CodeBuilder()
+            {
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4,
+                EndOfLine = EndOfLine.CRLF
+            };
+
+            foreach (var namespaceString in namespaces)
+            {
+                codeBuilder.AppendUsingDirective(namespaceString).AppendLine();
+            }
+
+            var expected = $"using {namespaces[0]};\r\nusing {namespaces[1]};\r\nusing {namespaces[2]};\r\n";
+
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void AppendNamespaceDeclarationTest()
         {
             var testNamespace = "TestOrganization.TestProduct";
@@ -392,6 +423,23 @@ public {TypeResolver.GetTypeAlias(testProperties[6].PropertyType)} {testProperti
             var actual = codeBuilder.ToString();
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ExtractNamespaceTest()
+        {
+            var properties = new ClassProperty[]
+            {
+                new ClassProperty("TestProperty01", typeof(int)),
+                new ClassProperty("TestProperty02", typeof(List<int>)),
+                new ClassProperty("TestProperty02", typeof(System.Text.StringBuilder))
+            };
+
+            var expected = properties.Select(p => p.PropertyType.Namespace).ToArray();
+
+            var actual = CodeBuilder.ExtractNamespace(properties).OrderBy(s => s).ToArray();
+
+            CollectionAssert.AreEqual(expected, actual);
         }
     }
 }
