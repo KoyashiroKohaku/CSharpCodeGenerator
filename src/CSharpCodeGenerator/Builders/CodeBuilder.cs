@@ -18,14 +18,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             {
                 var oldValue = IndentStyle switch
                 {
-                    IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
+                    IndentStyle.Space => GetIndentString(IndentStyle.Space, IndentSize),
                     IndentStyle.Tab => "\t",
                     _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
                 };
 
                 var newValue = value switch
                 {
-                    IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
+                    IndentStyle.Space => GetIndentString(IndentStyle.Space, IndentSize),
                     IndentStyle.Tab => "\t",
                     _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
                 };
@@ -43,9 +43,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             {
                 if (IndentStyle == IndentStyle.Space)
                 {
-                    var oldValue = string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " "));
+                    var oldValue = GetIndentString(IndentStyle.Space, IndentSize);
 
-                    var newValue = string.Join(string.Empty, Enumerable.Range(0, value).Select(x => " "));
+                    var newValue = GetIndentString(IndentStyle.Space, value);
 
                     _builder.Replace(oldValue, newValue);
                 }
@@ -88,7 +88,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         {
             var indentString = indentStyle switch
             {
-                IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, indentSize).Select(x => " ")),
+                IndentStyle.Space => string.Concat(Enumerable.Repeat(" ", indentSize)),
                 IndentStyle.Tab => "\t",
                 _ => throw new InvalidEnumArgumentException(nameof(indentStyle), (int)indentStyle, typeof(IndentStyle))
             };
@@ -110,7 +110,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(indentString));
             }
 
-            return string.Join(string.Empty, Enumerable.Range(0, indentDepth).Select(x => indentString));
+            return string.Concat(Enumerable.Repeat(indentString, indentDepth));
         }
 
         public static string GetEndOfLineString(EndOfLine endOfLine)
