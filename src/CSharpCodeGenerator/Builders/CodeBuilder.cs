@@ -58,6 +58,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
+        public string CurrentIndentString => GetIndentString(IndentStyle, IndentSize);
+
+        public string CurrentIndentStringWithDepth => GetIndentStringWithDepth(CurrentIndentString, IndentDepth);
+
+        public string CurrentEndOfLineString => GetEndOfLineString(EndOfLine);
+
         public CodeBuilder Indent()
         {
             if (IndentDepth < int.MaxValue)
@@ -78,26 +84,38 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public string GetIndentString()
+        public static string GetIndentString(IndentStyle indentStyle, int indentSize)
         {
-            var indentString = IndentStyle switch
+            var indentString = indentStyle switch
             {
-                IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, IndentSize).Select(x => " ")),
+                IndentStyle.Space => string.Join(string.Empty, Enumerable.Range(0, indentSize).Select(x => " ")),
                 IndentStyle.Tab => "\t",
-                _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
+                _ => throw new InvalidEnumArgumentException(nameof(indentStyle), (int)indentStyle, typeof(IndentStyle))
             };
 
-            return string.Join(string.Empty, Enumerable.Range(0, IndentDepth).Select(x => indentString));
+            return indentString;
         }
 
-        public string GetEndOfLineString()
+        public static string GetIndentStringWithDepth(IndentStyle indentStyle, int indentSize, int indentDepth)
+        {
+            var indentString = GetIndentString(indentStyle, indentSize);
+
+            return GetIndentStringWithDepth(indentString, indentDepth);
+        }
+
+        public static string GetIndentStringWithDepth(string indentString, int indentDepth)
+        {
+            return string.Join(string.Empty, Enumerable.Range(0, indentDepth).Select(x => indentString));
+        }
+
+        public string GetEndOfLineString(EndOfLine endOfLine)
         {
             return EndOfLine switch
             {
                 EndOfLine.CR => "\r",
                 EndOfLine.LF => "\n",
                 EndOfLine.CRLF => "\r\n",
-                _ => throw new InvalidEnumArgumentException(nameof(EndOfLine), (int)EndOfLine, typeof(EndOfLine))
+                _ => throw new InvalidEnumArgumentException(nameof(endOfLine), (int)endOfLine, typeof(EndOfLine))
             };
         }
 
@@ -115,7 +133,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public CodeBuilder AppendLine()
         {
-            _builder.Append(GetEndOfLineString());
+            _builder.Append(CurrentEndOfLineString);
 
             return this;
         }
@@ -127,14 +145,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(value));
             }
 
-            _builder.Append(value).Append(GetEndOfLineString());
+            _builder.Append(value).Append(CurrentEndOfLineString);
 
             return this;
         }
 
         public CodeBuilder AppendIndent()
         {
-            _builder.Append(GetIndentString());
+            _builder.Append(CurrentIndentStringWithDepth);
 
             return this;
         }
@@ -163,12 +181,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(xmlComment));
             }
 
-            var lines = _builder.ToString().Split(GetEndOfLineString());
-            var hasIndent = lines.Any() && lines.Last() == GetIndentString();
+            var lines = _builder.ToString().Split(CurrentEndOfLineString);
+            var hasIndent = lines.Any() && lines.Last() == CurrentIndentStringWithDepth;
 
             Append("/// <summary>").AppendLine();
 
-            foreach (var line in xmlComment.Split(GetIndentString()))
+            foreach (var line in xmlComment.Split(CurrentIndentString))
             {
                 if (hasIndent)
                 {

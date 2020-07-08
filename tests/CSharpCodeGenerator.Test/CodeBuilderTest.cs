@@ -39,17 +39,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("E");
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}    B{codeBuilder.CurrentEndOfLineString}        C{codeBuilder.CurrentEndOfLineString}    D{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
 
             codeBuilder.IndentStyle = IndentStyle.Tab;
             Assert.AreEqual(IndentStyle.Tab, codeBuilder.IndentStyle);
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}\tB{codeBuilder.GetEndOfLineString()}\t\tC{codeBuilder.GetEndOfLineString()}\tD{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}\tB{codeBuilder.CurrentEndOfLineString}\t\tC{codeBuilder.CurrentEndOfLineString}\tD{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
 
             codeBuilder.IndentStyle = IndentStyle.Space;
             Assert.AreEqual(IndentStyle.Space, codeBuilder.IndentStyle);
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}    B{codeBuilder.CurrentEndOfLineString}        C{codeBuilder.CurrentEndOfLineString}    D{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
         }
 
         [TestMethod]
@@ -74,17 +74,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.Unindent();
             codeBuilder.AppendIndent().Append("E");
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}    B{codeBuilder.GetEndOfLineString()}        C{codeBuilder.GetEndOfLineString()}    D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}    B{codeBuilder.CurrentEndOfLineString}        C{codeBuilder.CurrentEndOfLineString}    D{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
 
             codeBuilder.IndentSize = 2;
             Assert.AreEqual(2, codeBuilder.IndentSize);
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}  B{codeBuilder.GetEndOfLineString()}    C{codeBuilder.GetEndOfLineString()}  D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}  B{codeBuilder.CurrentEndOfLineString}    C{codeBuilder.CurrentEndOfLineString}  D{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
 
             codeBuilder.IndentSize = 8;
             Assert.AreEqual(8, codeBuilder.IndentSize);
 
-            Assert.AreEqual($"A{codeBuilder.GetEndOfLineString()}        B{codeBuilder.GetEndOfLineString()}                C{codeBuilder.GetEndOfLineString()}        D{codeBuilder.GetEndOfLineString()}E", codeBuilder.ToString());
+            Assert.AreEqual($"A{codeBuilder.CurrentEndOfLineString}        B{codeBuilder.CurrentEndOfLineString}                C{codeBuilder.CurrentEndOfLineString}        D{codeBuilder.CurrentEndOfLineString}E", codeBuilder.ToString());
         }
 
         [TestMethod]
@@ -132,54 +132,54 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             codeBuilder.IndentStyle = IndentStyle.Space;
             codeBuilder.IndentSize = 4;
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("    ", codeBuilder.GetIndentString());
+            Assert.AreEqual("    ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("        ", codeBuilder.GetIndentString());
+            Assert.AreEqual("        ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual("    ", codeBuilder.GetIndentString());
+            Assert.AreEqual("    ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             /* 2 Spaces */
 
             codeBuilder.IndentStyle = IndentStyle.Space;
             codeBuilder.IndentSize = 2;
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("  ", codeBuilder.GetIndentString());
+            Assert.AreEqual("  ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("    ", codeBuilder.GetIndentString());
+            Assert.AreEqual("    ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual("  ", codeBuilder.GetIndentString());
+            Assert.AreEqual("  ", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             /* Tab */
 
             codeBuilder.IndentStyle = IndentStyle.Tab;
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("\t", codeBuilder.GetIndentString());
+            Assert.AreEqual("\t", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
-            Assert.AreEqual("\t\t", codeBuilder.GetIndentString());
+            Assert.AreEqual("\t\t", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual("\t", codeBuilder.GetIndentString());
+            Assert.AreEqual("\t", codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Unindent();
-            Assert.AreEqual(string.Empty, codeBuilder.GetIndentString());
+            Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
         }
 
         [TestMethod]
@@ -190,17 +190,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             /* CR */
 
             codeBuilder.EndOfLine = EndOfLine.CR;
-            Assert.AreEqual("\r", codeBuilder.GetEndOfLineString());
+            Assert.AreEqual("\r", codeBuilder.CurrentEndOfLineString);
 
             /* LF */
 
             codeBuilder.EndOfLine = EndOfLine.LF;
-            Assert.AreEqual("\n", codeBuilder.GetEndOfLineString());
+            Assert.AreEqual("\n", codeBuilder.CurrentEndOfLineString);
 
             /* CRLF */
 
             codeBuilder.EndOfLine = EndOfLine.CRLF;
-            Assert.AreEqual("\r\n", codeBuilder.GetEndOfLineString());
+            Assert.AreEqual("\r\n", codeBuilder.CurrentEndOfLineString);
         }
 
         [TestMethod]
@@ -229,7 +229,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.AppendLine(appendLineString);
             codeBuilder.AppendLine();
 
-            var expected = $"{codeBuilder.GetEndOfLineString()}{appendLineString}{codeBuilder.GetEndOfLineString()}{codeBuilder.GetEndOfLineString()}";
+            var expected = $"{codeBuilder.CurrentEndOfLineString}{appendLineString}{codeBuilder.CurrentEndOfLineString}{codeBuilder.CurrentEndOfLineString}";
             var actual = codeBuilder.ToString();
 
             Assert.AreEqual(expected, actual);
