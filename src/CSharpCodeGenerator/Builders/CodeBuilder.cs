@@ -105,6 +105,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public static string GetIndentStringWithDepth(string indentString, int indentDepth)
         {
+            if (indentString == null)
+            {
+                throw new ArgumentNullException(nameof(indentString));
+            }
+
             return string.Join(string.Empty, Enumerable.Range(0, indentDepth).Select(x => indentString));
         }
 
