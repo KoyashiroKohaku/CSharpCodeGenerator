@@ -108,9 +108,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return string.Join(string.Empty, Enumerable.Range(0, indentDepth).Select(x => indentString));
         }
 
-        public string GetEndOfLineString(EndOfLine endOfLine)
+        public static string GetEndOfLineString(EndOfLine endOfLine)
         {
-            return EndOfLine switch
+            return endOfLine switch
             {
                 EndOfLine.CR => "\r",
                 EndOfLine.LF => "\n",
