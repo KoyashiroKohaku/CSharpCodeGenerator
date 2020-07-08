@@ -412,13 +412,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             codeBuilder.AppendProperty(testProperties[5]).AppendLine();
             codeBuilder.AppendProperty(testProperties[6]);
 
-            var expected = $@"public {TypeResolver.GetTypeAlias(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[2].PropertyType)} {testProperties[2].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[3].PropertyType)} {testProperties[3].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[4].PropertyType)} {testProperties[4].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[5].PropertyType)} {testProperties[5].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeAlias(testProperties[6].PropertyType)} {testProperties[6].PropertyName} {{ get; set; }}";
+            var expected = $@"public {TypeResolver.GetTypeString(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[2].PropertyType)} {testProperties[2].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[3].PropertyType)} {testProperties[3].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[4].PropertyType)} {testProperties[4].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[5].PropertyType)} {testProperties[5].PropertyName} {{ get; set; }}
+public {TypeResolver.GetTypeString(testProperties[6].PropertyType)} {testProperties[6].PropertyName} {{ get; set; }}";
 
             var actual = codeBuilder.ToString();
 

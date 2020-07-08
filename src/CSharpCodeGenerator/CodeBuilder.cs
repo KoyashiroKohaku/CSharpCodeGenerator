@@ -286,7 +286,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             }
 
             Append("public ")
-                    .Append(TypeResolver.GetTypeAlias(property.PropertyType))
+                    .Append(TypeResolver.GetTypeString(property.PropertyType))
                     .Append(" ")
                     .Append(property.PropertyName)
                     .Append(" { get; set; }");
