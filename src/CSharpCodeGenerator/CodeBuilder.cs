@@ -12,6 +12,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         private int _indentSize = 4;
         private int _indentDepth = 0;
 
+        public string CurrentIndentString => GetIndentString(IndentStyle, IndentSize);
+
+        public string CurrentIndentStringWithDepth => GetIndentStringWithDepth(CurrentIndentString, IndentDepth);
+
+        public string CurrentEndOfLineString => GetEndOfLineString(EndOfLine);
+
         public IndentStyle IndentStyle
         {
             get => _indentStyle;
@@ -76,12 +82,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         }
 
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
-
-        public string CurrentIndentString => GetIndentString(IndentStyle, IndentSize);
-
-        public string CurrentIndentStringWithDepth => GetIndentStringWithDepth(CurrentIndentString, IndentDepth);
-
-        public string CurrentEndOfLineString => GetEndOfLineString(EndOfLine);
 
         public static string GetIndentString(IndentStyle indentStyle, int indentSize)
         {
