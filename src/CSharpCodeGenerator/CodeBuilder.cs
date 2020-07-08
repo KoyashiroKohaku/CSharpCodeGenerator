@@ -70,10 +70,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 {
                     _indentDepth = 0;
                 }
-                else if (value > int.MaxValue)
-                {
-                    _indentDepth = int.MaxValue;
-                }
                 else
                 {
                     _indentDepth = value;
