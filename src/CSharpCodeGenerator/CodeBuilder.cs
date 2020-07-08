@@ -66,7 +66,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             get => _indentDepth;
             set
             {
-                if (value > 0)
+                if (value < 0)
                 {
                     _indentDepth = 0;
                 }
