@@ -111,13 +111,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             /* Indent (Max) */
 
-            codeBuilder.GetType().GetProperty(nameof(codeBuilder.IndentDepth)).SetValue(codeBuilder, int.MaxValue);
+            codeBuilder.IndentDepth = int.MaxValue;
             codeBuilder.Indent();
             Assert.AreEqual(int.MaxValue, codeBuilder.IndentDepth);
 
             /* Unindent (Min) */
 
-            codeBuilder.GetType().GetProperty(nameof(codeBuilder.IndentDepth)).SetValue(codeBuilder, 0);
+            codeBuilder.IndentDepth = 0;
             codeBuilder.Unindent();
             Assert.AreEqual(0, codeBuilder.IndentDepth);
         }

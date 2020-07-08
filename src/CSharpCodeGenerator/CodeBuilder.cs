@@ -125,14 +125,20 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public CodeBuilder Indent()
         {
-            IndentDepth++;
+            if (IndentDepth < int.MaxValue)
+            {
+                _indentDepth++;
+            }
 
             return this;
         }
 
         public CodeBuilder Unindent()
         {
-            IndentDepth--;
+            if (IndentDepth > 0)
+            {
+                _indentDepth--;
+            }
 
             return this;
         }
