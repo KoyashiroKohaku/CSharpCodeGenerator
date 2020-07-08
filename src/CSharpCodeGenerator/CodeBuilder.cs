@@ -155,6 +155,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
+        public CodeBuilder Append(ReadOnlySpan<char> value)
+        {
+            _builder.Append(value);
+
+            return this;
+        }
+
         public CodeBuilder AppendLine()
         {
             Append(CurrentEndOfLineString);
@@ -169,6 +176,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(value));
             }
 
+            Append(value).Append(CurrentEndOfLineString);
+
+            return this;
+        }
+
+        public CodeBuilder AppendLine(ReadOnlySpan<char> value)
+        {
             Append(value).Append(CurrentEndOfLineString);
 
             return this;
