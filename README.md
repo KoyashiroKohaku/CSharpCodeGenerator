@@ -1,6 +1,6 @@
 # CSharpCodeGenerator
 
-## Sample
+## Example
 
 ```cs
 var pocoClass = new POCOClass("TestClass")
