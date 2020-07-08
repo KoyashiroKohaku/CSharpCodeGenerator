@@ -10,6 +10,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         private readonly StringBuilder _builder = new StringBuilder();
         private IndentStyle _indentStyle = IndentStyle.Space;
         private int _indentSize = 4;
+        private int _indentDepth = 0;
 
         public IndentStyle IndentStyle
         {
@@ -54,7 +55,25 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             }
         }
 
-        public int IndentDepth { get; private set; } = 0;
+        public int IndentDepth
+        {
+            get => _indentDepth;
+            set
+            {
+                if (value > 0)
+                {
+                    _indentDepth = 0;
+                }
+                else if (value > int.MaxValue)
+                {
+                    _indentDepth = int.MaxValue;
+                }
+                else
+                {
+                    _indentDepth = value;
+                }
+            }
+        }
 
         public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
 
