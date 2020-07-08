@@ -83,26 +83,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public string CurrentEndOfLineString => GetEndOfLineString(EndOfLine);
 
-        public CodeBuilder Indent()
-        {
-            if (IndentDepth < int.MaxValue)
-            {
-                IndentDepth++;
-            }
-
-            return this;
-        }
-
-        public CodeBuilder Unindent()
-        {
-            if (IndentDepth > 0)
-            {
-                IndentDepth--;
-            }
-
-            return this;
-        }
-
         public static string GetIndentString(IndentStyle indentStyle, int indentSize)
         {
             var indentString = indentStyle switch
@@ -141,6 +121,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 EndOfLine.CRLF => "\r\n",
                 _ => throw new InvalidEnumArgumentException(nameof(endOfLine), (int)endOfLine, typeof(EndOfLine))
             };
+        }
+
+        public CodeBuilder Indent()
+        {
+            if (IndentDepth < int.MaxValue)
+            {
+                IndentDepth++;
+            }
+
+            return this;
+        }
+
+        public CodeBuilder Unindent()
+        {
+            if (IndentDepth > 0)
+            {
+                IndentDepth--;
+            }
+
+            return this;
         }
 
         public CodeBuilder Append(string value)
