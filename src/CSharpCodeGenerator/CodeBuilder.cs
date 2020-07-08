@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
 {
@@ -215,12 +216,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(xmlComment));
             }
 
-            var lines = ToString().Split(CurrentEndOfLineString);
+            var lines = SplitOnEndOfLine(ToString());
             var hasIndent = lines.Any() && lines.Last() == CurrentIndentStringWithDepth;
 
             Append("/// <summary>").AppendLine();
 
-            foreach (var line in xmlComment.Split(CurrentIndentString))
+            foreach (var line in SplitOnEndOfLine(xmlComment))
             {
                 if (hasIndent)
                 {
@@ -283,6 +284,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         public override string ToString()
         {
             return _builder.ToString();
+        }
+
+        private static string[] SplitOnEndOfLine(string value)
+        {
+            return Regex.Split(value, "\r\n|\n|\r");
         }
     }
 }
