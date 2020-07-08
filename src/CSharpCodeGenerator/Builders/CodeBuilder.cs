@@ -133,7 +133,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public CodeBuilder AppendLine()
         {
-            _builder.Append(CurrentEndOfLineString);
+            Append(CurrentEndOfLineString);
 
             return this;
         }
@@ -145,14 +145,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(value));
             }
 
-            _builder.Append(value).Append(CurrentEndOfLineString);
+            Append(value).Append(CurrentEndOfLineString);
 
             return this;
         }
 
         public CodeBuilder AppendIndent()
         {
-            _builder.Append(CurrentIndentStringWithDepth);
+            Append(CurrentIndentStringWithDepth);
 
             return this;
         }
@@ -181,7 +181,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(xmlComment));
             }
 
-            var lines = _builder.ToString().Split(CurrentEndOfLineString);
+            var lines = ToString().Split(CurrentEndOfLineString);
             var hasIndent = lines.Any() && lines.Last() == CurrentIndentStringWithDepth;
 
             Append("/// <summary>").AppendLine();
