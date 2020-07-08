@@ -92,7 +92,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         {
             if (type == null)
             {
-                throw new ArgumentNullException(nameof(type));
+                return false;
             }
 
             var types = new Type[]
