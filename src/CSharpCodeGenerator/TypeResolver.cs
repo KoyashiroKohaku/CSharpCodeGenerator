@@ -1,10 +1,31 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
 {
     public static class TypeResolver
     {
+        private static Dictionary<Type, string> TypeAliasDictionary => new Dictionary<Type, string>
+        {
+            { typeof(bool), "bool" },
+            { typeof(byte), "byte" },
+            { typeof(sbyte), "sbyte" },
+            { typeof(char), "char" },
+            { typeof(decimal), "decimal" },
+            { typeof(double), "double" },
+            { typeof(float), "float" },
+            { typeof(int), "int" },
+            { typeof(uint), "uint" },
+            { typeof(long), "long" },
+            { typeof(ulong), "ulong" },
+            { typeof(short), "short" },
+            { typeof(ushort), "ushort" },
+            { typeof(string), "string" },
+            { typeof(object), "object" },
+            { typeof(void), "void" }
+        };
+
         public static string GetTypeString(Type type)
         {
             if (type == null)
@@ -47,45 +68,23 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return type switch
+            if (!ExistsTypeAlias(type))
             {
-                Type _ when typeof(bool) == type => "bool",
-                Type _ when typeof(byte) == type => "byte",
-                Type _ when typeof(sbyte) == type => "sbyte",
-                Type _ when typeof(char) == type => "char",
-                Type _ when typeof(decimal) == type => "decimal",
-                Type _ when typeof(double) == type => "double",
-                Type _ when typeof(float) == type => "float",
-                Type _ when typeof(int) == type => "int",
-                Type _ when typeof(uint) == type => "uint",
-                Type _ when typeof(long) == type => "long",
-                Type _ when typeof(ulong) == type => "ulong",
-                Type _ when typeof(short) == type => "short",
-                Type _ when typeof(ushort) == type => "ushort",
-                Type _ when typeof(string) == type => "string",
-                Type _ when typeof(object) == type => "object",
-                Type _ when typeof(void) == type => "void",
-                _ => throw new ArgumentOutOfRangeException(nameof(type)),
-            };
+                throw new ArgumentOutOfRangeException(nameof(type));
+            }
+
+            return TypeAliasDictionary[type];
         }
 
-        public static bool TryGetTypeAliasName(Type type, out string typeAliasName)
+        public static bool TryGetTypeAliasName(Type type, out string? typeAliasName)
         {
             if (type == null)
             {
-                typeAliasName = string.Empty;
+                typeAliasName = null;
                 return false;
             }
 
-            if (!ExistsTypeAlias(type))
-            {
-                typeAliasName = string.Empty;
-                return false;
-            }
-
-            typeAliasName = GetTypeAliasName(type);
-
-            return true;
+            return TypeAliasDictionary.TryGetValue(type, out typeAliasName);
         }
 
         public static bool ExistsTypeAlias(Type type)
@@ -95,27 +94,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 return false;
             }
 
-            var types = new Type[]
-            {
-                typeof(bool),
-                typeof(byte),
-                typeof(sbyte),
-                typeof(char),
-                typeof(decimal),
-                typeof(double),
-                typeof(float),
-                typeof(int),
-                typeof(uint),
-                typeof(long),
-                typeof(ulong),
-                typeof(short),
-                typeof(ushort),
-                typeof(string),
-                typeof(object),
-                typeof(void)
-            };
-
-            return types.Contains(type);
+            return TypeAliasDictionary.ContainsKey(type);
         }
     }
 }

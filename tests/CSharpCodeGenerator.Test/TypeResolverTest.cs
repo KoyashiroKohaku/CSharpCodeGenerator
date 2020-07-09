@@ -69,10 +69,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         public void TryGetTypeAliasName()
         {
             Assert.IsFalse(TypeResolver.TryGetTypeAliasName(null, out string actual));
-            Assert.AreEqual(string.Empty, actual);
+            Assert.AreEqual(null, actual);
 
             Assert.IsFalse(TypeResolver.TryGetTypeAliasName(typeof(List<>), out actual));
-            Assert.AreEqual(string.Empty, actual);
+            Assert.AreEqual(null, actual);
 
             Assert.IsTrue(TypeResolver.TryGetTypeAliasName(typeof(bool), out actual));
             Assert.AreEqual("bool", actual);
