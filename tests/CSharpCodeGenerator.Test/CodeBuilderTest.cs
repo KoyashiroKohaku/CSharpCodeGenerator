@@ -282,7 +282,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
-        public void AppendXmlCommentTest()
+        public void AppendDocumentationCommentTest()
         {
             var codeBuilder = new CodeBuilder()
             {
@@ -291,7 +291,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 EndOfLine = EndOfLine.CRLF
             };
 
-            codeBuilder.AppendXmlComment();
+            codeBuilder.AppendDocumentationComment();
 
             var actual = codeBuilder.ToString();
 

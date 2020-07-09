@@ -210,7 +210,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
-        public CodeBuilder AppendXmlComment()
+        public CodeBuilder AppendDocumentationComment()
         {
             Append("/// ");
 

@@ -52,14 +52,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             // class declaration (start)
             if (pocoClass.XmlComment != null)
             {
-                codeBuilder.AppendIndent().AppendXmlComment().AppendXmlCommentTag("summary", XmlCommentTag.StartTag).AppendLine();
+                codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.StartTag).AppendLine();
 
                 foreach (var line in EndOfLineHelper.Split(pocoClass.XmlComment))
                 {
-                    codeBuilder.AppendIndent().AppendXmlComment().Append(line).AppendLine();
+                    codeBuilder.AppendIndent().AppendDocumentationComment().Append(line).AppendLine();
                 }
 
-                codeBuilder.AppendIndent().AppendXmlComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
+                codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
             }
             codeBuilder.AppendIndent().AppendClassDeclaration(pocoClass.ClassName).AppendLine();
             codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
@@ -74,14 +74,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 {
                     if (property.XmlComment != null)
                     {
-                        codeBuilder.AppendIndent().AppendXmlComment().AppendXmlCommentTag("summary", XmlCommentTag.StartTag).AppendLine();
+                        codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.StartTag).AppendLine();
 
                         foreach (var line in EndOfLineHelper.Split(property.XmlComment))
                         {
-                            codeBuilder.AppendIndent().AppendXmlComment().Append(line).AppendLine();
+                            codeBuilder.AppendIndent().AppendDocumentationComment().Append(line).AppendLine();
                         }
 
-                        codeBuilder.AppendIndent().AppendXmlComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
+                        codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
                     }
 
                     codeBuilder.AppendIndent().AppendProperty(property).AppendLine();
