@@ -30,7 +30,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             };
 
             // using directive
-            var namespaces = CodeBuilder.ExtractNamespace(pocoClass.Properties).OrderBy(s => s);
+            var namespaces = CodeBuilder.ExtractNamespace(pocoClass.Properties).OrderBy(s => s).ToArray();
             if (namespaces.Any())
             {
                 foreach (var namespaceString in namespaces)
