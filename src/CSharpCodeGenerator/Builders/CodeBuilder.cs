@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator
+namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public class CodeBuilder
     {
