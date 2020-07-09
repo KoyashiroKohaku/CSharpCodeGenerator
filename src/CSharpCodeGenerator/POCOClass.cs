@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
@@ -9,6 +10,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
     {
         public POCOClass(string className)
         {
+            if (className == null)
+            {
+                throw new ArgumentNullException(nameof(className));
+            }
+
             ClassName = className;
         }
 
