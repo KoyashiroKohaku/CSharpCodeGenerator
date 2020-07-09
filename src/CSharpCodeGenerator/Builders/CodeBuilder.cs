@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
-    public class CodeBuilder
+    public class CodeBuilder : ICodeBuilder
     {
         private readonly StringBuilder _builder = new StringBuilder();
         private IndentStyle _indentStyle = IndentStyle.Space;
@@ -263,84 +261,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public CodeBuilder AppendClassDeclaration(string className)
-        {
-            if (string.IsNullOrEmpty(className))
-            {
-                return this;
-            }
-
-            Append("public class ").Append(className);
-
-            return this;
-        }
-
-        public CodeBuilder AppendField(ClassProperty property)
-        {
-            if (property == null)
-            {
-                throw new ArgumentNullException(nameof(property));
-            }
-
-            Append("private ").Append(TypeResolver.GetTypeString(property.PropertyType));
-
-            if (property.Nullable)
-            {
-                Append("?");
-            }
-
-            Append(" ").Append(NameConverter.Convert(property.PropertyName, property.FieldNamingConvention)).Append(";");
-
-            return this;
-        }
-
-        public CodeBuilder AppendPropertyDeclaration(ClassProperty property)
-        {
-            if (property == null)
-            {
-                throw new ArgumentNullException(nameof(property));
-            }
-
-            Append("public ").Append(TypeResolver.GetTypeString(property.PropertyType));
-
-            if (property.Nullable)
-            {
-                Append("?");
-            }
-
-            Append(" ").Append(property.PropertyName);
-
-            return this;
-        }
-
-        public CodeBuilder AppendAutoImplementedProperties(ClassProperty property)
-        {
-            if (property == null)
-            {
-                throw new ArgumentNullException(nameof(property));
-            }
-
-            AppendPropertyDeclaration(property).Append(" { get; set; }");
-
-            return this;
-        }
-
         public override string ToString()
         {
             return _builder.ToString();
-        }
-
-        public static IEnumerable<string> ExtractNamespace(IEnumerable<ClassProperty> properties)
-        {
-            if (properties == null)
-            {
-                throw new ArgumentNullException(nameof(properties));
-            }
-
-            return properties
-                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
-                .Select(p => p.PropertyType.Namespace)
-                .Distinct();
         }
     }
 }
