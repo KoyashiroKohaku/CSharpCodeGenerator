@@ -394,7 +394,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
-        public void AppendPropertyTest()
+        public void AppendPropertyDeclarationTest()
         {
             var testProperties = new ClassProperty[]
             {
@@ -413,19 +413,33 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             foreach (var testProperty in testProperties)
             {
-                codeBuilder.AppendProperty(testProperty).AppendLine();
+                codeBuilder.AppendPropertyDeclaration(testProperty).AppendLine();
             }
 
-            var expected = @"public int TestProperty01 { get; set; }
-public string TestProperty02 { get; set; }
-public int[] TestProperty03 { get; set; }
-public string[] TestProperty04 { get; set; }
-public List<int> TestProperty05 { get; set; }
-public List<string> TestProperty06 { get; set; }
-public Dictionary<int, string> TestProperty07 { get; set; }
-public int? TestProperty08 { get; set; }
-public string? TestProperty09 { get; set; }
+            var expected = @"public int TestProperty01
+public string TestProperty02
+public int[] TestProperty03
+public string[] TestProperty04
+public List<int> TestProperty05
+public List<string> TestProperty06
+public Dictionary<int, string> TestProperty07
+public int? TestProperty08
+public string? TestProperty09
 ";
+
+            var actual = codeBuilder.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AppendAutoImplementedPropertiesTest()
+        {
+            var codeBuilder = new CodeBuilder();
+
+            codeBuilder.AppendAutoImplementedProperties(new ClassProperty("TestProperty", typeof(int)));
+
+            var expected = "public int TestProperty { get; set; }";
 
             var actual = codeBuilder.ToString();
 

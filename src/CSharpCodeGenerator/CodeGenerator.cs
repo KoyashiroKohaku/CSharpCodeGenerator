@@ -65,6 +65,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
             codeBuilder.Indent();
 
+            // Fields
+            if (pocoClass.Properties.Any(p => !p.AutoImplementedProperties))
+            {
+                foreach (var (property, index) in pocoClass.Properties.Where(p => !p.AutoImplementedProperties).Select((p, i) => (p, i)))
+                {
+                    codeBuilder.AppendIndent().AppendField(property).AppendLine();
+                }
+
+                codeBuilder.AppendLine();
+            }
+
             // Properties
             if (pocoClass.Properties.Any())
             {
@@ -84,7 +95,28 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                         codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
                     }
 
-                    codeBuilder.AppendIndent().AppendProperty(property).AppendLine();
+                    if (property.AutoImplementedProperties)
+                    {
+                        codeBuilder.AppendIndent().AppendAutoImplementedProperties(property).AppendLine();
+                    }
+                    else
+                    {
+                        codeBuilder.AppendIndent().AppendPropertyDeclaration(property).AppendLine();
+
+                        var fieldName = NameConverter.Convert(property.PropertyName, property.FieldNamingConvention);
+
+                        codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
+
+                        codeBuilder.Indent();
+
+                        codeBuilder.AppendIndent().Append("get => ").Append(fieldName).Append(";").AppendLine();
+
+                        codeBuilder.AppendIndent().Append("set => value = ").Append(fieldName).Append(";").AppendLine();
+
+                        codeBuilder.Unindent();
+
+                        codeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Right).AppendLine();
+                    }
 
                     if (count != index + 1)
                     {

@@ -54,6 +54,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 Nullable = true
             });
 
+            pocoClass.Properties.Add(new ClassProperty("TestProperty08", typeof(int))
+            {
+                XmlComment = "TestProperty08 XML Comment",
+                AutoImplementedProperties = false
+            });
+
+            pocoClass.Properties.Add(new ClassProperty("TestProperty09", typeof(int))
+            {
+                XmlComment = "TestProperty09 XML Comment",
+                AutoImplementedProperties = false,
+                FieldNamingConvention = FieldNamingConvention.CamelWithUnderscoreInThePrefix
+            });
+
+            pocoClass.Properties.Add(new ClassProperty("TestProperty10", typeof(int))
+            {
+                XmlComment = "TestProperty10 XML Comment",
+                AutoImplementedProperties = false,
+                FieldNamingConvention = FieldNamingConvention.Camel
+            });
+
             var expected = @"using System;
 using System.Collections.Generic;
 
@@ -64,6 +84,10 @@ namespace TestOrganization.TestProduct
     /// </summary>
     public class TestClass
     {
+        private int _testProperty08;
+        private int _testProperty09;
+        private int testProperty10;
+
         /// <summary>
         /// TestProperty01 XML Comment
         /// </summary>
@@ -98,6 +122,33 @@ namespace TestOrganization.TestProduct
         /// TestProperty07 XML Comment
         /// </summary>
         public string? TestProperty07 { get; set; }
+
+        /// <summary>
+        /// TestProperty08 XML Comment
+        /// </summary>
+        public int TestProperty08
+        {
+            get => _testProperty08;
+            set => value = _testProperty08;
+        }
+
+        /// <summary>
+        /// TestProperty09 XML Comment
+        /// </summary>
+        public int TestProperty09
+        {
+            get => _testProperty09;
+            set => value = _testProperty09;
+        }
+
+        /// <summary>
+        /// TestProperty10 XML Comment
+        /// </summary>
+        public int TestProperty10
+        {
+            get => testProperty10;
+            set => value = testProperty10;
+        }
     }
 }
 ";

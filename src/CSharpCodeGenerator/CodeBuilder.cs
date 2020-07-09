@@ -275,7 +275,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
-        public CodeBuilder AppendProperty(ClassProperty property)
+        public CodeBuilder AppendField(ClassProperty property)
+        {
+            if (property == null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
+            Append("private ").Append(TypeResolver.GetTypeString(property.PropertyType));
+
+            if (property.Nullable)
+            {
+                Append("?");
+            }
+
+            Append(" ").Append(NameConverter.Convert(property.PropertyName, property.FieldNamingConvention)).Append(";");
+
+            return this;
+        }
+
+        public CodeBuilder AppendPropertyDeclaration(ClassProperty property)
         {
             if (property == null)
             {
@@ -289,7 +308,19 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 Append("?");
             }
 
-            Append(" ").Append(property.PropertyName).Append(" { get; set; }");
+            Append(" ").Append(property.PropertyName);
+
+            return this;
+        }
+
+        public CodeBuilder AppendAutoImplementedProperties(ClassProperty property)
+        {
+            if (property == null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
+            AppendPropertyDeclaration(property).Append(" { get; set; }");
 
             return this;
         }
