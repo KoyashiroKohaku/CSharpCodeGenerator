@@ -435,7 +435,10 @@ public {TypeResolver.GetTypeString(testProperties[6].PropertyType)} {testPropert
                 new ClassProperty("TestProperty02", typeof(System.Text.StringBuilder))
             };
 
-            var expected = properties.Select(p => p.PropertyType.Namespace).ToArray();
+            var expected = properties
+                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
+                .Select(p => p.PropertyType.Namespace)
+                .ToArray();
 
             var actual = CodeBuilder.ExtractNamespace(properties).OrderBy(s => s).ToArray();
 

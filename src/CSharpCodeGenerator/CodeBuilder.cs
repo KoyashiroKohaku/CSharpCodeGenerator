@@ -311,7 +311,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                 throw new ArgumentNullException(nameof(properties));
             }
 
-            return properties.Select(p => p.PropertyType.Namespace).Distinct();
+            return properties
+                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
+                .Select(p => p.PropertyType.Namespace)
+                .Distinct();
         }
     }
 }
