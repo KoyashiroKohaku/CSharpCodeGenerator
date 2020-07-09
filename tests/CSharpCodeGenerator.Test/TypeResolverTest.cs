@@ -8,7 +8,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
     public class TypeResolverTest
     {
         [TestMethod]
-        public void GetTypeString()
+        public void GetTypeStringTest()
         {
             Assert.AreEqual("bool", TypeResolver.GetTypeString(typeof(bool)));
             Assert.AreEqual("byte", TypeResolver.GetTypeString(typeof(byte)));
@@ -66,7 +66,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         }
 
         [TestMethod]
-        public void TryGetTypeAliasName()
+        public void TryGetTypeAliasNameTest()
         {
             Assert.IsFalse(TypeResolver.TryGetTypeAliasName(null, out string actual));
             Assert.AreEqual(null, actual);
