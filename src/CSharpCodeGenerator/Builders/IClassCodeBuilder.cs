@@ -4,38 +4,38 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public interface IClassCodeBuilder : ICodeBuilder
     {
-        new ClassCodeBuilder Indent();
+        new IClassCodeBuilder Indent();
 
-        new ClassCodeBuilder Unindent();
+        new IClassCodeBuilder Unindent();
 
-        new ClassCodeBuilder Append(string value);
+        new IClassCodeBuilder Append(string value);
 
-        new ClassCodeBuilder Append(ReadOnlySpan<char> value);
+        new IClassCodeBuilder Append(ReadOnlySpan<char> value);
 
-        new ClassCodeBuilder AppendLine();
+        new IClassCodeBuilder AppendLine();
 
-        new ClassCodeBuilder AppendLine(string value);
+        new IClassCodeBuilder AppendLine(string value);
 
-        new ClassCodeBuilder AppendLine(ReadOnlySpan<char> value);
+        new IClassCodeBuilder AppendLine(ReadOnlySpan<char> value);
 
-        new ClassCodeBuilder AppendIndent();
+        new IClassCodeBuilder AppendIndent();
 
-        new ClassCodeBuilder AppendCurlyBracket(CurlyBracket curlyBracket);
+        new IClassCodeBuilder AppendCurlyBracket(CurlyBracket curlyBracket);
 
-        new ClassCodeBuilder AppendDocumentationComment();
+        new IClassCodeBuilder AppendDocumentationComment();
 
-        new ClassCodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag);
+        new IClassCodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag);
 
-        new ClassCodeBuilder AppendUsingDirective(string namespaceString);
+        new IClassCodeBuilder AppendUsingDirective(string namespaceString);
 
-        new ClassCodeBuilder AppendNamespaceDeclaration(string namespaceName);
+        new IClassCodeBuilder AppendNamespaceDeclaration(string namespaceName);
 
-        ClassCodeBuilder AppendClassDeclaration(string className);
+        IClassCodeBuilder AppendClassDeclaration(string className);
 
-        ClassCodeBuilder AppendField(ClassProperty property);
+        IClassCodeBuilder AppendField(ClassProperty property);
 
-        ClassCodeBuilder AppendPropertyDeclaration(ClassProperty property);
+        IClassCodeBuilder AppendPropertyDeclaration(ClassProperty property);
 
-        ClassCodeBuilder AppendAutoImplementedProperties(ClassProperty property);
+        IClassCodeBuilder AppendAutoImplementedProperties(ClassProperty property);
     }
 }

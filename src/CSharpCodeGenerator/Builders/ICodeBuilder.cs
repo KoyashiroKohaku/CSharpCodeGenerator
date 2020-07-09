@@ -18,30 +18,30 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         EndOfLine EndOfLine { get; set; }
 
-        CodeBuilder Indent();
+        ICodeBuilder Indent();
 
-        CodeBuilder Unindent();
+        ICodeBuilder Unindent();
 
-        CodeBuilder Append(string value);
+        ICodeBuilder Append(string value);
 
-        CodeBuilder Append(ReadOnlySpan<char> value);
+        ICodeBuilder Append(ReadOnlySpan<char> value);
 
-        CodeBuilder AppendLine();
+        ICodeBuilder AppendLine();
 
-        CodeBuilder AppendLine(string value);
+        ICodeBuilder AppendLine(string value);
 
-        CodeBuilder AppendLine(ReadOnlySpan<char> value);
+        ICodeBuilder AppendLine(ReadOnlySpan<char> value);
 
-        CodeBuilder AppendIndent();
+        ICodeBuilder AppendIndent();
 
-        CodeBuilder AppendCurlyBracket(CurlyBracket curlyBracket);
+        ICodeBuilder AppendCurlyBracket(CurlyBracket curlyBracket);
 
-        CodeBuilder AppendDocumentationComment();
+        ICodeBuilder AppendDocumentationComment();
 
-        CodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag);
+        ICodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag);
 
-        CodeBuilder AppendUsingDirective(string namespaceString);
+        ICodeBuilder AppendUsingDirective(string namespaceString);
 
-        CodeBuilder AppendNamespaceDeclaration(string namespaceName);
+        ICodeBuilder AppendNamespaceDeclaration(string namespaceName);
     }
 }
