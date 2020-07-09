@@ -34,6 +34,18 @@ pocoClass.Properties.Add(new ClassProperty("TestProperty05", typeof(DateTime))
     XmlComment = "TestProperty05 XML Comment"
 });
 
+pocoClass.Properties.Add(new ClassProperty("TestProperty06", typeof(int))
+{
+    XmlComment = "TestProperty06 XML Comment",
+    Nullable = true
+});
+
+pocoClass.Properties.Add(new ClassProperty("TestProperty07", typeof(string))
+{
+    XmlComment = "TestProperty07 XML Comment",
+    Nullable = true
+});
+
 var code = CodeGenerator.Generate(pocoClass);
 
 /* Result */
@@ -72,6 +84,16 @@ namespace TestOrganization.TestProduct
         /// TestProperty05 XML Comment
         /// </summary>
         public DateTime TestProperty05 { get; set; }
+        
+        /// <summary>
+        /// TestProperty06 XML Comment
+        /// </summary>
+        public int? TestProperty06 { get; set; }
+
+        /// <summary>
+        /// TestProperty07 XML Comment
+        /// </summary>
+        public string? TestProperty07 { get; set; }
     }
 }
 */
