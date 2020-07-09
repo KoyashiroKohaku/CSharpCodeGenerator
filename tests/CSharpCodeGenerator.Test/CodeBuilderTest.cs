@@ -291,28 +291,33 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 EndOfLine = EndOfLine.CRLF
             };
 
-            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 01").AppendLine();
-
-            codeBuilder.Indent();
-
-            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 02").AppendLine();
-
-            codeBuilder.Unindent();
-
-            codeBuilder.AppendIndent().AppendXmlComment("Test XML Comment 03").AppendLine();
-
-            var expected = @"/// <summary>
-/// Test XML Comment 01
-/// </summary>
-    /// <summary>
-    /// Test XML Comment 02
-    /// </summary>
-/// <summary>
-/// Test XML Comment 03
-/// </summary>
-";
+            codeBuilder.AppendXmlComment();
 
             var actual = codeBuilder.ToString();
+
+            var expected = "/// ";
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void AppendXmlCommentTagTest()
+        {
+            var codeBuilder = new CodeBuilder()
+            {
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4,
+                EndOfLine = EndOfLine.CRLF
+            };
+
+            codeBuilder.AppendXmlCommentTag("TestTag01", XmlCommentTag.StartTag);
+            codeBuilder.AppendXmlCommentTag("TestTag01", XmlCommentTag.EndTag);
+            codeBuilder.AppendXmlCommentTag("TestTag02", XmlCommentTag.StartTag);
+            codeBuilder.AppendXmlCommentTag("TestTag02", XmlCommentTag.EndTag);
+
+            var actual = codeBuilder.ToString();
+
+            var expected = "<TestTag01></TestTag01><TestTag02></TestTag02>";
 
             Assert.AreEqual(expected, actual);
         }

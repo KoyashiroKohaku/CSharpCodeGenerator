@@ -210,34 +210,31 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
-        public CodeBuilder AppendXmlComment(string xmlComment)
+        public CodeBuilder AppendXmlComment()
         {
-            if (xmlComment == null)
+            Append("/// ");
+
+            return this;
+        }
+
+        public CodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag)
+        {
+            if (tagName == null)
             {
-                throw new ArgumentNullException(nameof(xmlComment));
+                throw new ArgumentNullException(nameof(tagName));
             }
 
-            var lines = SplitOnEndOfLine(ToString());
-            var hasIndent = lines.Any() && lines.Last() == CurrentIndentStringWithDepth;
-
-            Append("/// <summary>").AppendLine();
-
-            foreach (var line in SplitOnEndOfLine(xmlComment))
+            switch (xmlCommentTag)
             {
-                if (hasIndent)
-                {
-                    AppendIndent();
-                }
-
-                Append("/// ").Append(line).AppendLine();
+                case XmlCommentTag.StartTag:
+                    Append("<").Append(tagName).Append(">");
+                    break;
+                case XmlCommentTag.EndTag:
+                    Append("</").Append(tagName).Append(">");
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(nameof(xmlCommentTag), (int)xmlCommentTag, typeof(XmlCommentTag));
             }
-
-            if (hasIndent)
-            {
-                AppendIndent();
-            }
-
-            Append("/// </summary>");
 
             return this;
         }
@@ -297,11 +294,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         public override string ToString()
         {
             return _builder.ToString();
-        }
-
-        private static string[] SplitOnEndOfLine(string value)
-        {
-            return Regex.Split(value, "\n|\r|\r\n");
         }
 
         public static IEnumerable<string> ExtractNamespace(IEnumerable<ClassProperty> properties)
