@@ -404,26 +404,28 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 new ClassProperty("TestProperty04", typeof(string[])),
                 new ClassProperty("TestProperty05", typeof(List<int>)),
                 new ClassProperty("TestProperty06", typeof(List<string>)),
-                new ClassProperty("TestProperty07", typeof(Dictionary<int, string>))
+                new ClassProperty("TestProperty07", typeof(Dictionary<int, string>)),
+                new ClassProperty("TestProperty08", typeof(int)) { Nullable = true },
+                new ClassProperty("TestProperty09", typeof(string)) { Nullable = true }
             };
 
             var codeBuilder = new CodeBuilder();
 
-            codeBuilder.AppendProperty(testProperties[0].PropertyName, testProperties[0].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[1].PropertyName, testProperties[1].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[2].PropertyName, testProperties[2].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[3].PropertyName, testProperties[3].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[4].PropertyName, testProperties[4].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[5].PropertyName, testProperties[5].PropertyType).AppendLine();
-            codeBuilder.AppendProperty(testProperties[6].PropertyName, testProperties[6].PropertyType);
+            foreach (var testProperty in testProperties)
+            {
+                codeBuilder.AppendProperty(testProperty).AppendLine();
+            }
 
-            var expected = $@"public {TypeResolver.GetTypeString(testProperties[0].PropertyType)} {testProperties[0].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[1].PropertyType)} {testProperties[1].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[2].PropertyType)} {testProperties[2].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[3].PropertyType)} {testProperties[3].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[4].PropertyType)} {testProperties[4].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[5].PropertyType)} {testProperties[5].PropertyName} {{ get; set; }}
-public {TypeResolver.GetTypeString(testProperties[6].PropertyType)} {testProperties[6].PropertyName} {{ get; set; }}";
+            var expected = @"public int TestProperty01 { get; set; }
+public string TestProperty02 { get; set; }
+public int[] TestProperty03 { get; set; }
+public string[] TestProperty04 { get; set; }
+public List<int> TestProperty05 { get; set; }
+public List<string> TestProperty06 { get; set; }
+public Dictionary<int, string> TestProperty07 { get; set; }
+public int? TestProperty08 { get; set; }
+public string? TestProperty09 { get; set; }
+";
 
             var actual = codeBuilder.ToString();
 

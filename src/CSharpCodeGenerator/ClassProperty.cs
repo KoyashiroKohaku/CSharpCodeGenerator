@@ -15,5 +15,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         public string? XmlComment { get; set; }
 
         public Type PropertyType { get; set; }
+
+        public bool Nullable { get; set; } = false;
     }
 }

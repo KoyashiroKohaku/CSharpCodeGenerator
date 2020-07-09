@@ -275,23 +275,21 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             return this;
         }
 
-        public CodeBuilder AppendProperty(string propertyName, Type propertyType)
+        public CodeBuilder AppendProperty(ClassProperty property)
         {
-            if (propertyName == null)
+            if (property == null)
             {
-                throw new ArgumentNullException(nameof(propertyName));
+                throw new ArgumentNullException(nameof(property));
             }
 
-            if (propertyType == null)
+            Append("public ").Append(TypeResolver.GetTypeString(property.PropertyType));
+
+            if (property.Nullable)
             {
-                throw new ArgumentNullException(nameof(propertyType));
+                Append("?");
             }
 
-            Append("public ")
-                    .Append(TypeResolver.GetTypeString(propertyType))
-                    .Append(" ")
-                    .Append(propertyName)
-                    .Append(" { get; set; }");
+            Append(" ").Append(property.PropertyName).Append(" { get; set; }");
 
             return this;
         }

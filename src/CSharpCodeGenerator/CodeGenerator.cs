@@ -84,7 +84,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                         codeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
                     }
 
-                    codeBuilder.AppendIndent().AppendProperty(property.PropertyName, property.PropertyType).AppendLine();
+                    codeBuilder.AppendIndent().AppendProperty(property).AppendLine();
 
                     if (count != index + 1)
                     {
