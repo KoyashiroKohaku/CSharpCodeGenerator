@@ -51,14 +51,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
                 return $"{type.Name[0..^2]}<{arguments}>";
             }
-            else if (type.IsArray)
+
+            if (type.IsArray)
             {
                 return $"{GetTypeString(type.GetElementType())}[]";
             }
-            else
-            {
-                return type.Name;
-            }
+
+            return type.Name;
         }
 
         public static string GetTypeAliasName(Type type)
