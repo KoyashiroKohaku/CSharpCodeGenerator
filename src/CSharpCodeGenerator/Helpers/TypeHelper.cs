@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
@@ -75,11 +76,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             return TypeAliasDictionary[type];
         }
 
-        public static bool TryGetTypeAliasName(Type type, out string? typeAliasName)
+        public static bool TryGetTypeAliasName(Type type, [MaybeNullWhen(false)] out string typeAliasName)
         {
             if (type == null)
             {
-                typeAliasName = null;
+                typeAliasName = default;
                 return false;
             }
 
