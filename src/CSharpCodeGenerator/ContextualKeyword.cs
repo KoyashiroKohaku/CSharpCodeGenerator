@@ -1,0 +1,37 @@
+namespace KoyashiroKohaku.CSharpCodeGenerator
+{
+    public enum ContextualKeyword
+    {
+        Add,
+        Alias,
+        Ascending,
+        Async,
+        Await,
+        By,
+        Descending,
+        Dynamic,
+        Equals,
+        From,
+        Get,
+        Global,
+        Group,
+        Into,
+        Join,
+        Let,
+        Nameof,
+        On,
+        Orderby,
+        PartialType,
+        PartialMethod,
+        Remove,
+        Select,
+        Set,
+        UnmanagedGenericTypeConstraint,
+        Value,
+        Var,
+        WhenFilterCondition,
+        WhereGenericTypeConstraint,
+        WhereQueryClause,
+        Yield,
+    }
+}
