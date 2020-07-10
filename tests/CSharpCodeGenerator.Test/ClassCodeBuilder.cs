@@ -42,7 +42,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void AppendPropertyDeclarationTest()
         {
-            var testProperties = new PropertySetting[]
+            var testPropertySettings = new PropertySetting[]
             {
                 new PropertySetting("TestProperty01", typeof(int)),
                 new PropertySetting("TestProperty02", typeof(string)),
@@ -57,7 +57,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 
             var codeBuilder = new ClassCodeBuilder();
 
-            foreach (var testProperty in testProperties)
+            foreach (var testProperty in testPropertySettings)
             {
                 codeBuilder.AppendPropertyDeclaration(testProperty).AppendLine();
             }
@@ -95,19 +95,19 @@ public string? TestProperty09
         [TestMethod]
         public void ExtractNamespaceTest()
         {
-            var properties = new PropertySetting[]
+            var propertySettings = new PropertySetting[]
             {
                 new PropertySetting("TestProperty01", typeof(int)),
                 new PropertySetting("TestProperty02", typeof(List<int>)),
                 new PropertySetting("TestProperty02", typeof(System.Text.StringBuilder))
             };
 
-            var expected = properties
+            var expected = propertySettings
                 .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
                 .Select(p => p.PropertyType.Namespace)
                 .ToArray();
 
-            var actual = ClassCodeBuilder.ExtractNamespace(properties).OrderBy(s => s).ToArray();
+            var actual = ClassCodeBuilder.ExtractNamespace(propertySettings).OrderBy(s => s).ToArray();
 
             CollectionAssert.AreEqual(expected, actual);
         }

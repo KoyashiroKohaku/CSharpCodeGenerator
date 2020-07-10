@@ -31,7 +31,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             };
 
             // using directive
-            var namespaces = ClassCodeBuilder.ExtractNamespace(classSetting.Properties).OrderBy(s => s).ToArray();
+            var namespaces = ClassCodeBuilder.ExtractNamespace(classSetting.PropertySettings).OrderBy(s => s).ToArray();
             if (namespaces.Any())
             {
                 foreach (var namespaceString in namespaces)
@@ -67,9 +67,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             classCodeBuilder.Indent();
 
             // Fields
-            if (classSetting.Properties.Any(p => !p.AutoImplementedProperties))
+            if (classSetting.PropertySettings.Any(p => !p.AutoImplementedProperties))
             {
-                foreach (var (propertySetting, index) in classSetting.Properties.Where(p => !p.AutoImplementedProperties).Select((p, i) => (p, i)))
+                foreach (var (propertySetting, index) in classSetting.PropertySettings.Where(p => !p.AutoImplementedProperties).Select((p, i) => (p, i)))
                 {
                     classCodeBuilder.AppendIndent().AppendField(propertySetting).AppendLine();
                 }
@@ -78,11 +78,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             }
 
             // Properties
-            if (classSetting.Properties.Any())
+            if (classSetting.PropertySettings.Any())
             {
-                var count = classSetting.Properties.Count;
+                var count = classSetting.PropertySettings.Count;
 
-                foreach (var (propertySetting, index) in classSetting.Properties.Select((p, i) => (p, i)))
+                foreach (var (propertySetting, index) in classSetting.PropertySettings.Select((p, i) => (p, i)))
                 {
                     if (propertySetting.XmlComment != null)
                     {

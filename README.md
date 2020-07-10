@@ -9,38 +9,38 @@ var classSetting = new ClassSetting("TestClass")
     XmlComment = "TestClass XML Comment"
 };
 
-classSetting.Properties.Add(new PropertySetting("TestProperty01", typeof(int))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty01", typeof(int))
 {
     XmlComment = "TestProperty01 XML Comment"
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty02", typeof(string))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty02", typeof(string))
 {
     XmlComment = "TestProperty02 XML Comment"
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty03", typeof(int[]))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty03", typeof(int[]))
 {
     XmlComment = "TestProperty03 XML Comment"
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty04", typeof(List<string>))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty04", typeof(List<string>))
 {
     XmlComment = "TestProperty04 XML Comment"
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty05", typeof(DateTime))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty05", typeof(DateTime))
 {
     XmlComment = "TestProperty05 XML Comment"
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty06", typeof(int))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty06", typeof(int))
 {
     XmlComment = "TestProperty06 XML Comment",
     Nullable = true
 });
 
-classSetting.Properties.Add(new PropertySetting("TestProperty07", typeof(string))
+classSetting.PropertySettings.Add(new PropertySetting("TestProperty07", typeof(string))
 {
     XmlComment = "TestProperty07 XML Comment",
     Nullable = true

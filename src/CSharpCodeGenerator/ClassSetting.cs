@@ -24,6 +24,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public string? Namepace { get; set; }
 
-        public List<PropertySetting> Properties { get; } = new List<PropertySetting>();
+        public List<PropertySetting> PropertySettings { get; } = new List<PropertySetting>();
     }
 }
