@@ -13,12 +13,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             int size = Marshal.SizeOf<CodeWord>();
             Assert.IsTrue(size <= 24);
 
-            Assert.AreEqual("abstract", CodeWord.Abstract.ValueString);
+            Assert.AreEqual("abstract", CodeWord.Abstract.GetValueString());
             Assert.IsTrue(CodeWord.Abstract.Equals(CodeWord.Abstract));
             Assert.IsTrue(CodeWord.Abstract == CodeWord.Abstract);
             Assert.IsFalse(CodeWord.Abstract != CodeWord.Abstract);
 
-            Assert.AreEqual("abstract", new CodeWord("abstract").ValueString);
+            Assert.AreEqual("abstract", new CodeWord("abstract").GetValueString());
             Assert.IsFalse(CodeWord.Abstract.Equals(new CodeWord("abstract")));
             Assert.IsFalse(CodeWord.Abstract == new CodeWord("abstract"));
             Assert.IsTrue(CodeWord.Abstract != new CodeWord("abstract"));
