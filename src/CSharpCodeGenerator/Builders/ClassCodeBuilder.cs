@@ -16,7 +16,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public override IClassCodeBuilder AppendField(PropertySetting propertySetting)
+        public override IClassCodeBuilder AppendField(PropertySetting propertySetting, FieldNamingConvention classFieldNamingConvention)
         {
             if (propertySetting == null)
             {
@@ -30,7 +30,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 Append("?");
             }
 
-            Append(" ").Append(NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention)).Append(";");
+            Append(" ").Append(NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention ?? classFieldNamingConvention)).Append(";");
 
             return this;
         }

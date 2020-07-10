@@ -18,8 +18,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public bool Nullable { get; set; } = false;
 
-        public bool AutoImplementedProperties { get; set; } = true;
+        public bool? AutoImplementedProperties { get; set; }
 
-        public FieldNamingConvention FieldNamingConvention { get; set; } = FieldNamingConvention.CamelWithUnderscoreInThePrefix;
+        public FieldNamingConvention? FieldNamingConvention { get; set; }
     }
 }

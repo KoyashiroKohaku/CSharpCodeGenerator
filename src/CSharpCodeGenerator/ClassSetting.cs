@@ -19,6 +19,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public string? Namepace { get; set; }
 
+        public bool AutoImplementedProperties { get; set; } = true;
+
+        public FieldNamingConvention FieldNamingConvention { get; set; } = FieldNamingConvention.CamelWithUnderscoreInThePrefix;
+
         public List<PropertySetting> PropertySettings { get; } = new List<PropertySetting>();
     }
 }

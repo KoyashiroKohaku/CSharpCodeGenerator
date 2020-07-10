@@ -67,11 +67,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             classCodeBuilder.Indent();
 
             // Fields
-            if (classSetting.PropertySettings.Any(p => !p.AutoImplementedProperties))
+            var targetPropertySetting = classSetting.PropertySettings.Where(p => !p.AutoImplementedProperties ?? !classSetting.AutoImplementedProperties).ToArray();
+            if (targetPropertySetting.Any())
             {
-                foreach (var (propertySetting, index) in classSetting.PropertySettings.Where(p => !p.AutoImplementedProperties).Select((p, i) => (p, i)))
+                foreach (var (propertySetting, index) in targetPropertySetting.Select((p, i) => (p, i)))
                 {
-                    classCodeBuilder.AppendIndent().AppendField(propertySetting).AppendLine();
+                    classCodeBuilder.AppendIndent().AppendField(propertySetting, classSetting.FieldNamingConvention).AppendLine();
                 }
 
                 classCodeBuilder.AppendLine();
@@ -96,7 +97,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                         classCodeBuilder.AppendIndent().AppendDocumentationComment().AppendXmlCommentTag("summary", XmlCommentTag.EndTag).AppendLine();
                     }
 
-                    if (propertySetting.AutoImplementedProperties)
+                    if (propertySetting.AutoImplementedProperties ?? classSetting.AutoImplementedProperties)
                     {
                         classCodeBuilder.AppendIndent().AppendAutoImplementedProperties(propertySetting).AppendLine();
                     }
@@ -104,7 +105,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                     {
                         classCodeBuilder.AppendIndent().AppendPropertyDeclaration(propertySetting).AppendLine();
 
-                        var fieldName = NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention);
+                        var fieldName = NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention ?? classSetting.FieldNamingConvention);
 
                         classCodeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
 

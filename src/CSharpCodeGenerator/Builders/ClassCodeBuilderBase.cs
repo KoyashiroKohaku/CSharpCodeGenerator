@@ -99,7 +99,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public abstract IClassCodeBuilder AppendClassDeclaration(string className);
 
-        public abstract IClassCodeBuilder AppendField(PropertySetting propertySetting);
+        public abstract IClassCodeBuilder AppendField(PropertySetting propertySetting, FieldNamingConvention classFieldNamingConvention);
 
         public abstract IClassCodeBuilder AppendPropertyDeclaration(PropertySetting propertySetting);
 
