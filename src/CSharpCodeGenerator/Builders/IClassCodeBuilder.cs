@@ -32,10 +32,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         IClassCodeBuilder AppendClassDeclaration(string className);
 
-        IClassCodeBuilder AppendField(ClassProperty property);
+        IClassCodeBuilder AppendField(PropertySetting property);
 
-        IClassCodeBuilder AppendPropertyDeclaration(ClassProperty property);
+        IClassCodeBuilder AppendPropertyDeclaration(PropertySetting property);
 
-        IClassCodeBuilder AppendAutoImplementedProperties(ClassProperty property);
+        IClassCodeBuilder AppendAutoImplementedProperties(PropertySetting property);
     }
 }

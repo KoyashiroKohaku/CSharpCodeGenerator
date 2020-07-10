@@ -6,9 +6,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
     /// <summary>
     /// 
     /// </summary>
-    public class POCOClass
+    public class ClassSetting
     {
-        public POCOClass(string className)
+        public ClassSetting(string className)
         {
             if (className == null)
             {
@@ -24,6 +24,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public string? Namepace { get; set; }
 
-        public List<ClassProperty> Properties { get; } = new List<ClassProperty>();
+        public List<PropertySetting> Properties { get; } = new List<PropertySetting>();
     }
 }

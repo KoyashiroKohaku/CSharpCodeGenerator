@@ -16,52 +16,52 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public override IClassCodeBuilder AppendField(ClassProperty property)
+        public override IClassCodeBuilder AppendField(PropertySetting propertySetting)
         {
-            if (property == null)
+            if (propertySetting == null)
             {
-                throw new ArgumentNullException(nameof(property));
+                throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("private ").Append(TypeResolver.GetTypeString(property.PropertyType));
+            Append("private ").Append(TypeResolver.GetTypeString(propertySetting.PropertyType));
 
-            if (property.Nullable)
+            if (propertySetting.Nullable)
             {
                 Append("?");
             }
 
-            Append(" ").Append(NameConverter.Convert(property.PropertyName, property.FieldNamingConvention)).Append(";");
+            Append(" ").Append(NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention)).Append(";");
 
             return this;
         }
 
-        public override IClassCodeBuilder AppendPropertyDeclaration(ClassProperty property)
+        public override IClassCodeBuilder AppendPropertyDeclaration(PropertySetting propertySetting)
         {
-            if (property == null)
+            if (propertySetting == null)
             {
-                throw new ArgumentNullException(nameof(property));
+                throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("public ").Append(TypeResolver.GetTypeString(property.PropertyType));
+            Append("public ").Append(TypeResolver.GetTypeString(propertySetting.PropertyType));
 
-            if (property.Nullable)
+            if (propertySetting.Nullable)
             {
                 Append("?");
             }
 
-            Append(" ").Append(property.PropertyName);
+            Append(" ").Append(propertySetting.PropertyName);
 
             return this;
         }
 
-        public override IClassCodeBuilder AppendAutoImplementedProperties(ClassProperty property)
+        public override IClassCodeBuilder AppendAutoImplementedProperties(PropertySetting propertySetting)
         {
-            if (property == null)
+            if (propertySetting == null)
             {
-                throw new ArgumentNullException(nameof(property));
+                throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            AppendPropertyDeclaration(property).Append(" { get; set; }");
+            AppendPropertyDeclaration(propertySetting).Append(" { get; set; }");
 
             return this;
         }

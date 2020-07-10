@@ -4,14 +4,14 @@ using System;
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {
     [TestClass]
-    public class POCOClassTest
+    public class ClassSettingTest
     {
         [TestMethod]
         public void ConstructorTest()
         {
             try
             {
-                new POCOClass(null);
+                new ClassSetting(null);
 
                 Assert.Fail();
             }
@@ -20,9 +20,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
                 Assert.AreEqual("Value cannot be null. (Parameter 'className')", e.Message);
             }
 
-            var pocoClass = new POCOClass("TestClass");
+            var classSetting = new ClassSetting("TestClass");
 
-            Assert.AreEqual("TestClass", pocoClass.ClassName);
+            Assert.AreEqual("TestClass", classSetting.ClassName);
         }
     }
 }

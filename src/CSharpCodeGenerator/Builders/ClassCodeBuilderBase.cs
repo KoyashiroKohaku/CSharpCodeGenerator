@@ -99,13 +99,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public abstract IClassCodeBuilder AppendClassDeclaration(string className);
 
-        public abstract IClassCodeBuilder AppendField(ClassProperty property);
+        public abstract IClassCodeBuilder AppendField(PropertySetting property);
 
-        public abstract IClassCodeBuilder AppendPropertyDeclaration(ClassProperty property);
+        public abstract IClassCodeBuilder AppendPropertyDeclaration(PropertySetting property);
 
-        public abstract IClassCodeBuilder AppendAutoImplementedProperties(ClassProperty property);
+        public abstract IClassCodeBuilder AppendAutoImplementedProperties(PropertySetting property);
 
-        public static IEnumerable<string> ExtractNamespace(IEnumerable<ClassProperty> properties)
+        public static IEnumerable<string> ExtractNamespace(IEnumerable<PropertySetting> properties)
         {
             if (properties == null)
             {

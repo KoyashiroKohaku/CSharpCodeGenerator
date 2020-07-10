@@ -10,63 +10,63 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void GenerateTest()
         {
-            var pocoClass = new POCOClass("TestClass")
+            var classSetting = new ClassSetting("TestClass")
             {
                 Namepace = "TestOrganization.TestProduct",
                 XmlComment = "TestClass XML Comment"
             };
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty01", typeof(int))
+            classSetting.Properties.Add(new PropertySetting("TestProperty01", typeof(int))
             {
                 XmlComment = "TestProperty01 XML Comment"
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty02", typeof(string))
+            classSetting.Properties.Add(new PropertySetting("TestProperty02", typeof(string))
             {
                 XmlComment = "TestProperty02 XML Comment"
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty03", typeof(int[]))
+            classSetting.Properties.Add(new PropertySetting("TestProperty03", typeof(int[]))
             {
                 XmlComment = "TestProperty03 XML Comment"
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty04", typeof(List<string>))
+            classSetting.Properties.Add(new PropertySetting("TestProperty04", typeof(List<string>))
             {
                 XmlComment = "TestProperty04 XML Comment"
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty05", typeof(DateTime))
+            classSetting.Properties.Add(new PropertySetting("TestProperty05", typeof(DateTime))
             {
                 XmlComment = "TestProperty05 XML Comment"
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty06", typeof(int))
+            classSetting.Properties.Add(new PropertySetting("TestProperty06", typeof(int))
             {
                 XmlComment = "TestProperty06 XML Comment",
                 Nullable = true
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty07", typeof(string))
+            classSetting.Properties.Add(new PropertySetting("TestProperty07", typeof(string))
             {
                 XmlComment = "TestProperty07 XML Comment",
                 Nullable = true
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty08", typeof(int))
+            classSetting.Properties.Add(new PropertySetting("TestProperty08", typeof(int))
             {
                 XmlComment = "TestProperty08 XML Comment",
                 AutoImplementedProperties = false
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty09", typeof(int))
+            classSetting.Properties.Add(new PropertySetting("TestProperty09", typeof(int))
             {
                 XmlComment = "TestProperty09 XML Comment",
                 AutoImplementedProperties = false,
                 FieldNamingConvention = FieldNamingConvention.CamelWithUnderscoreInThePrefix
             });
 
-            pocoClass.Properties.Add(new ClassProperty("TestProperty10", typeof(int))
+            classSetting.Properties.Add(new PropertySetting("TestProperty10", typeof(int))
             {
                 XmlComment = "TestProperty10 XML Comment",
                 AutoImplementedProperties = false,
@@ -152,7 +152,7 @@ namespace TestOrganization.TestProduct
 }
 ";
 
-            var actual = CodeGenerator.Generate(pocoClass);
+            var actual = CodeGenerator.Generate(classSetting);
 
             Assert.AreEqual(expected, actual);
         }

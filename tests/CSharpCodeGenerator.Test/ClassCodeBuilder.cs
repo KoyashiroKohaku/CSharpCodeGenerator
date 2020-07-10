@@ -42,17 +42,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void AppendPropertyDeclarationTest()
         {
-            var testProperties = new ClassProperty[]
+            var testProperties = new PropertySetting[]
             {
-                new ClassProperty("TestProperty01", typeof(int)),
-                new ClassProperty("TestProperty02", typeof(string)),
-                new ClassProperty("TestProperty03", typeof(int[])),
-                new ClassProperty("TestProperty04", typeof(string[])),
-                new ClassProperty("TestProperty05", typeof(List<int>)),
-                new ClassProperty("TestProperty06", typeof(List<string>)),
-                new ClassProperty("TestProperty07", typeof(Dictionary<int, string>)),
-                new ClassProperty("TestProperty08", typeof(int)) { Nullable = true },
-                new ClassProperty("TestProperty09", typeof(string)) { Nullable = true }
+                new PropertySetting("TestProperty01", typeof(int)),
+                new PropertySetting("TestProperty02", typeof(string)),
+                new PropertySetting("TestProperty03", typeof(int[])),
+                new PropertySetting("TestProperty04", typeof(string[])),
+                new PropertySetting("TestProperty05", typeof(List<int>)),
+                new PropertySetting("TestProperty06", typeof(List<string>)),
+                new PropertySetting("TestProperty07", typeof(Dictionary<int, string>)),
+                new PropertySetting("TestProperty08", typeof(int)) { Nullable = true },
+                new PropertySetting("TestProperty09", typeof(string)) { Nullable = true }
             };
 
             var codeBuilder = new ClassCodeBuilder();
@@ -83,7 +83,7 @@ public string? TestProperty09
         {
             var codeBuilder = new ClassCodeBuilder();
 
-            codeBuilder.AppendAutoImplementedProperties(new ClassProperty("TestProperty", typeof(int)));
+            codeBuilder.AppendAutoImplementedProperties(new PropertySetting("TestProperty", typeof(int)));
 
             var expected = "public int TestProperty { get; set; }";
 
@@ -95,11 +95,11 @@ public string? TestProperty09
         [TestMethod]
         public void ExtractNamespaceTest()
         {
-            var properties = new ClassProperty[]
+            var properties = new PropertySetting[]
             {
-                new ClassProperty("TestProperty01", typeof(int)),
-                new ClassProperty("TestProperty02", typeof(List<int>)),
-                new ClassProperty("TestProperty02", typeof(System.Text.StringBuilder))
+                new PropertySetting("TestProperty01", typeof(int)),
+                new PropertySetting("TestProperty02", typeof(List<int>)),
+                new PropertySetting("TestProperty02", typeof(System.Text.StringBuilder))
             };
 
             var expected = properties

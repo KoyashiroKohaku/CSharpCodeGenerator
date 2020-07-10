@@ -2,9 +2,9 @@ using System;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
 {
-    public class ClassProperty
+    public class PropertySetting
     {
-        public ClassProperty(string propertyName, Type propertyType)
+        public PropertySetting(string propertyName, Type propertyType)
         {
             PropertyName = propertyName;
             PropertyType = propertyType;
