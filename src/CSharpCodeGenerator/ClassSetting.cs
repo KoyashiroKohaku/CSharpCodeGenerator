@@ -10,12 +10,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
     {
         public ClassSetting(string className)
         {
-            if (className == null)
-            {
-                throw new ArgumentNullException(nameof(className));
-            }
-
-            ClassName = className;
+            ClassName = className ?? throw new ArgumentNullException(nameof(className));
         }
 
         public string ClassName { get; set; }
