@@ -7,6 +7,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 {
     public static class ContextualKeywordHelper
     {
+        /// <summary>
+        /// ContextualKeywords dictionary.
+        /// </summary>
         private static Dictionary<ContextualKeyword, string> ContextualKeywords => new Dictionary<ContextualKeyword, string>
         {
             { ContextualKeyword.Add, "add" },
