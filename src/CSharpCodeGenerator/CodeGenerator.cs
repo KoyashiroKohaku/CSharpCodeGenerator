@@ -1,4 +1,5 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Builders;
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
 using System.Linq;
 
@@ -31,7 +32,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
             };
 
             // using directive
-            var namespaces = ClassCodeBuilder.ExtractNamespace(classSetting.PropertySettings).OrderBy(s => s).ToArray();
+            var namespaces = NamespaceHelper.ExtractNamespace(classSetting.PropertySettings).OrderBy(s => s).ToArray();
             if (namespaces.Any())
             {
                 foreach (var namespaceString in namespaces)

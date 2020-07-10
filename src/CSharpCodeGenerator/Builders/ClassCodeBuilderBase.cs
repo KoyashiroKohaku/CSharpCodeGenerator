@@ -104,18 +104,5 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         public abstract IClassCodeBuilder AppendPropertyDeclaration(PropertySetting propertySetting);
 
         public abstract IClassCodeBuilder AppendAutoImplementedProperties(PropertySetting propertySetting);
-
-        public static IEnumerable<string> ExtractNamespace(IEnumerable<PropertySetting> propertySettings)
-        {
-            if (propertySettings == null)
-            {
-                throw new ArgumentNullException(nameof(propertySettings));
-            }
-
-            return propertySettings
-                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
-                .Select(p => p.PropertyType.Namespace)
-                .Distinct();
-        }
     }
 }
