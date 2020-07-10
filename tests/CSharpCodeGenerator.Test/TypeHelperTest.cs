@@ -1,7 +1,7 @@
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test
 {

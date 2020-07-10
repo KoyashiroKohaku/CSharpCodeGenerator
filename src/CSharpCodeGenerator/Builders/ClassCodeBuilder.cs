@@ -1,5 +1,5 @@
-using System;
 using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
+using System;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {

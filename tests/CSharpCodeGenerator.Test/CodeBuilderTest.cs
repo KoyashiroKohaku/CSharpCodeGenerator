@@ -125,12 +125,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void GetIndentStringTest()
         {
-            var codeBuilder = new CodeBuilder();
-
             /* 4 Spaces */
+            var codeBuilder = new CodeBuilder
+            {
 
-            codeBuilder.IndentStyle = IndentStyle.Space;
-            codeBuilder.IndentSize = 4;
+
+                IndentStyle = IndentStyle.Space,
+                IndentSize = 4
+            };
             Assert.AreEqual(string.Empty, codeBuilder.CurrentIndentStringWithDepth);
 
             codeBuilder.Indent();
@@ -184,11 +186,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
         [TestMethod]
         public void GetEndOfLineStringTest()
         {
-            var codeBuilder = new CodeBuilder();
-
             /* CR */
+            var codeBuilder = new CodeBuilder
+            {
 
-            codeBuilder.EndOfLine = EndOfLine.CR;
+
+                EndOfLine = EndOfLine.CR
+            };
             Assert.AreEqual("\r", codeBuilder.CurrentEndOfLineString);
 
             /* LF */
