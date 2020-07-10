@@ -14,7 +14,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             }
 
             return propertySettings
-                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
+                .Where(p => !TypeHelper.ExistsTypeAlias(p.PropertyType))
                 .Select(p => p.PropertyType.Namespace)
                 .Distinct();
         }

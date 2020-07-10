@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator
+namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 {
     public static class EndOfLineHelper
     {

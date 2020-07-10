@@ -1,4 +1,5 @@
 using System;
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -23,7 +24,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("private ").Append(TypeResolver.GetTypeString(propertySetting.PropertyType));
+            Append("private ").Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
 
             if (propertySetting.Nullable)
             {
@@ -42,7 +43,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("public ").Append(TypeResolver.GetTypeString(propertySetting.PropertyType));
+            Append("public ").Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
 
             if (propertySetting.Nullable)
             {

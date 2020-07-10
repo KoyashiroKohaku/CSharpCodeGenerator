@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator
+namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 {
-    public static class TypeResolver
+    public static class TypeHelper
     {
         private static Dictionary<Type, string> TypeAliasDictionary => new Dictionary<Type, string>
         {

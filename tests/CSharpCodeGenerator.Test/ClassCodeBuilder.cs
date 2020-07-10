@@ -1,4 +1,5 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Builders;
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,11 +104,11 @@ public string? TestProperty09
             };
 
             var expected = propertySettings
-                .Where(p => !TypeResolver.ExistsTypeAlias(p.PropertyType))
+                .Where(p => !TypeHelper.ExistsTypeAlias(p.PropertyType))
                 .Select(p => p.PropertyType.Namespace)
                 .ToArray();
 
-            var actual = ClassCodeBuilder.ExtractNamespace(propertySettings).OrderBy(s => s).ToArray();
+            var actual = NamespaceHelper.ExtractNamespace(propertySettings).OrderBy(s => s).ToArray();
 
             CollectionAssert.AreEqual(expected, actual);
         }
