@@ -91,6 +91,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             { Keyword.While, "while" }
         };
 
+        public static bool IsKeyword(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            return Keywords.ContainsValue(value);
+        }
+
         public static string GetValue(Keyword keyword)
         {
             if (!Enum.IsDefined(typeof(Keyword), keyword))
@@ -104,16 +114,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
         public static bool TryGetValue(Keyword keyword, [MaybeNullWhen(false)] out string value)
         {
             return Keywords.TryGetValue(keyword, out value);
-        }
-
-        public static bool IsKeyword(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return false;
-            }
-
-            return Keywords.ContainsValue(value);
         }
     }
 }
