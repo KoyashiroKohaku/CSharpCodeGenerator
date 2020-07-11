@@ -45,6 +45,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             { ContextualKeyword.Yield, "yield" }
         };
 
+        public static bool IsContextualKeyword(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            return ContextualKeywords.ContainsValue(value);
+        }
+
         public static string GetValue(ContextualKeyword contextualKeyword)
         {
             if (!Enum.IsDefined(typeof(ContextualKeyword), contextualKeyword))
@@ -58,16 +68,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
         public static bool TryGetValue(ContextualKeyword contextualKeyword, [MaybeNullWhen(false)] out string value)
         {
             return ContextualKeywords.TryGetValue(contextualKeyword, out value);
-        }
-
-        public static bool IsContextualKeyword(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return false;
-            }
-
-            return ContextualKeywords.ContainsValue(value);
         }
     }
 }
