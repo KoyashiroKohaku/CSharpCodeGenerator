@@ -157,6 +157,18 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         private static string[] InternalSplitCamel(ReadOnlySpan<char> input)
         {
+            var ranges = InternalSplitCamelIntoRange(input);
+            return InternalSplitByRanges(input, ranges);
+        }
+
+        private static string[] InternalSplitSnake(ReadOnlySpan<char> input)
+        {
+            var ranges = InternalSplitSnakeIntoRange(input);
+            return InternalSplitByRanges(input, ranges);
+        }
+
+        private static List<Range> InternalSplitCamelIntoRange(ReadOnlySpan<char> input)
+        {
             var ranges = new List<Range>();
             var startIndex = 0;
 
@@ -170,10 +182,37 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             }
             ranges.Add(startIndex..input.Length);
 
-            string[] results = new string[ranges.Count];
+            return ranges;
+        }
 
+        private static List<Range> InternalSplitSnakeIntoRange(ReadOnlySpan<char> input)
+        {
+            var ranges = new List<Range>();
+            var startIndex = 0;
+
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                if (input[i] == '_')
+                {
+                    ranges.Add(startIndex..i);
+                    startIndex = i + 1;
+                }
+            }
+
+            if (startIndex != input.Length)
+            {
+                ranges.Add(startIndex..input.Length);
+            }
+
+            return ranges;
+        }
+
+        private static string[] InternalSplitByRanges(ReadOnlySpan<char> input, IList<Range> ranges)
+        {
             var maxBufferSize = ranges.Select(r => r.End.Value - r.Start.Value).Max();
             Span<char> buffer = maxBufferSize <= 128 ? stackalloc char[maxBufferSize] : new char[maxBufferSize];
+
+            string[] results = new string[ranges.Count];
 
             for (int i = 0; i < results.Length; i++)
             {
@@ -186,27 +225,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
                 }
 
                 results[i] = new string(buffer.Slice(0, rangeLength));
-            }
-
-            return results;
-        }
-
-        private static string[] InternalSplitSnake(string input)
-        {
-            var results = input.Split('_');
-
-            foreach (var result in results)
-            {
-                unsafe
-                {
-                    fixed (char* c = result)
-                    {
-                        for (int i = 0; i < result.Length; i++)
-                        {
-                            c[i] = char.ToLower(c[i], new CultureInfo("en-US"));
-                        }
-                    }
-                }
             }
 
             return results;
