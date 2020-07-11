@@ -285,6 +285,31 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
         }
 
         [TestMethod]
+        public void ToLowerCamelWithUnderscoreTest()
+        {
+            foreach (var testCase in TestCases)
+            {
+                if (testCase.NameCase == NameCase.None)
+                {
+                    if (testCase.TestString is null)
+                    {
+                        Assert.ThrowsException<ArgumentNullException>(() => NameHelper.ToLowerCamelWithUnderscore(testCase.TestString));
+                    }
+                    else
+                    {
+                        Assert.ThrowsException<ArgumentException>(() => NameHelper.ToLowerCamelWithUnderscore(testCase.TestString));
+                    }
+                }
+                else
+                {
+                    var expected = $"_{testCase.ToLowerCamelResult}";
+                    var actual = NameHelper.ToLowerCamelWithUnderscore(testCase.TestString);
+                    Assert.AreEqual(expected, actual);
+                }
+            }
+        }
+
+        [TestMethod]
         public void ToUpperCamelTest()
         {
             foreach (var testCase in TestCases)

@@ -175,6 +175,21 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             return InternalToLowerCamel(input);
         }
 
+        public static string ToLowerCamelWithUnderscore(string input)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            if (!InternalIsValidString(input))
+            {
+                throw new ArgumentException($"{nameof(input)} is not a valdid string.", nameof(input));
+            }
+
+            return InternalToLowerCamelWithUnderscore(input);
+        }
+
         public static string ToUpperCamel(string input)
         {
             if (input is null)
@@ -343,6 +358,29 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
         private static string InternalToLowerCamel(string input)
         {
             StringBuilder builder = new StringBuilder();
+
+            var spritResults = InternalSplit(input);
+
+            for (int i = 0; i < spritResults.Length; i++)
+            {
+                if (i == 0)
+                {
+                    builder.Append(spritResults[i]);
+                }
+                else
+                {
+                    builder.Append(char.ToUpper(spritResults[i][0], new CultureInfo("en-US")));
+                    builder.Append(spritResults[i].AsSpan(1));
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        private static string InternalToLowerCamelWithUnderscore(string input)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append('_');
 
             var spritResults = InternalSplit(input);
 

@@ -1,5 +1,6 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
+using System.ComponentModel;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -31,7 +32,28 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 Append("?");
             }
 
-            Append(" ").Append(NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention ?? classFieldNamingConvention)).Append(";");
+            Append(" ");
+
+            switch (propertySetting.FieldNamingConvention ?? classFieldNamingConvention)
+            {
+                case FieldNamingConvention.Camel:
+                    Append(NameHelper.ToLowerCamel(propertySetting.PropertyName));
+                    break;
+                case FieldNamingConvention.CamelWithUnderscoreInThePrefix:
+                    Append(NameHelper.ToLowerCamelWithUnderscore(propertySetting.PropertyName));
+                    break;
+                default:
+                    if (propertySetting.FieldNamingConvention is null)
+                    {
+                        throw new InvalidEnumArgumentException(nameof(propertySetting.FieldNamingConvention), (int)classFieldNamingConvention, typeof(FieldNamingConvention));
+                    }
+                    else
+                    {
+                        throw new InvalidEnumArgumentException(nameof(propertySetting.FieldNamingConvention), (int)propertySetting.FieldNamingConvention, typeof(FieldNamingConvention));
+                    }
+            }
+
+            Append(";");
 
             return this;
         }

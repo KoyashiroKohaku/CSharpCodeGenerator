@@ -1,6 +1,7 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Builders;
 using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator
@@ -106,7 +107,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
                     {
                         classCodeBuilder.AppendIndent().AppendPropertyDeclaration(propertySetting).AppendLine();
 
-                        var fieldName = NameConverter.Convert(propertySetting.PropertyName, propertySetting.FieldNamingConvention ?? classSetting.FieldNamingConvention);
+                        string fieldName;
+
+                        switch (propertySetting.FieldNamingConvention ?? classSetting.FieldNamingConvention)
+                        {
+                            case FieldNamingConvention.Camel:
+                                fieldName = NameHelper.ToLowerCamel(propertySetting.PropertyName);
+                                break;
+                            case FieldNamingConvention.CamelWithUnderscoreInThePrefix:
+                                fieldName = NameHelper.ToLowerCamelWithUnderscore(propertySetting.PropertyName);
+                                break;
+                            default:
+                                if (propertySetting.FieldNamingConvention is null)
+                                {
+                                    throw new InvalidEnumArgumentException(nameof(classSetting.FieldNamingConvention), (int)classSetting.FieldNamingConvention, typeof(FieldNamingConvention));
+                                }
+                                else
+                                {
+                                    throw new InvalidEnumArgumentException(nameof(propertySetting.FieldNamingConvention), (int)propertySetting.FieldNamingConvention, typeof(FieldNamingConvention));
+                                }
+                        }
 
                         classCodeBuilder.AppendIndent().AppendCurlyBracket(CurlyBracket.Left).AppendLine();
 
