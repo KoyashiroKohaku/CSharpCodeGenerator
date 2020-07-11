@@ -128,6 +128,36 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             return InternalSplitSnake(input);
         }
 
+        public static Range[] SplitCamelIntoRange(string input)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            if (!IsCamel(input))
+            {
+                throw new ArgumentException($"{nameof(input)} is not a camel case value.", nameof(input));
+            }
+
+            return InternalSplitCamelIntoRange(input).ToArray();
+        }
+
+        public static Range[] SplitSnakeIntoRange(string input)
+        {
+            if (input is null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            if (!IsSnake(input))
+            {
+                throw new ArgumentException($"{nameof(input)} is not a snake case value.", nameof(input));
+            }
+
+            return InternalSplitSnakeIntoRange(input).ToArray();
+        }
+
         private static bool InternalIsCamel(string input)
         {
             return InternalIsLowerCamel(input) || InternalIsUpperCamel(input);
