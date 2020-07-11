@@ -98,8 +98,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test
             Assert.IsFalse(KeywordHelper.IsKeyword(" "));
             Assert.IsFalse(KeywordHelper.IsKeyword("abcdefg"));
 
-            var keywords = Enum.GetValues(typeof(Keyword)).Cast<Keyword>().ToArray();
-
             foreach (var testCase in TestCase)
             {
                 Assert.IsTrue(KeywordHelper.IsKeyword(testCase));
