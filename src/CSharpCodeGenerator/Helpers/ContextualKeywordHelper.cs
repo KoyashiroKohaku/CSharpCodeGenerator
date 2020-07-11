@@ -40,7 +40,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             { ContextualKeyword.Value, "value" },
             { ContextualKeyword.Var, "var" },
             { ContextualKeyword.WhenFilterCondition, "when" },
-            { ContextualKeyword.WhereGenericTypeConstraint, "when" },
+            { ContextualKeyword.WhereGenericTypeConstraint, "where" },
             { ContextualKeyword.WhereQueryClause, "where" },
             { ContextualKeyword.Yield, "yield" }
         };
