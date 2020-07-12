@@ -132,13 +132,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public ICodeBuilder Append(Token token)
-        {
-            Tokens.Append(token);
-
-            return this;
-        }
-
         public ICodeBuilder Append(string value)
         {
             if (string.IsNullOrEmpty(value))

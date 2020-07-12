@@ -22,8 +22,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         ICodeBuilder Append(TokenType tokenType);
 
-        ICodeBuilder Append(Token token);
-
         ICodeBuilder Append(string value);
 
         ICodeBuilder AppendLine();
