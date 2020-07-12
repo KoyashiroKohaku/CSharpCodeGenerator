@@ -1,7 +1,9 @@
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -13,7 +15,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public Token(string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -44,6 +46,46 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             _value = string.Empty;
             _tokenType = tokenType;
         }
+
+        /// <summary>
+        /// ASCII chars set
+        /// </summary>
+        private static Dictionary<TokendType, ASCIIChar> ASCIIChars => new Dictionary<TokendType, ASCIIChar>
+        {
+            { TokendType.Space, ASCIIChar.Space },
+            { TokendType.ExclamationMark, ASCIIChar.ExclamationMark },
+            { TokendType.QuotationMark, ASCIIChar.QuotationMark },
+            { TokendType.NumberSign, ASCIIChar.NumberSign },
+            { TokendType.DollarSign, ASCIIChar.DollarSign },
+            { TokendType.PercentSign, ASCIIChar.PercentSign },
+            { TokendType.Ampersand, ASCIIChar.Ampersand },
+            { TokendType.Apostrophe, ASCIIChar.Apostrophe },
+            { TokendType.LeftParentheses, ASCIIChar.LeftParentheses },
+            { TokendType.RightParentheses, ASCIIChar.RightParentheses },
+            { TokendType.Asterisk, ASCIIChar.Asterisk },
+            { TokendType.PlusSign, ASCIIChar.PlusSign },
+            { TokendType.Commma, ASCIIChar.Commma },
+            { TokendType.HyphenMinus, ASCIIChar.HyphenMinus },
+            { TokendType.FullStop, ASCIIChar.FullStop },
+            { TokendType.Slash, ASCIIChar.Slash },
+            { TokendType.Colon, ASCIIChar.Colon },
+            { TokendType.Semicolon, ASCIIChar.Semicolon },
+            { TokendType.LessThanSign, ASCIIChar.LessThanSign },
+            { TokendType.Equals, ASCIIChar.Equals },
+            { TokendType.GreaterThanSign, ASCIIChar.GreaterThanSign },
+            { TokendType.QuestionMark, ASCIIChar.QuestionMark },
+            { TokendType.AtSign, ASCIIChar.AtSign },
+            { TokendType.LeftSquareBracket, ASCIIChar.LeftSquareBracket },
+            { TokendType.Backslash, ASCIIChar.Backslash },
+            { TokendType.RightSquareBracket, ASCIIChar.RightSquareBracket },
+            { TokendType.CircumflexAccent, ASCIIChar.CircumflexAccent },
+            { TokendType.LowLine, ASCIIChar.LowLine },
+            { TokendType.GraveAccent, ASCIIChar.GraveAccent },
+            { TokendType.LeftCurlyBracket, ASCIIChar.LeftCurlyBracket },
+            { TokendType.VerticalBar, ASCIIChar.VerticalBar },
+            { TokendType.RightCurlyBracket, ASCIIChar.RightCurlyBracket },
+            { TokendType.Tilde, ASCIIChar.Tilde }
+        };
 
         /// <summary>
         /// Keywords dictionary.
@@ -167,51 +209,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             { TokendType.Yield, ContextualKeyword.Yield }
         };
 
-        /// <summary>
-        /// ASCII chars set
-        /// </summary>
-        private static HashSet<TokendType> ASCIIChars => new HashSet<TokendType>
-        {
-            TokendType.Space,
-            TokendType.ExclamationMark,
-            TokendType.QuotationMark,
-            TokendType.NumberSign,
-            TokendType.DollarSign,
-            TokendType.PercentSign,
-            TokendType.Ampersand,
-            TokendType.Apostrophe,
-            TokendType.LeftParentheses,
-            TokendType.RightParentheses,
-            TokendType.Asterisk,
-            TokendType.PlusSign,
-            TokendType.Commma,
-            TokendType.HyphenMinus,
-            TokendType.FullStop,
-            TokendType.Slash,
-            TokendType.Colon,
-            TokendType.Semicolon,
-            TokendType.LessThanSign,
-            TokendType.Equals,
-            TokendType.GreaterThanSign,
-            TokendType.QuestionMark,
-            TokendType.AtSign,
-            TokendType.LeftSquareBracket,
-            TokendType.Backslash,
-            TokendType.RightSquareBracket,
-            TokendType.CircumflexAccent,
-            TokendType.LowLine,
-            TokendType.GraveAccent,
-            TokendType.LeftCurlyBracket,
-            TokendType.VerticalBar,
-            TokendType.RightCurlyBracket,
-            TokendType.Tilde,
-        };
-
         public bool IsKeyword => Keywords.ContainsKey(_tokenType);
 
         public bool IsContextualKeyword => ContextualKeywords.ContainsKey(_tokenType);
 
-        public bool IsASCIIChar => ASCIIChars.Contains(_tokenType);
+        public bool IsASCIIChar => ASCIIChars.ContainsKey(_tokenType);
 
         public bool IsAnyString => _tokenType == TokendType.AnyString;
 
@@ -992,735 +994,24 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return (_value == other._value) && (_tokenType == other._tokenType);
         }
 
-        internal enum TokendType
+        public override string ToString()
         {
-            #region ASCIIChars
-            /// <summary>
-            /// &nbsp;
-            /// </summary>
-            Space,
-
-            /// <summary>
-            /// !
-            /// </summary>
-            ExclamationMark,
-
-            /// <summary>
-            /// "
-            /// </summary>
-            QuotationMark,
-
-            /// <summary>
-            /// #
-            /// </summary>
-            NumberSign,
-
-            /// <summary>
-            /// $
-            /// </summary>
-            DollarSign,
-
-            /// <summary>
-            /// %
-            /// </summary>
-            PercentSign,
-
-            /// <summary>
-            /// &amp;
-            /// </summary>
-            Ampersand,
-
-            /// <summary>
-            /// '
-            /// </summary>
-            Apostrophe,
-
-            /// <summary>
-            /// (
-            /// </summary>
-            LeftParentheses,
-
-            /// <summary>
-            /// )
-            /// </summary>
-            RightParentheses,
-
-            /// <summary>
-            /// *
-            /// </summary>
-            Asterisk,
-
-            /// <summary>
-            /// +
-            /// </summary>
-            PlusSign,
-
-            /// <summary>
-            /// ,
-            /// </summary>
-            Commma,
-
-            /// <summary>
-            /// -
-            /// </summary>
-            HyphenMinus,
-
-            /// <summary>
-            /// .
-            /// </summary>
-            FullStop,
-
-            /// <summary>
-            /// /
-            /// </summary>
-            Slash,
-
-            /// <summary>
-            /// :
-            /// </summary>
-            Colon,
-
-            /// <summary>
-            /// ;
-            /// </summary>
-            Semicolon,
-
-            /// <summary>
-            /// &lt;
-            /// </summary>
-            LessThanSign,
-
-            /// <summary>
-            /// =
-            /// </summary>
-            EqualSign,
-
-            /// <summary>
-            /// &gt;
-            /// </summary>
-            GreaterThanSign,
-
-            /// <summary>
-            /// ?
-            /// </summary>
-            QuestionMark,
-
-            /// <summary>
-            /// @
-            /// </summary>
-            AtSign,
-
-            /// <summary>
-            /// [
-            /// </summary>
-            LeftSquareBracket,
-
-            /// <summary>
-            /// \
-            /// </summary>
-            Backslash,
-
-            /// <summary>
-            /// ]
-            /// </summary>
-            RightSquareBracket,
-
-            /// <summary>
-            /// ^
-            /// </summary>
-            CircumflexAccent,
-
-            /// <summary>
-            /// _
-            /// </summary>
-            LowLine,
-
-            /// <summary>
-            /// `
-            /// </summary>
-            GraveAccent,
-
-            /// <summary>
-            /// {
-            /// </summary>
-            LeftCurlyBracket,
-
-            /// <summary>
-            /// |
-            /// </summary>
-            VerticalBar,
-
-            /// <summary>
-            /// }
-            /// </summary>
-            RightCurlyBracket,
-
-            /// <summary>
-            /// ~
-            /// </summary>
-            Tilde,
-            #endregion
-
-            #region Separator other than spaces
-            /// <summary>
-            /// End of line
-            /// </summary>
-            EndOfLine,
-
-            /// <summary>
-            /// Indent.
-            /// </summary>
-            Indent,
-            #endregion
-
-            #region Keywords
-            /// <summary>
-            /// abstract
-            /// </summary>
-            Abstract,
-
-            /// <summary>
-            /// as
-            /// </summary>
-            As,
-
-            /// <summary>
-            /// base
-            /// </summary>
-            Base,
-
-            /// <summary>
-            /// bool
-            /// </summary>
-            Bool,
-
-            /// <summary>
-            /// break
-            /// </summary>
-            Break,
-
-            /// <summary>
-            /// byte
-            /// </summary>
-            Byte,
-
-            /// <summary>
-            /// case
-            /// </summary>
-            Case,
-
-            /// <summary>
-            /// catch
-            /// </summary>
-            Catch,
-
-            /// <summary>
-            /// char
-            /// </summary>
-            Char,
-
-            /// <summary>
-            /// checked
-            /// </summary>
-            Checked,
-
-            /// <summary>
-            /// class
-            /// </summary>
-            Class,
-
-            /// <summary>
-            /// const
-            /// </summary>
-            Const,
-
-            /// <summary>
-            /// continue
-            /// </summary>
-            Continue,
-
-            /// <summary>
-            /// decimal
-            /// </summary>
-            Decimal,
-
-            /// <summary>
-            /// default
-            /// </summary>
-            Default,
-
-            /// <summary>
-            /// delegate
-            /// </summary>
-            Delegate,
-
-            /// <summary>
-            /// do
-            /// </summary>
-            Do,
-
-            /// <summary>
-            /// double
-            /// </summary>
-            Double,
-
-            /// <summary>
-            /// else
-            /// </summary>
-            Else,
-
-            /// <summary>
-            /// enum
-            /// </summary>
-            Enum,
-
-            /// <summary>
-            /// event
-            /// </summary>
-            Event,
-
-            /// <summary>
-            /// explicit
-            /// </summary>
-            Explicit,
-
-            /// <summary>
-            /// extern
-            /// </summary>
-            Extern,
-
-            /// <summary>
-            /// false
-            /// </summary>
-            False,
-
-            /// <summary>
-            /// finally
-            /// </summary>
-            Finally,
-
-            /// <summary>
-            /// fixed
-            /// </summary>
-            Fixed,
-
-            /// <summary>
-            /// float
-            /// </summary>
-            Float,
-
-            /// <summary>
-            /// for
-            /// </summary>
-            For,
-
-            /// <summary>
-            /// foreach
-            /// </summary>
-            Foreach,
-
-            /// <summary>
-            /// goto
-            /// </summary>
-            Goto,
-
-            /// <summary>
-            /// if
-            /// </summary>
-            If,
-
-            /// <summary>
-            /// implicit
-            /// </summary>
-            Implicit,
-
-            /// <summary>
-            /// in
-            /// </summary>
-            In,
-
-            /// <summary>
-            /// int
-            /// </summary>
-            Int,
-
-            /// <summary>
-            /// interface
-            /// </summary>
-            Interface,
-
-            /// <summary>
-            /// internal
-            /// </summary>
-            Internal,
-
-            /// <summary>
-            /// is
-            /// </summary>
-            Is,
-
-            /// <summary>
-            /// lock
-            /// </summary>
-            Lock,
-
-            /// <summary>
-            /// long
-            /// </summary>
-            Long,
-
-            /// <summary>
-            /// namespace
-            /// </summary>
-            Namespace,
-
-            /// <summary>
-            /// new
-            /// </summary>
-            New,
-
-            /// <summary>
-            /// null
-            /// </summary>
-            Null,
-
-            /// <summary>
-            /// object
-            /// </summary>
-            Object,
-
-            /// <summary>
-            /// operator
-            /// </summary>
-            Operator,
-
-            /// <summary>
-            /// out
-            /// </summary>
-            Out,
-
-            /// <summary>
-            /// override
-            /// </summary>
-            Override,
-
-            /// <summary>
-            /// params
-            /// </summary>
-            Params,
-
-            /// <summary>
-            /// private
-            /// </summary>
-            Private,
-
-            /// <summary>
-            /// protected
-            /// </summary>
-            Protected,
-
-            /// <summary>
-            /// public
-            /// </summary>
-            Public,
-
-            /// <summary>
-            /// readonly
-            /// </summary>
-            Readonly,
-
-            /// <summary>
-            /// ref
-            /// </summary>
-            Ref,
-
-            /// <summary>
-            /// return
-            /// </summary>
-            Return,
-
-            /// <summary>
-            /// sbyte
-            /// </summary>
-            Sbyte,
-
-            /// <summary>
-            /// sealed
-            /// </summary>
-            Sealed,
-
-            /// <summary>
-            /// short
-            /// </summary>
-            Short,
-
-            /// <summary>
-            /// sizeof
-            /// </summary>
-            Sizeof,
-
-            /// <summary>
-            /// stackalloc
-            /// </summary>
-            Stackalloc,
-
-            /// <summary>
-            /// static
-            /// </summary>
-            Static,
-
-            /// <summary>
-            /// string
-            /// </summary>
-            String,
-
-            /// <summary>
-            /// struct
-            /// </summary>
-            Struct,
-
-            /// <summary>
-            /// switch
-            /// </summary>
-            Switch,
-
-            /// <summary>
-            /// this
-            /// </summary>
-            This,
-
-            /// <summary>
-            /// throw
-            /// </summary>
-            Throw,
-
-            /// <summary>
-            /// true
-            /// </summary>
-            True,
-
-            /// <summary>
-            /// try
-            /// </summary>
-            Try,
-
-            /// <summary>
-            /// typeof
-            /// </summary>
-            Typeof,
-
-            /// <summary>
-            /// uint
-            /// </summary>
-            Uint,
-
-            /// <summary>
-            /// ulong
-            /// </summary>
-            Ulong,
-
-            /// <summary>
-            /// unchecked
-            /// </summary>
-            Unchecked,
-
-            /// <summary>
-            /// unsafe
-            /// </summary>
-            Unsafe,
-
-            /// <summary>
-            /// ushort
-            /// </summary>
-            Ushort,
-
-            /// <summary>
-            /// using
-            /// </summary>
-            Using,
-
-            /// <summary>
-            /// virtual
-            /// </summary>
-            Virtual,
-
-            /// <summary>
-            /// void
-            /// </summary>
-            Void,
-
-            /// <summary>
-            /// volatile
-            /// </summary>
-            Volatile,
-
-            /// <summary>
-            /// while
-            /// </summary>
-            While,
-            #endregion
-
-            #region ContextualKeyword
-            /// <summary>
-            /// add
-            /// </summary>
-            Add,
-
-            /// <summary>
-            /// alias
-            /// </summary>
-            Alias,
-
-            /// <summary>
-            /// ascending
-            /// </summary>
-            Ascending,
-
-            /// <summary>
-            /// async
-            /// </summary>
-            Async,
-
-            /// <summary>
-            /// await
-            /// </summary>
-            Await,
-
-            /// <summary>
-            /// by
-            /// </summary>
-            By,
-
-            /// <summary>
-            /// descending
-            /// </summary>
-            Descending,
-
-            /// <summary>
-            /// dynamic
-            /// </summary>
-            Dynamic,
-
-            /// <summary>
-            /// equals
-            /// </summary>
-            Equals,
-
-            /// <summary>
-            /// from
-            /// </summary>
-            From,
-
-            /// <summary>
-            /// get
-            /// </summary>
-            Get,
-
-            /// <summary>
-            /// global
-            /// </summary>
-            Global,
-
-            /// <summary>
-            /// group
-            /// </summary>
-            Group,
-
-            /// <summary>
-            /// into
-            /// </summary>
-            Into,
-
-            /// <summary>
-            /// join
-            /// </summary>
-            Join,
-
-            /// <summary>
-            /// let
-            /// </summary>
-            Let,
-
-            /// <summary>
-            /// nameof
-            /// </summary>
-            Nameof,
-
-            /// <summary>
-            /// on
-            /// </summary>
-            On,
-
-            /// <summary>
-            /// orderby
-            /// </summary>
-            Orderby,
-
-            /// <summary>
-            /// partial (type)
-            /// </summary>
-            PartialType,
-
-            /// <summary>
-            /// partial (method)
-            /// </summary>
-            PartialMethod,
-
-            /// <summary>
-            /// remove
-            /// </summary>
-            Remove,
-
-            /// <summary>
-            /// select
-            /// </summary>
-            Select,
-
-            /// <summary>
-            /// set
-            /// </summary>
-            Set,
-
-            /// <summary>
-            /// unmanaged (generic type constraint)
-            /// </summary>
-            UnmanagedGenericTypeConstraint,
-
-            /// <summary>
-            /// value
-            /// </summary>
-            Value,
-
-            /// <summary>
-            /// var
-            /// </summary>
-            Var,
-
-            /// <summary>
-            /// when (filter condition)
-            /// </summary>
-            WhenFilterCondition,
-
-            /// <summary>
-            /// when where (generic type constraint)
-            /// </summary>
-            WhereGenericTypeConstraint,
-
-            /// <summary>
-            /// where (query clause)
-            /// </summary>
-            WhereQueryClause,
-
-            /// <summary>
-            /// yield
-            /// </summary>
-            Yield,
-            #endregion
-
-            /// <summary>
-            /// any string.
-            /// </summary>
-            AnyString
+            if (IsKeyword)
+            {
+                return KeywordHelper.GetValue(Keywords[_tokenType]);
+            }
+
+            if (IsContextualKeyword)
+            {
+                return ContextualKeywordHelper.GetValue(ContextualKeywords[_tokenType]);
+            }
+
+            if (IsASCIIChar)
+            {
+                return ASCIICharHelper.GetValue(ASCIIChars[_tokenType]).ToString(new CultureInfo("en-US"));
+            }
+
+            return GetAnyString();
         }
     }
 }

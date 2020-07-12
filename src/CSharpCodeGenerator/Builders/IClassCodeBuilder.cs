@@ -1,5 +1,3 @@
-using System;
-
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public interface IClassCodeBuilder : ICodeBuilder
@@ -10,13 +8,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         new IClassCodeBuilder Append(string value);
 
-        new IClassCodeBuilder Append(ReadOnlySpan<char> value);
-
         new IClassCodeBuilder AppendLine();
 
         new IClassCodeBuilder AppendLine(string value);
-
-        new IClassCodeBuilder AppendLine(ReadOnlySpan<char> value);
 
         new IClassCodeBuilder AppendIndent();
 
