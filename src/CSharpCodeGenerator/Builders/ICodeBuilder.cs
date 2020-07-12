@@ -20,6 +20,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         ICodeBuilder Unindent();
 
+        ICodeBuilder Append(TokendType tokenType);
+
+        ICodeBuilder Append(Token token);
+
         ICodeBuilder Append(string value);
 
         ICodeBuilder AppendLine();
