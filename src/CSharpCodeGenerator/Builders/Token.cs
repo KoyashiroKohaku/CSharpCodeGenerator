@@ -5,13 +5,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
-    public struct CodeWord : IEquatable<CodeWord>
+    public struct Token : IEquatable<Token>
     {
         private readonly string _value;
 
-        private readonly CodeWordType _codeWordType;
+        private readonly TokendType _tokenType;
 
-        public CodeWord(string value)
+        public Token(string value)
         {
             if (value == null)
             {
@@ -24,916 +24,916 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
 
             _value = value;
-            _codeWordType = CodeWordType.AnyString;
+            _tokenType = TokendType.AnyString;
         }
 
-        internal CodeWord(CodeWordType codeWordType)
+        internal Token(TokendType tokenType)
         {
-            if (!System.Enum.IsDefined(typeof(CodeWordType), codeWordType))
+            if (!System.Enum.IsDefined(typeof(TokendType), tokenType))
             {
-                throw new InvalidEnumArgumentException(nameof(codeWordType), (int)codeWordType, typeof(CodeWordType));
+                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokendType));
             }
 
-            if (codeWordType == CodeWordType.AnyString)
+            if (tokenType == TokendType.AnyString)
             {
-                throw new ArgumentException("", nameof(codeWordType));
+                throw new ArgumentException("", nameof(tokenType));
             }
 
             _value = string.Empty;
-            _codeWordType = codeWordType;
+            _tokenType = tokenType;
         }
 
         /// <summary>
         /// Keywords dictionary.
         /// </summary>
-        private static Dictionary<CodeWordType, Keyword> Keywords => new Dictionary<CodeWordType, Keyword>
+        private static Dictionary<TokendType, Keyword> Keywords => new Dictionary<TokendType, Keyword>
         {
-            { CodeWordType.Abstract, Keyword.Abstract },
-            { CodeWordType.As, Keyword.As },
-            { CodeWordType.Base, Keyword.Base },
-            { CodeWordType.Bool, Keyword.Bool },
-            { CodeWordType.Break, Keyword.Break },
-            { CodeWordType.Byte, Keyword.Byte },
-            { CodeWordType.Case, Keyword.Case },
-            { CodeWordType.Catch, Keyword.Catch },
-            { CodeWordType.Char, Keyword.Char },
-            { CodeWordType.Checked, Keyword.Checked },
-            { CodeWordType.Class, Keyword.Class },
-            { CodeWordType.Const, Keyword.Const },
-            { CodeWordType.Continue, Keyword.Continue },
-            { CodeWordType.Decimal, Keyword.Decimal },
-            { CodeWordType.Default, Keyword.Default },
-            { CodeWordType.Delegate, Keyword.Delegate },
-            { CodeWordType.Do, Keyword.Do },
-            { CodeWordType.Double, Keyword.Double },
-            { CodeWordType.Else, Keyword.Else },
-            { CodeWordType.Enum, Keyword.Enum },
-            { CodeWordType.Event, Keyword.Event },
-            { CodeWordType.Explicit, Keyword.Explicit },
-            { CodeWordType.Extern, Keyword.Extern },
-            { CodeWordType.False, Keyword.False },
-            { CodeWordType.Finally, Keyword.Finally },
-            { CodeWordType.Fixed, Keyword.Fixed },
-            { CodeWordType.Float, Keyword.Float },
-            { CodeWordType.For, Keyword.For },
-            { CodeWordType.Foreach, Keyword.Foreach },
-            { CodeWordType.Goto, Keyword.Goto },
-            { CodeWordType.If, Keyword.If },
-            { CodeWordType.Implicit, Keyword.Implicit },
-            { CodeWordType.In, Keyword.In },
-            { CodeWordType.Int, Keyword.Int },
-            { CodeWordType.Interface, Keyword.Interface },
-            { CodeWordType.Internal, Keyword.Internal },
-            { CodeWordType.Is, Keyword.Is },
-            { CodeWordType.Lock, Keyword.Lock },
-            { CodeWordType.Long, Keyword.Long },
-            { CodeWordType.Namespace, Keyword.Namespace },
-            { CodeWordType.New, Keyword.New },
-            { CodeWordType.Null, Keyword.Null },
-            { CodeWordType.Object, Keyword.Object },
-            { CodeWordType.Operator, Keyword.Operator },
-            { CodeWordType.Out, Keyword.Out },
-            { CodeWordType.Override, Keyword.Override },
-            { CodeWordType.Params, Keyword.Params },
-            { CodeWordType.Private, Keyword.Private },
-            { CodeWordType.Protected, Keyword.Protected },
-            { CodeWordType.Public, Keyword.Public },
-            { CodeWordType.Readonly, Keyword.Readonly },
-            { CodeWordType.Ref, Keyword.Ref },
-            { CodeWordType.Return, Keyword.Return },
-            { CodeWordType.Sbyte, Keyword.Sbyte },
-            { CodeWordType.Sealed, Keyword.Sealed },
-            { CodeWordType.Short, Keyword.Short },
-            { CodeWordType.Sizeof, Keyword.Sizeof },
-            { CodeWordType.Stackalloc, Keyword.Stackalloc },
-            { CodeWordType.Static, Keyword.Static },
-            { CodeWordType.String, Keyword.String },
-            { CodeWordType.Struct, Keyword.Struct },
-            { CodeWordType.Switch, Keyword.Switch },
-            { CodeWordType.This, Keyword.This },
-            { CodeWordType.Throw, Keyword.Throw },
-            { CodeWordType.True, Keyword.True },
-            { CodeWordType.Try, Keyword.Try },
-            { CodeWordType.Typeof, Keyword.Typeof },
-            { CodeWordType.Uint, Keyword.Uint },
-            { CodeWordType.Ulong, Keyword.Ulong },
-            { CodeWordType.Unchecked, Keyword.Unchecked },
-            { CodeWordType.Unsafe, Keyword.Unsafe },
-            { CodeWordType.Ushort, Keyword.Ushort },
-            { CodeWordType.Using, Keyword.Using },
-            { CodeWordType.Virtual, Keyword.Virtual },
-            { CodeWordType.Void, Keyword.Void },
-            { CodeWordType.Volatile, Keyword.Volatile },
-            { CodeWordType.While, Keyword.While }
+            { TokendType.Abstract, Keyword.Abstract },
+            { TokendType.As, Keyword.As },
+            { TokendType.Base, Keyword.Base },
+            { TokendType.Bool, Keyword.Bool },
+            { TokendType.Break, Keyword.Break },
+            { TokendType.Byte, Keyword.Byte },
+            { TokendType.Case, Keyword.Case },
+            { TokendType.Catch, Keyword.Catch },
+            { TokendType.Char, Keyword.Char },
+            { TokendType.Checked, Keyword.Checked },
+            { TokendType.Class, Keyword.Class },
+            { TokendType.Const, Keyword.Const },
+            { TokendType.Continue, Keyword.Continue },
+            { TokendType.Decimal, Keyword.Decimal },
+            { TokendType.Default, Keyword.Default },
+            { TokendType.Delegate, Keyword.Delegate },
+            { TokendType.Do, Keyword.Do },
+            { TokendType.Double, Keyword.Double },
+            { TokendType.Else, Keyword.Else },
+            { TokendType.Enum, Keyword.Enum },
+            { TokendType.Event, Keyword.Event },
+            { TokendType.Explicit, Keyword.Explicit },
+            { TokendType.Extern, Keyword.Extern },
+            { TokendType.False, Keyword.False },
+            { TokendType.Finally, Keyword.Finally },
+            { TokendType.Fixed, Keyword.Fixed },
+            { TokendType.Float, Keyword.Float },
+            { TokendType.For, Keyword.For },
+            { TokendType.Foreach, Keyword.Foreach },
+            { TokendType.Goto, Keyword.Goto },
+            { TokendType.If, Keyword.If },
+            { TokendType.Implicit, Keyword.Implicit },
+            { TokendType.In, Keyword.In },
+            { TokendType.Int, Keyword.Int },
+            { TokendType.Interface, Keyword.Interface },
+            { TokendType.Internal, Keyword.Internal },
+            { TokendType.Is, Keyword.Is },
+            { TokendType.Lock, Keyword.Lock },
+            { TokendType.Long, Keyword.Long },
+            { TokendType.Namespace, Keyword.Namespace },
+            { TokendType.New, Keyword.New },
+            { TokendType.Null, Keyword.Null },
+            { TokendType.Object, Keyword.Object },
+            { TokendType.Operator, Keyword.Operator },
+            { TokendType.Out, Keyword.Out },
+            { TokendType.Override, Keyword.Override },
+            { TokendType.Params, Keyword.Params },
+            { TokendType.Private, Keyword.Private },
+            { TokendType.Protected, Keyword.Protected },
+            { TokendType.Public, Keyword.Public },
+            { TokendType.Readonly, Keyword.Readonly },
+            { TokendType.Ref, Keyword.Ref },
+            { TokendType.Return, Keyword.Return },
+            { TokendType.Sbyte, Keyword.Sbyte },
+            { TokendType.Sealed, Keyword.Sealed },
+            { TokendType.Short, Keyword.Short },
+            { TokendType.Sizeof, Keyword.Sizeof },
+            { TokendType.Stackalloc, Keyword.Stackalloc },
+            { TokendType.Static, Keyword.Static },
+            { TokendType.String, Keyword.String },
+            { TokendType.Struct, Keyword.Struct },
+            { TokendType.Switch, Keyword.Switch },
+            { TokendType.This, Keyword.This },
+            { TokendType.Throw, Keyword.Throw },
+            { TokendType.True, Keyword.True },
+            { TokendType.Try, Keyword.Try },
+            { TokendType.Typeof, Keyword.Typeof },
+            { TokendType.Uint, Keyword.Uint },
+            { TokendType.Ulong, Keyword.Ulong },
+            { TokendType.Unchecked, Keyword.Unchecked },
+            { TokendType.Unsafe, Keyword.Unsafe },
+            { TokendType.Ushort, Keyword.Ushort },
+            { TokendType.Using, Keyword.Using },
+            { TokendType.Virtual, Keyword.Virtual },
+            { TokendType.Void, Keyword.Void },
+            { TokendType.Volatile, Keyword.Volatile },
+            { TokendType.While, Keyword.While }
         };
 
         /// <summary>
         /// ContextualKeywords dictionary.
         /// </summary>
-        private static Dictionary<CodeWordType, ContextualKeyword> ContextualKeywords => new Dictionary<CodeWordType, ContextualKeyword>
+        private static Dictionary<TokendType, ContextualKeyword> ContextualKeywords => new Dictionary<TokendType, ContextualKeyword>
         {
-            { CodeWordType.Add, ContextualKeyword.Add },
-            { CodeWordType.Alias, ContextualKeyword.Alias },
-            { CodeWordType.Ascending, ContextualKeyword.Ascending },
-            { CodeWordType.Async, ContextualKeyword.Async },
-            { CodeWordType.Await, ContextualKeyword.Await },
-            { CodeWordType.By, ContextualKeyword.By },
-            { CodeWordType.Descending, ContextualKeyword.Descending },
-            { CodeWordType.Dynamic, ContextualKeyword.Dynamic },
-            { CodeWordType.Equals, ContextualKeyword.Equals },
-            { CodeWordType.From, ContextualKeyword.From },
-            { CodeWordType.Get, ContextualKeyword.Get },
-            { CodeWordType.Global, ContextualKeyword.Global },
-            { CodeWordType.Group, ContextualKeyword.Group },
-            { CodeWordType.Into, ContextualKeyword.Into },
-            { CodeWordType.Join, ContextualKeyword.Join },
-            { CodeWordType.Let, ContextualKeyword.Let },
-            { CodeWordType.Nameof, ContextualKeyword.Nameof },
-            { CodeWordType.On, ContextualKeyword.On },
-            { CodeWordType.Orderby, ContextualKeyword.Orderby },
-            { CodeWordType.PartialType, ContextualKeyword.PartialType },
-            { CodeWordType.PartialMethod, ContextualKeyword.PartialMethod },
-            { CodeWordType.Remove, ContextualKeyword.Remove },
-            { CodeWordType.Select, ContextualKeyword.Select },
-            { CodeWordType.Set, ContextualKeyword.Set },
-            { CodeWordType.UnmanagedGenericTypeConstraint, ContextualKeyword.UnmanagedGenericTypeConstraint },
-            { CodeWordType.Value, ContextualKeyword.Value },
-            { CodeWordType.Var, ContextualKeyword.Var },
-            { CodeWordType.WhenFilterCondition, ContextualKeyword.WhenFilterCondition },
-            { CodeWordType.WhereGenericTypeConstraint, ContextualKeyword.WhereGenericTypeConstraint },
-            { CodeWordType.WhereQueryClause, ContextualKeyword.WhereQueryClause },
-            { CodeWordType.Yield, ContextualKeyword.Yield }
+            { TokendType.Add, ContextualKeyword.Add },
+            { TokendType.Alias, ContextualKeyword.Alias },
+            { TokendType.Ascending, ContextualKeyword.Ascending },
+            { TokendType.Async, ContextualKeyword.Async },
+            { TokendType.Await, ContextualKeyword.Await },
+            { TokendType.By, ContextualKeyword.By },
+            { TokendType.Descending, ContextualKeyword.Descending },
+            { TokendType.Dynamic, ContextualKeyword.Dynamic },
+            { TokendType.Equals, ContextualKeyword.Equals },
+            { TokendType.From, ContextualKeyword.From },
+            { TokendType.Get, ContextualKeyword.Get },
+            { TokendType.Global, ContextualKeyword.Global },
+            { TokendType.Group, ContextualKeyword.Group },
+            { TokendType.Into, ContextualKeyword.Into },
+            { TokendType.Join, ContextualKeyword.Join },
+            { TokendType.Let, ContextualKeyword.Let },
+            { TokendType.Nameof, ContextualKeyword.Nameof },
+            { TokendType.On, ContextualKeyword.On },
+            { TokendType.Orderby, ContextualKeyword.Orderby },
+            { TokendType.PartialType, ContextualKeyword.PartialType },
+            { TokendType.PartialMethod, ContextualKeyword.PartialMethod },
+            { TokendType.Remove, ContextualKeyword.Remove },
+            { TokendType.Select, ContextualKeyword.Select },
+            { TokendType.Set, ContextualKeyword.Set },
+            { TokendType.UnmanagedGenericTypeConstraint, ContextualKeyword.UnmanagedGenericTypeConstraint },
+            { TokendType.Value, ContextualKeyword.Value },
+            { TokendType.Var, ContextualKeyword.Var },
+            { TokendType.WhenFilterCondition, ContextualKeyword.WhenFilterCondition },
+            { TokendType.WhereGenericTypeConstraint, ContextualKeyword.WhereGenericTypeConstraint },
+            { TokendType.WhereQueryClause, ContextualKeyword.WhereQueryClause },
+            { TokendType.Yield, ContextualKeyword.Yield }
         };
 
         /// <summary>
         /// ASCII chars set
         /// </summary>
-        private static HashSet<CodeWordType> ASCIIChars => new HashSet<CodeWordType>
+        private static HashSet<TokendType> ASCIIChars => new HashSet<TokendType>
         {
-            CodeWordType.Space,
-            CodeWordType.ExclamationMark,
-            CodeWordType.QuotationMark,
-            CodeWordType.NumberSign,
-            CodeWordType.DollarSign,
-            CodeWordType.PercentSign,
-            CodeWordType.Ampersand,
-            CodeWordType.Apostrophe,
-            CodeWordType.LeftParentheses,
-            CodeWordType.RightParentheses,
-            CodeWordType.Asterisk,
-            CodeWordType.PlusSign,
-            CodeWordType.Commma,
-            CodeWordType.HyphenMinus,
-            CodeWordType.FullStop,
-            CodeWordType.Slash,
-            CodeWordType.Colon,
-            CodeWordType.Semicolon,
-            CodeWordType.LessThanSign,
-            CodeWordType.Equals,
-            CodeWordType.GreaterThanSign,
-            CodeWordType.QuestionMark,
-            CodeWordType.AtSign,
-            CodeWordType.LeftSquareBracket,
-            CodeWordType.Backslash,
-            CodeWordType.RightSquareBracket,
-            CodeWordType.CircumflexAccent,
-            CodeWordType.LowLine,
-            CodeWordType.GraveAccent,
-            CodeWordType.LeftCurlyBracket,
-            CodeWordType.VerticalBar,
-            CodeWordType.RightCurlyBracket,
-            CodeWordType.Tilde,
+            TokendType.Space,
+            TokendType.ExclamationMark,
+            TokendType.QuotationMark,
+            TokendType.NumberSign,
+            TokendType.DollarSign,
+            TokendType.PercentSign,
+            TokendType.Ampersand,
+            TokendType.Apostrophe,
+            TokendType.LeftParentheses,
+            TokendType.RightParentheses,
+            TokendType.Asterisk,
+            TokendType.PlusSign,
+            TokendType.Commma,
+            TokendType.HyphenMinus,
+            TokendType.FullStop,
+            TokendType.Slash,
+            TokendType.Colon,
+            TokendType.Semicolon,
+            TokendType.LessThanSign,
+            TokendType.Equals,
+            TokendType.GreaterThanSign,
+            TokendType.QuestionMark,
+            TokendType.AtSign,
+            TokendType.LeftSquareBracket,
+            TokendType.Backslash,
+            TokendType.RightSquareBracket,
+            TokendType.CircumflexAccent,
+            TokendType.LowLine,
+            TokendType.GraveAccent,
+            TokendType.LeftCurlyBracket,
+            TokendType.VerticalBar,
+            TokendType.RightCurlyBracket,
+            TokendType.Tilde,
         };
 
-        public bool IsKeyword => Keywords.ContainsKey(_codeWordType);
+        public bool IsKeyword => Keywords.ContainsKey(_tokenType);
 
-        public bool IsContextualKeyword => ContextualKeywords.ContainsKey(_codeWordType);
+        public bool IsContextualKeyword => ContextualKeywords.ContainsKey(_tokenType);
 
-        public bool IsASCIIChar => ASCIIChars.Contains(_codeWordType);
+        public bool IsASCIIChar => ASCIIChars.Contains(_tokenType);
 
-        public bool IsAnyString => _codeWordType == CodeWordType.AnyString;
+        public bool IsAnyString => _tokenType == TokendType.AnyString;
 
         #region ASCII Chars
         /// <summary>
         /// &nbsp;
         /// </summary>
-        public static CodeWord Space => new CodeWord(CodeWordType.Space);
+        public static Token Space => new Token(TokendType.Space);
 
         /// <summary>
         /// !
         /// </summary>
-        public static CodeWord ExclamationMark => new CodeWord(CodeWordType.ExclamationMark);
+        public static Token ExclamationMark => new Token(TokendType.ExclamationMark);
 
         /// <summary>
         /// "
         /// </summary>
-        public static CodeWord QuotationMark => new CodeWord(CodeWordType.QuotationMark);
+        public static Token QuotationMark => new Token(TokendType.QuotationMark);
 
         /// <summary>
         /// #
         /// </summary>
-        public static CodeWord NumberSign => new CodeWord(CodeWordType.NumberSign);
+        public static Token NumberSign => new Token(TokendType.NumberSign);
 
         /// <summary>
         /// $
         /// </summary>
-        public static CodeWord DollarSign => new CodeWord(CodeWordType.DollarSign);
+        public static Token DollarSign => new Token(TokendType.DollarSign);
 
         /// <summary>
         /// %
         /// </summary>
-        public static CodeWord PercentSign => new CodeWord(CodeWordType.PercentSign);
+        public static Token PercentSign => new Token(TokendType.PercentSign);
 
         /// <summary>
         /// &amp;
         /// </summary>
-        public static CodeWord Ampersand => new CodeWord(CodeWordType.Ampersand);
+        public static Token Ampersand => new Token(TokendType.Ampersand);
 
         /// <summary>
         /// '
         /// </summary>
-        public static CodeWord Apostrophe => new CodeWord(CodeWordType.Apostrophe);
+        public static Token Apostrophe => new Token(TokendType.Apostrophe);
 
         /// <summary>
         /// (
         /// </summary>
-        public static CodeWord LeftParentheses => new CodeWord(CodeWordType.LeftParentheses);
+        public static Token LeftParentheses => new Token(TokendType.LeftParentheses);
 
         /// <summary>
         /// )
         /// </summary>
-        public static CodeWord RightParentheses => new CodeWord(CodeWordType.RightParentheses);
+        public static Token RightParentheses => new Token(TokendType.RightParentheses);
 
         /// <summary>
         /// *
         /// </summary>
-        public static CodeWord Asterisk => new CodeWord(CodeWordType.Asterisk);
+        public static Token Asterisk => new Token(TokendType.Asterisk);
 
         /// <summary>
         /// +
         /// </summary>
-        public static CodeWord PlusSign => new CodeWord(CodeWordType.PlusSign);
+        public static Token PlusSign => new Token(TokendType.PlusSign);
 
         /// <summary>
         /// ,
         /// </summary>
-        public static CodeWord Commma => new CodeWord(CodeWordType.Commma);
+        public static Token Commma => new Token(TokendType.Commma);
 
         /// <summary>
         /// -
         /// </summary>
-        public static CodeWord HyphenMinus => new CodeWord(CodeWordType.HyphenMinus);
+        public static Token HyphenMinus => new Token(TokendType.HyphenMinus);
 
         /// <summary>
         /// .
         /// </summary>
-        public static CodeWord FullStop => new CodeWord(CodeWordType.FullStop);
+        public static Token FullStop => new Token(TokendType.FullStop);
 
         /// <summary>
         /// /
         /// </summary>
-        public static CodeWord Slash => new CodeWord(CodeWordType.Slash);
+        public static Token Slash => new Token(TokendType.Slash);
 
         /// <summary>
         /// :
         /// </summary>
-        public static CodeWord Colon => new CodeWord(CodeWordType.Colon);
+        public static Token Colon => new Token(TokendType.Colon);
 
         /// <summary>
         /// ;
         /// </summary>
-        public static CodeWord Semicolon => new CodeWord(CodeWordType.Semicolon);
+        public static Token Semicolon => new Token(TokendType.Semicolon);
 
         /// <summary>
         /// &lt;
         /// </summary>
-        public static CodeWord LessThanSign => new CodeWord(CodeWordType.LessThanSign);
+        public static Token LessThanSign => new Token(TokendType.LessThanSign);
 
         /// <summary>
         /// =
         /// </summary>
-        public static CodeWord EqualSign => new CodeWord(CodeWordType.EqualSign);
+        public static Token EqualSign => new Token(TokendType.EqualSign);
 
         /// <summary>
         /// &gt;
         /// </summary>
-        public static CodeWord GreaterThanSign => new CodeWord(CodeWordType.GreaterThanSign);
+        public static Token GreaterThanSign => new Token(TokendType.GreaterThanSign);
 
         /// <summary>
         /// ?
         /// </summary>
-        public static CodeWord QuestionMark => new CodeWord(CodeWordType.QuestionMark);
+        public static Token QuestionMark => new Token(TokendType.QuestionMark);
 
         /// <summary>
         /// @
         /// </summary>
-        public static CodeWord AtSign => new CodeWord(CodeWordType.AtSign);
+        public static Token AtSign => new Token(TokendType.AtSign);
 
         /// <summary>
         /// [
         /// </summary>
-        public static CodeWord LeftSquareBracket => new CodeWord(CodeWordType.LeftSquareBracket);
+        public static Token LeftSquareBracket => new Token(TokendType.LeftSquareBracket);
 
         /// <summary>
         /// \
         /// </summary>
-        public static CodeWord Backslash => new CodeWord(CodeWordType.Backslash);
+        public static Token Backslash => new Token(TokendType.Backslash);
 
         /// <summary>
         /// ]
         /// </summary>
-        public static CodeWord RightSquareBracket => new CodeWord(CodeWordType.RightSquareBracket);
+        public static Token RightSquareBracket => new Token(TokendType.RightSquareBracket);
 
         /// <summary>
         /// ^
         /// </summary>
-        public static CodeWord CircumflexAccent => new CodeWord(CodeWordType.CircumflexAccent);
+        public static Token CircumflexAccent => new Token(TokendType.CircumflexAccent);
 
         /// <summary>
         /// _
         /// </summary>
-        public static CodeWord LowLine => new CodeWord(CodeWordType.LowLine);
+        public static Token LowLine => new Token(TokendType.LowLine);
 
         /// <summary>
         /// `
         /// </summary>
-        public static CodeWord GraveAccent => new CodeWord(CodeWordType.GraveAccent);
+        public static Token GraveAccent => new Token(TokendType.GraveAccent);
 
         /// <summary>
         /// {
         /// </summary>
-        public static CodeWord LeftCurlyBracket => new CodeWord(CodeWordType.LeftCurlyBracket);
+        public static Token LeftCurlyBracket => new Token(TokendType.LeftCurlyBracket);
 
         /// <summary>
         /// |
         /// </summary>
-        public static CodeWord VerticalBar => new CodeWord(CodeWordType.VerticalBar);
+        public static Token VerticalBar => new Token(TokendType.VerticalBar);
 
         /// <summary>
         /// }
         /// </summary>
-        public static CodeWord RightCurlyBracket => new CodeWord(CodeWordType.RightCurlyBracket);
+        public static Token RightCurlyBracket => new Token(TokendType.RightCurlyBracket);
 
         /// <summary>
         /// ~
         /// </summary>
-        public static CodeWord Tilde => new CodeWord(CodeWordType.Tilde);
+        public static Token Tilde => new Token(TokendType.Tilde);
         #endregion
 
         #region Separator other than spaces
         /// <summary>
         /// End of line.
         /// </summary>
-        public static CodeWord EndOfLine => new CodeWord(CodeWordType.EndOfLine);
+        public static Token EndOfLine => new Token(TokendType.EndOfLine);
 
         /// <summary>
         /// Indent.
         /// </summary>
-        public static CodeWord Indent => new CodeWord(CodeWordType.Indent);
+        public static Token Indent => new Token(TokendType.Indent);
         #endregion
 
         #region Keywords
         /// <summary>
         /// abstract
         /// </summary>
-        public static CodeWord Abstract => new CodeWord(CodeWordType.Abstract);
+        public static Token Abstract => new Token(TokendType.Abstract);
 
         /// <summary>
         /// as
         /// </summary>
-        public static CodeWord As => new CodeWord(CodeWordType.As);
+        public static Token As => new Token(TokendType.As);
 
         /// <summary>
         /// base
         /// </summary>
-        public static CodeWord Base => new CodeWord(CodeWordType.Base);
+        public static Token Base => new Token(TokendType.Base);
 
         /// <summary>
         /// bool
         /// </summary>
-        public static CodeWord Bool => new CodeWord(CodeWordType.Bool);
+        public static Token Bool => new Token(TokendType.Bool);
 
         /// <summary>
         /// break
         /// </summary>
-        public static CodeWord Break => new CodeWord(CodeWordType.Break);
+        public static Token Break => new Token(TokendType.Break);
 
         /// <summary>
         /// byte
         /// </summary>
-        public static CodeWord Byte => new CodeWord(CodeWordType.Byte);
+        public static Token Byte => new Token(TokendType.Byte);
 
         /// <summary>
         /// case
         /// </summary>
-        public static CodeWord Case => new CodeWord(CodeWordType.Case);
+        public static Token Case => new Token(TokendType.Case);
 
         /// <summary>
         /// catch
         /// </summary>
-        public static CodeWord Catch => new CodeWord(CodeWordType.Catch);
+        public static Token Catch => new Token(TokendType.Catch);
 
         /// <summary>
         /// char
         /// </summary>
-        public static CodeWord Char => new CodeWord(CodeWordType.Char);
+        public static Token Char => new Token(TokendType.Char);
 
         /// <summary>
         /// checked
         /// </summary>
-        public static CodeWord Checked => new CodeWord(CodeWordType.Checked);
+        public static Token Checked => new Token(TokendType.Checked);
 
         /// <summary>
         /// class
         /// </summary>
-        public static CodeWord Class => new CodeWord(CodeWordType.Class);
+        public static Token Class => new Token(TokendType.Class);
 
         /// <summary>
         /// const
         /// </summary>
-        public static CodeWord Const => new CodeWord(CodeWordType.Const);
+        public static Token Const => new Token(TokendType.Const);
 
         /// <summary>
         /// continue
         /// </summary>
-        public static CodeWord Continue => new CodeWord(CodeWordType.Continue);
+        public static Token Continue => new Token(TokendType.Continue);
 
         /// <summary>
         /// decimal
         /// </summary>
-        public static CodeWord Decimal => new CodeWord(CodeWordType.Decimal);
+        public static Token Decimal => new Token(TokendType.Decimal);
 
         /// <summary>
         /// default
         /// </summary>
-        public static CodeWord Default => new CodeWord(CodeWordType.Default);
+        public static Token Default => new Token(TokendType.Default);
 
         /// <summary>
         /// delegate
         /// </summary>
-        public static CodeWord Delegate => new CodeWord(CodeWordType.Delegate);
+        public static Token Delegate => new Token(TokendType.Delegate);
 
         /// <summary>
         /// do
         /// </summary>
-        public static CodeWord Do => new CodeWord(CodeWordType.Do);
+        public static Token Do => new Token(TokendType.Do);
 
         /// <summary>
         /// double
         /// </summary>
-        public static CodeWord Double => new CodeWord(CodeWordType.Double);
+        public static Token Double => new Token(TokendType.Double);
 
         /// <summary>
         /// else
         /// </summary>
-        public static CodeWord Else => new CodeWord(CodeWordType.Else);
+        public static Token Else => new Token(TokendType.Else);
 
         /// <summary>
         /// enum
         /// </summary>
-        public static CodeWord Enum => new CodeWord(CodeWordType.Enum);
+        public static Token Enum => new Token(TokendType.Enum);
 
         /// <summary>
         /// event
         /// </summary>
-        public static CodeWord Event => new CodeWord(CodeWordType.Event);
+        public static Token Event => new Token(TokendType.Event);
 
         /// <summary>
         /// explicit
         /// </summary>
-        public static CodeWord Explicit => new CodeWord(CodeWordType.Explicit);
+        public static Token Explicit => new Token(TokendType.Explicit);
 
         /// <summary>
         /// extern
         /// </summary>
-        public static CodeWord Extern => new CodeWord(CodeWordType.Extern);
+        public static Token Extern => new Token(TokendType.Extern);
 
         /// <summary>
         /// false
         /// </summary>
-        public static CodeWord False => new CodeWord(CodeWordType.False);
+        public static Token False => new Token(TokendType.False);
 
         /// <summary>
         /// finally
         /// </summary>
-        public static CodeWord Finally => new CodeWord(CodeWordType.Finally);
+        public static Token Finally => new Token(TokendType.Finally);
 
         /// <summary>
         /// fixed
         /// </summary>
-        public static CodeWord Fixed => new CodeWord(CodeWordType.Fixed);
+        public static Token Fixed => new Token(TokendType.Fixed);
 
         /// <summary>
         /// float
         /// </summary>
-        public static CodeWord Float => new CodeWord(CodeWordType.Float);
+        public static Token Float => new Token(TokendType.Float);
 
         /// <summary>
         /// for
         /// </summary>
-        public static CodeWord For => new CodeWord(CodeWordType.For);
+        public static Token For => new Token(TokendType.For);
 
         /// <summary>
         /// foreach
         /// </summary>
-        public static CodeWord Foreach => new CodeWord(CodeWordType.Foreach);
+        public static Token Foreach => new Token(TokendType.Foreach);
 
         /// <summary>
         /// goto
         /// </summary>
-        public static CodeWord Goto => new CodeWord(CodeWordType.Goto);
+        public static Token Goto => new Token(TokendType.Goto);
 
         /// <summary>
         /// if
         /// </summary>
-        public static CodeWord If => new CodeWord(CodeWordType.If);
+        public static Token If => new Token(TokendType.If);
 
         /// <summary>
         /// implicit
         /// </summary>
-        public static CodeWord Implicit => new CodeWord(CodeWordType.Implicit);
+        public static Token Implicit => new Token(TokendType.Implicit);
 
         /// <summary>
         /// in
         /// </summary>
-        public static CodeWord In => new CodeWord(CodeWordType.In);
+        public static Token In => new Token(TokendType.In);
 
         /// <summary>
         /// int
         /// </summary>
-        public static CodeWord Int => new CodeWord(CodeWordType.Int);
+        public static Token Int => new Token(TokendType.Int);
 
         /// <summary>
         /// interface
         /// </summary>
-        public static CodeWord Interface => new CodeWord(CodeWordType.Interface);
+        public static Token Interface => new Token(TokendType.Interface);
 
         /// <summary>
         /// internal
         /// </summary>
-        public static CodeWord Internal => new CodeWord(CodeWordType.Internal);
+        public static Token Internal => new Token(TokendType.Internal);
 
         /// <summary>
         /// is
         /// </summary>
-        public static CodeWord Is => new CodeWord(CodeWordType.Is);
+        public static Token Is => new Token(TokendType.Is);
 
         /// <summary>
         /// lock
         /// </summary>
-        public static CodeWord Lock => new CodeWord(CodeWordType.Lock);
+        public static Token Lock => new Token(TokendType.Lock);
 
         /// <summary>
         /// long
         /// </summary>
-        public static CodeWord Long => new CodeWord(CodeWordType.Long);
+        public static Token Long => new Token(TokendType.Long);
 
         /// <summary>
         /// namespace
         /// </summary>
-        public static CodeWord Namespace => new CodeWord(CodeWordType.Namespace);
+        public static Token Namespace => new Token(TokendType.Namespace);
 
         /// <summary>
         /// new
         /// </summary>
-        public static CodeWord New => new CodeWord(CodeWordType.New);
+        public static Token New => new Token(TokendType.New);
 
         /// <summary>
         /// null
         /// </summary>
-        public static CodeWord Null => new CodeWord(CodeWordType.Null);
+        public static Token Null => new Token(TokendType.Null);
 
         /// <summary>
         /// object
         /// </summary>
-        public static CodeWord Object => new CodeWord(CodeWordType.Object);
+        public static Token Object => new Token(TokendType.Object);
 
         /// <summary>
         /// operator
         /// </summary>
-        public static CodeWord Operator => new CodeWord(CodeWordType.Operator);
+        public static Token Operator => new Token(TokendType.Operator);
 
         /// <summary>
         /// out
         /// </summary>
-        public static CodeWord Out => new CodeWord(CodeWordType.Out);
+        public static Token Out => new Token(TokendType.Out);
 
         /// <summary>
         /// override
         /// </summary>
-        public static CodeWord Override => new CodeWord(CodeWordType.Override);
+        public static Token Override => new Token(TokendType.Override);
 
         /// <summary>
         /// params
         /// </summary>
-        public static CodeWord Params => new CodeWord(CodeWordType.Params);
+        public static Token Params => new Token(TokendType.Params);
 
         /// <summary>
         /// private
         /// </summary>
-        public static CodeWord Private => new CodeWord(CodeWordType.Private);
+        public static Token Private => new Token(TokendType.Private);
 
         /// <summary>
         /// protected
         /// </summary>
-        public static CodeWord Protected => new CodeWord(CodeWordType.Protected);
+        public static Token Protected => new Token(TokendType.Protected);
 
         /// <summary>
         /// public
         /// </summary>
-        public static CodeWord Public => new CodeWord(CodeWordType.Public);
+        public static Token Public => new Token(TokendType.Public);
 
         /// <summary>
         /// readonly
         /// </summary>
-        public static CodeWord Readonly => new CodeWord(CodeWordType.Readonly);
+        public static Token Readonly => new Token(TokendType.Readonly);
 
         /// <summary>
         /// ref
         /// </summary>
-        public static CodeWord Ref => new CodeWord(CodeWordType.Ref);
+        public static Token Ref => new Token(TokendType.Ref);
 
         /// <summary>
         /// return
         /// </summary>
-        public static CodeWord Return => new CodeWord(CodeWordType.Return);
+        public static Token Return => new Token(TokendType.Return);
 
         /// <summary>
         /// sbyte
         /// </summary>
-        public static CodeWord Sbyte => new CodeWord(CodeWordType.Sbyte);
+        public static Token Sbyte => new Token(TokendType.Sbyte);
 
         /// <summary>
         /// sealed
         /// </summary>
-        public static CodeWord Sealed => new CodeWord(CodeWordType.Sealed);
+        public static Token Sealed => new Token(TokendType.Sealed);
 
         /// <summary>
         /// short
         /// </summary>
-        public static CodeWord Short => new CodeWord(CodeWordType.Short);
+        public static Token Short => new Token(TokendType.Short);
 
         /// <summary>
         /// sizeof
         /// </summary>
-        public static CodeWord Sizeof => new CodeWord(CodeWordType.Sizeof);
+        public static Token Sizeof => new Token(TokendType.Sizeof);
 
         /// <summary>
         /// stackalloc
         /// </summary>
-        public static CodeWord Stackalloc => new CodeWord(CodeWordType.Stackalloc);
+        public static Token Stackalloc => new Token(TokendType.Stackalloc);
 
         /// <summary>
         /// static
         /// </summary>
-        public static CodeWord Static => new CodeWord(CodeWordType.Static);
+        public static Token Static => new Token(TokendType.Static);
 
         /// <summary>
         /// string
         /// </summary>
-        public static CodeWord String => new CodeWord(CodeWordType.String);
+        public static Token String => new Token(TokendType.String);
 
         /// <summary>
         /// struct
         /// </summary>
-        public static CodeWord Struct => new CodeWord(CodeWordType.Struct);
+        public static Token Struct => new Token(TokendType.Struct);
 
         /// <summary>
         /// switch
         /// </summary>
-        public static CodeWord Switch => new CodeWord(CodeWordType.Switch);
+        public static Token Switch => new Token(TokendType.Switch);
 
         /// <summary>
         /// this
         /// </summary>
-        public static CodeWord This => new CodeWord(CodeWordType.This);
+        public static Token This => new Token(TokendType.This);
 
         /// <summary>
         /// throw
         /// </summary>
-        public static CodeWord Throw => new CodeWord(CodeWordType.Throw);
+        public static Token Throw => new Token(TokendType.Throw);
 
         /// <summary>
         /// true
         /// </summary>
-        public static CodeWord True => new CodeWord(CodeWordType.True);
+        public static Token True => new Token(TokendType.True);
 
         /// <summary>
         /// try
         /// </summary>
-        public static CodeWord Try => new CodeWord(CodeWordType.Try);
+        public static Token Try => new Token(TokendType.Try);
 
         /// <summary>
         /// typeof
         /// </summary>
-        public static CodeWord Typeof => new CodeWord(CodeWordType.Typeof);
+        public static Token Typeof => new Token(TokendType.Typeof);
 
         /// <summary>
         /// uint
         /// </summary>
-        public static CodeWord Uint => new CodeWord(CodeWordType.Uint);
+        public static Token Uint => new Token(TokendType.Uint);
 
         /// <summary>
         /// ulong
         /// </summary>
-        public static CodeWord Ulong => new CodeWord(CodeWordType.Ulong);
+        public static Token Ulong => new Token(TokendType.Ulong);
 
         /// <summary>
         /// unchecked
         /// </summary>
-        public static CodeWord Unchecked => new CodeWord(CodeWordType.Unchecked);
+        public static Token Unchecked => new Token(TokendType.Unchecked);
 
         /// <summary>
         /// unsafe
         /// </summary>
-        public static CodeWord Unsafe => new CodeWord(CodeWordType.Unsafe);
+        public static Token Unsafe => new Token(TokendType.Unsafe);
 
         /// <summary>
         /// ushort
         /// </summary>
-        public static CodeWord Ushort => new CodeWord(CodeWordType.Ushort);
+        public static Token Ushort => new Token(TokendType.Ushort);
 
         /// <summary>
         /// using
         /// </summary>
-        public static CodeWord Using => new CodeWord(CodeWordType.Using);
+        public static Token Using => new Token(TokendType.Using);
 
         /// <summary>
         /// virtual
         /// </summary>
-        public static CodeWord Virtual => new CodeWord(CodeWordType.Virtual);
+        public static Token Virtual => new Token(TokendType.Virtual);
 
         /// <summary>
         /// void
         /// </summary>
-        public static CodeWord Void => new CodeWord(CodeWordType.Void);
+        public static Token Void => new Token(TokendType.Void);
 
         /// <summary>
         /// volatile
         /// </summary>
-        public static CodeWord Volatile => new CodeWord(CodeWordType.Volatile);
+        public static Token Volatile => new Token(TokendType.Volatile);
 
         /// <summary>
         /// while
         /// </summary>
-        public static CodeWord While => new CodeWord(CodeWordType.While);
+        public static Token While => new Token(TokendType.While);
         #endregion
 
         #region ContextualKeywords
         /// <summary>
         /// add
         /// </summary>
-        public static CodeWord Add => new CodeWord(CodeWordType.Add);
+        public static Token Add => new Token(TokendType.Add);
 
         /// <summary>
         /// alias
         /// </summary>
-        public static CodeWord Alias => new CodeWord(CodeWordType.Alias);
+        public static Token Alias => new Token(TokendType.Alias);
 
         /// <summary>
         /// ascending
         /// </summary>
-        public static CodeWord Ascending => new CodeWord(CodeWordType.Ascending);
+        public static Token Ascending => new Token(TokendType.Ascending);
 
         /// <summary>
         /// async
         /// </summary>
-        public static CodeWord Async => new CodeWord(CodeWordType.Async);
+        public static Token Async => new Token(TokendType.Async);
 
         /// <summary>
         /// await
         /// </summary>
-        public static CodeWord Await => new CodeWord(CodeWordType.Await);
+        public static Token Await => new Token(TokendType.Await);
 
         /// <summary>
         /// by
         /// </summary>
-        public static CodeWord By => new CodeWord(CodeWordType.By);
+        public static Token By => new Token(TokendType.By);
 
         /// <summary>
         /// descending
         /// </summary>
-        public static CodeWord Descending => new CodeWord(CodeWordType.Descending);
+        public static Token Descending => new Token(TokendType.Descending);
 
         /// <summary>
         /// dynamic
         /// </summary>
-        public static CodeWord Dynamic => new CodeWord(CodeWordType.Dynamic);
+        public static Token Dynamic => new Token(TokendType.Dynamic);
 
         /// <summary>
         /// equals
         /// </summary>
-        public static CodeWord EqualsKeyword => new CodeWord(CodeWordType.Equals);
+        public static Token EqualsKeyword => new Token(TokendType.Equals);
 
         /// <summary>
         /// from
         /// </summary>
-        public static CodeWord From => new CodeWord(CodeWordType.From);
+        public static Token From => new Token(TokendType.From);
 
         /// <summary>
         /// get
         /// </summary>
-        public static CodeWord Get => new CodeWord(CodeWordType.Get);
+        public static Token Get => new Token(TokendType.Get);
 
         /// <summary>
         /// global
         /// </summary>
-        public static CodeWord Global => new CodeWord(CodeWordType.Global);
+        public static Token Global => new Token(TokendType.Global);
 
         /// <summary>
         /// group
         /// </summary>
-        public static CodeWord Group => new CodeWord(CodeWordType.Group);
+        public static Token Group => new Token(TokendType.Group);
 
         /// <summary>
         /// into
         /// </summary>
-        public static CodeWord Into => new CodeWord(CodeWordType.Into);
+        public static Token Into => new Token(TokendType.Into);
 
         /// <summary>
         /// join
         /// </summary>
-        public static CodeWord Join => new CodeWord(CodeWordType.Join);
+        public static Token Join => new Token(TokendType.Join);
 
         /// <summary>
         /// let
         /// </summary>
-        public static CodeWord Let => new CodeWord(CodeWordType.Let);
+        public static Token Let => new Token(TokendType.Let);
 
         /// <summary>
         /// nameof
         /// </summary>
-        public static CodeWord Nameof => new CodeWord(CodeWordType.Nameof);
+        public static Token Nameof => new Token(TokendType.Nameof);
 
         /// <summary>
         /// on
         /// </summary>
-        public static CodeWord On => new CodeWord(CodeWordType.On);
+        public static Token On => new Token(TokendType.On);
 
         /// <summary>
         /// orderby
         /// </summary>
-        public static CodeWord Orderby => new CodeWord(CodeWordType.Orderby);
+        public static Token Orderby => new Token(TokendType.Orderby);
 
         /// <summary>
         /// partial (type)
         /// </summary>
-        public static CodeWord PartialType => new CodeWord(CodeWordType.PartialType);
+        public static Token PartialType => new Token(TokendType.PartialType);
 
         /// <summary>
         /// partial (method)
         /// </summary>
-        public static CodeWord PartialMethod => new CodeWord(CodeWordType.PartialMethod);
+        public static Token PartialMethod => new Token(TokendType.PartialMethod);
 
         /// <summary>
         /// remove
         /// </summary>
-        public static CodeWord Remove => new CodeWord(CodeWordType.Remove);
+        public static Token Remove => new Token(TokendType.Remove);
 
         /// <summary>
         /// select
         /// </summary>
-        public static CodeWord Select => new CodeWord(CodeWordType.Select);
+        public static Token Select => new Token(TokendType.Select);
 
         /// <summary>
         /// set
         /// </summary>
-        public static CodeWord Set => new CodeWord(CodeWordType.Set);
+        public static Token Set => new Token(TokendType.Set);
 
         /// <summary>
         /// unmanaged (generic type constraint)
         /// </summary>
-        public static CodeWord UnmanagedGenericTypeConstraint => new CodeWord(CodeWordType.UnmanagedGenericTypeConstraint);
+        public static Token UnmanagedGenericTypeConstraint => new Token(TokendType.UnmanagedGenericTypeConstraint);
 
         /// <summary>
         /// value
         /// </summary>
-        public static CodeWord Value => new CodeWord(CodeWordType.Value);
+        public static Token Value => new Token(TokendType.Value);
 
         /// <summary>
         /// var
         /// </summary>
-        public static CodeWord Var => new CodeWord(CodeWordType.Var);
+        public static Token Var => new Token(TokendType.Var);
 
         /// <summary>
         /// when (filter condition)
         /// </summary>
-        public static CodeWord WhenFilterCondition => new CodeWord(CodeWordType.WhenFilterCondition);
+        public static Token WhenFilterCondition => new Token(TokendType.WhenFilterCondition);
 
         /// <summary>
         /// when where (generic type constraint)
         /// </summary>
-        public static CodeWord WhereGenericTypeConstraint => new CodeWord(CodeWordType.WhereGenericTypeConstraint);
+        public static Token WhereGenericTypeConstraint => new Token(TokendType.WhereGenericTypeConstraint);
 
         /// <summary>
         /// where (query clause)
         /// </summary>
-        public static CodeWord WhereQueryClause => new CodeWord(CodeWordType.WhereQueryClause);
+        public static Token WhereQueryClause => new Token(TokendType.WhereQueryClause);
 
         /// <summary>
         /// yield
         /// </summary>
-        public static CodeWord Yield => new CodeWord(CodeWordType.Yield);
+        public static Token Yield => new Token(TokendType.Yield);
         #endregion
 
         public bool TryGetAnyString([MaybeNullWhen(false)] out string value)
@@ -962,7 +962,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override bool Equals(object obj)
         {
-            if (obj is CodeWord part)
+            if (obj is Token part)
             {
                 return Equals(part);
             }
@@ -972,25 +972,25 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_value, _codeWordType);
+            return HashCode.Combine(_value, _tokenType);
         }
 
-        public static bool operator ==(CodeWord left, CodeWord right)
+        public static bool operator ==(Token left, Token right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(CodeWord left, CodeWord right)
+        public static bool operator !=(Token left, Token right)
         {
             return !(left == right);
         }
 
-        public bool Equals(CodeWord other)
+        public bool Equals(Token other)
         {
-            return (_value == other._value) && (_codeWordType == other._codeWordType);
+            return (_value == other._value) && (_tokenType == other._tokenType);
         }
 
-        internal enum CodeWordType
+        internal enum TokendType
         {
             #region ASCIIChars
             /// <summary>
