@@ -20,7 +20,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException("", nameof(value));
+                // TODO: exception message
+                throw new ArgumentException(string.Empty, nameof(value));
             }
 
             _value = value;
@@ -36,7 +37,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             if (tokenType == TokendType.AnyString)
             {
-                throw new ArgumentException("", nameof(tokenType));
+                // TODO: exception message
+                throw new ArgumentException(string.Empty, nameof(tokenType));
             }
 
             _value = string.Empty;
