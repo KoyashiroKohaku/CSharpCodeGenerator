@@ -19,7 +19,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         public static string GetValue(AccessModifier accessModifier)
         {
-            if (!Enum.IsDefined(typeof(Keyword), accessModifier))
+            if (!Enum.IsDefined(typeof(AccessModifier), accessModifier))
             {
                 throw new InvalidEnumArgumentException(nameof(accessModifier), (int)accessModifier, typeof(AccessModifier));
             }
