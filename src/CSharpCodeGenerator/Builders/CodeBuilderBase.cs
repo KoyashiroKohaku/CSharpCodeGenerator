@@ -81,7 +81,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public static string GetIndentStringWithDepth(string indentString, int indentDepth)
         {
-            if (indentString == null)
+            if (indentString is null)
             {
                 throw new ArgumentNullException(nameof(indentString));
             }

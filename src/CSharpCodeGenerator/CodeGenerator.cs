@@ -15,12 +15,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public static string Generate(ClassSetting classSetting, GenerateOption generateOption)
         {
-            if (classSetting == null)
+            if (classSetting is null)
             {
                 throw new ArgumentNullException(nameof(classSetting));
             }
 
-            if (generateOption == null)
+            if (generateOption is null)
             {
                 throw new ArgumentNullException(nameof(generateOption));
             }

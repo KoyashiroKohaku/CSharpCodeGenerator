@@ -29,7 +29,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         public static string GetTypeString(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -63,7 +63,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         public static string GetTypeAliasName(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -78,7 +78,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         public static bool TryGetTypeAliasName(Type type, [MaybeNullWhen(false)] out string typeAliasName)
         {
-            if (type == null)
+            if (type is null)
             {
                 typeAliasName = default;
                 return false;
@@ -89,7 +89,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
 
         public static bool ExistsTypeAlias(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }

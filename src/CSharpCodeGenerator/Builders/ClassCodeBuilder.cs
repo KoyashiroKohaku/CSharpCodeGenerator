@@ -20,7 +20,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override IClassCodeBuilder AppendField(PropertySetting propertySetting, FieldNamingConvention classFieldNamingConvention)
         {
-            if (propertySetting == null)
+            if (propertySetting is null)
             {
                 throw new ArgumentNullException(nameof(propertySetting));
             }
@@ -60,7 +60,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override IClassCodeBuilder AppendPropertyDeclaration(PropertySetting propertySetting)
         {
-            if (propertySetting == null)
+            if (propertySetting is null)
             {
                 throw new ArgumentNullException(nameof(propertySetting));
             }
@@ -79,7 +79,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override IClassCodeBuilder AppendAutoImplementedProperties(PropertySetting propertySetting)
         {
-            if (propertySetting == null)
+            if (propertySetting is null)
             {
                 throw new ArgumentNullException(nameof(propertySetting));
             }

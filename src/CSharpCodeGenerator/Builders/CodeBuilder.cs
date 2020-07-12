@@ -38,7 +38,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override ICodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag)
         {
-            if (tagName == null)
+            if (tagName is null)
             {
                 throw new ArgumentNullException(nameof(tagName));
             }
@@ -60,7 +60,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override ICodeBuilder AppendUsingDirective(string namespaceString)
         {
-            if (namespaceString == null)
+            if (namespaceString is null)
             {
                 throw new ArgumentNullException(nameof(namespaceString));
             }

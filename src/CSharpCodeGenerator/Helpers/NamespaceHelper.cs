@@ -8,7 +8,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
     {
         public static IEnumerable<string> ExtractNamespace(IEnumerable<PropertySetting> propertySettings)
         {
-            if (propertySettings == null)
+            if (propertySettings is null)
             {
                 throw new ArgumentNullException(nameof(propertySettings));
             }
