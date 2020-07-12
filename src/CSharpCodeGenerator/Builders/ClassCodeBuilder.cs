@@ -13,7 +13,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
-            Append("public class ").Append(className);
+            Append(TokenType.Public)
+                .Append(TokenType.Space)
+                .Append(TokenType.Class)
+                .Append(TokenType.Space)
+                .Append(className);
 
             return this;
         }
@@ -25,14 +29,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("private ").Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
+            Append(TokenType.Private)
+                .Append(TokenType.Space)
+                .Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
 
             if (propertySetting.Nullable)
             {
-                Append("?");
+                Append(TokenType.QuestionMark);
             }
 
-            Append(" ");
+            Append(TokenType.Space);
 
             switch (propertySetting.FieldNamingConvention ?? classFieldNamingConvention)
             {
@@ -53,7 +59,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                     }
             }
 
-            Append(";");
+            Append(TokenType.Semicolon);
 
             return this;
         }
@@ -65,14 +71,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            Append("public ").Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
+            Append(TokenType.Public)
+                .Append(TokenType.Space)
+                .Append(TypeHelper.GetTypeString(propertySetting.PropertyType));
 
             if (propertySetting.Nullable)
             {
-                Append("?");
+                Append(TokenType.Space);
             }
 
-            Append(" ").Append(propertySetting.PropertyName);
+            Append(TokenType.Space).Append(propertySetting.PropertyName);
 
             return this;
         }
@@ -84,7 +92,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new ArgumentNullException(nameof(propertySetting));
             }
 
-            AppendPropertyDeclaration(propertySetting).Append(" { get; set; }");
+            AppendPropertyDeclaration(propertySetting)
+                .Append(TokenType.Space)
+                .Append(TokenType.LeftCurlyBracket)
+                .Append(TokenType.Space)
+                .Append(TokenType.Get)
+                .Append(TokenType.Semicolon)
+                .Append(TokenType.Space)
+                .Append(TokenType.Set)
+                .Append(TokenType.Semicolon)
+                .Append(TokenType.Space)
+                .Append(TokenType.RightCurlyBracket);
 
             return this;
         }

@@ -132,9 +132,31 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
                         classCodeBuilder.Indent();
 
-                        classCodeBuilder.AppendIndent().Append("get => ").Append(fieldName).Append(";").AppendLine();
+                        classCodeBuilder
+                            .AppendIndent()
+                            .Append(TokenType.Get)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.GreaterThanSign)
+                            .Append(TokenType.Space)
+                            .Append(fieldName)
+                            .Append(TokenType.Semicolon)
+                            .AppendLine();
 
-                        classCodeBuilder.AppendIndent().Append("set => value = ").Append(fieldName).Append(";").AppendLine();
+                        classCodeBuilder
+                            .AppendIndent()
+                            .Append(TokenType.Set)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.GreaterThanSign)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.Value)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.Space)
+                            .Append(fieldName)
+                            .Append(TokenType.Semicolon)
+                            .AppendLine();
 
                         classCodeBuilder.Unindent();
 
