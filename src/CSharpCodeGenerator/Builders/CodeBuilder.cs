@@ -7,7 +7,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
     {
         public override ICodeBuilder AppendIndent()
         {
-            Append(TokendType.Indent);
+            Append(TokenType.Indent);
 
             return this;
         }
@@ -21,8 +21,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             _ = curlyBracket switch
             {
-                CurlyBracket.Left => Append(TokendType.LeftCurlyBracket),
-                CurlyBracket.Right => Append(TokendType.RightCurlyBracket),
+                CurlyBracket.Left => Append(TokenType.LeftCurlyBracket),
+                CurlyBracket.Right => Append(TokenType.RightCurlyBracket),
                 _ => throw new InvalidEnumArgumentException(nameof(curlyBracket), (int)curlyBracket, typeof(CurlyBracket))
             };
 
@@ -66,7 +66,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
 
             // TODO: remove space token
-            Append(TokendType.Namespace).Append(TokendType.Space).Append(namespaceString).Append(TokendType.Semicolon);
+            Append(TokenType.Namespace).Append(TokenType.Space).Append(namespaceString).Append(TokenType.Semicolon);
 
             return this;
         }
@@ -79,7 +79,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
 
             // TODO: remove space token
-            Append(TokendType.Namespace).Append(TokendType.Space).Append(namespaceName);
+            Append(TokenType.Namespace).Append(TokenType.Space).Append(namespaceName);
 
             return this;
         }

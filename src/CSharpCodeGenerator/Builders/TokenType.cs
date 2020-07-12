@@ -1,6 +1,6 @@
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
-    public enum TokendType
+    public enum TokenType
     {
         #region ASCIIChars
         /// <summary>

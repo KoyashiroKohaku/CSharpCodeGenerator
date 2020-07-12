@@ -120,11 +120,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public ICodeBuilder Append(TokendType tokenType)
+        public ICodeBuilder Append(TokenType tokenType)
         {
             if (!Enum.IsDefined(typeof(EndOfLine), tokenType))
             {
-                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokendType));
+                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokenType));
             }
 
             Tokens.Append(new Token(tokenType));
@@ -153,7 +153,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public ICodeBuilder AppendLine()
         {
-            Append(TokendType.EndOfLine);
+            Append(TokenType.EndOfLine);
 
             return this;
         }
