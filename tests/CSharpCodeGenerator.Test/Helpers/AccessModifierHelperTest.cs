@@ -1,22 +1,50 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.ComponentModel;
-using System.Linq;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
 {
     [TestClass]
     public class AccessModifierHelperTest
     {
-        private static readonly string[] TestCase = new string[]
+        private class TestCase
         {
-            "public",
-            "protected",
-            "internal",
-            "protected internal",
-            "private",
-            "private protected"
+            public AccessModifier AccessModifier { get; set; }
+            public string TestString { get; set; }
+        }
+
+        private static readonly TestCase[] TestCases = new TestCase[]
+        {
+            new TestCase
+            {
+                AccessModifier = AccessModifier.Public,
+                TestString = "public",
+            },
+            new TestCase
+            {
+                AccessModifier = AccessModifier.Protected,
+                TestString = "protected",
+            },
+            new TestCase
+            {
+                AccessModifier = AccessModifier.Internal,
+                TestString = "internal",
+            },
+            new TestCase
+            {
+                AccessModifier = AccessModifier.ProtectedInternal,
+                TestString = "protected internal"
+            },
+            new TestCase
+            {
+                AccessModifier = AccessModifier.Private,
+                TestString = "private",
+            },
+            new TestCase
+            {
+                AccessModifier = AccessModifier.PrivateProtected,
+                TestString = "private protected",
+            }
         };
 
         [TestMethod]
@@ -27,9 +55,9 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
             Assert.IsFalse(AccessModifierHelper.IsAccessModifier(" "));
             Assert.IsFalse(AccessModifierHelper.IsAccessModifier("abcdefg"));
 
-            foreach (var testCase in TestCase)
+            foreach (var testCase in TestCases)
             {
-                Assert.IsTrue(AccessModifierHelper.IsAccessModifier(testCase));
+                Assert.IsTrue(AccessModifierHelper.IsAccessModifier(testCase.TestString));
             }
         }
 
@@ -38,12 +66,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
         {
             Assert.ThrowsException<InvalidEnumArgumentException>(() => AccessModifierHelper.GetValue((AccessModifier)int.MinValue));
 
-            var AccessModifiers = Enum.GetValues(typeof(AccessModifier)).Cast<AccessModifier>().ToArray();
-
-            foreach (var AccessModifier in AccessModifiers)
+            foreach (var testCase in TestCases)
             {
-                var expected = Enum.GetName(typeof(AccessModifier), AccessModifier).Split(' ').First().ToLower();
-                var actual = AccessModifierHelper.GetValue(AccessModifier);
+                var expected = testCase.TestString;
+                var actual = AccessModifierHelper.GetValue(testCase.AccessModifier);
 
                 Assert.AreEqual(expected, actual);
             }
@@ -52,16 +78,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
         [TestMethod]
         public void TryGetValueTest()
         {
-            string expected = null;
+            string expected = default;
             Assert.IsFalse(AccessModifierHelper.TryGetValue((AccessModifier)int.MinValue, out var actual));
             Assert.AreEqual(expected, actual);
 
-            var AccessModifiers = Enum.GetValues(typeof(AccessModifier)).Cast<AccessModifier>().ToArray();
-
-            foreach (var AccessModifier in AccessModifiers)
+            foreach (var testCase in TestCases)
             {
-                expected = Enum.GetName(typeof(AccessModifier), AccessModifier).Split(' ').First().ToLower();
-                Assert.IsTrue(AccessModifierHelper.TryGetValue(AccessModifier, out actual));
+                expected = testCase.TestString;
+                Assert.IsTrue(AccessModifierHelper.TryGetValue(testCase.AccessModifier, out actual));
                 Assert.AreEqual(expected, actual);
             }
         }
