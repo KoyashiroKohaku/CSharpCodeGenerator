@@ -71,7 +71,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             { TokenType.Colon, ASCIIChar.Colon },
             { TokenType.Semicolon, ASCIIChar.Semicolon },
             { TokenType.LessThanSign, ASCIIChar.LessThanSign },
-            { TokenType.Equals, ASCIIChar.Equals },
+            { TokenType.EqualSign, ASCIIChar.EqualSign },
             { TokenType.GreaterThanSign, ASCIIChar.GreaterThanSign },
             { TokenType.QuestionMark, ASCIIChar.QuestionMark },
             { TokenType.AtSign, ASCIIChar.AtSign },
@@ -214,6 +214,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         public bool IsContextualKeyword => ContextualKeywords.ContainsKey(_tokenType);
 
         public bool IsASCIIChar => ASCIIChars.ContainsKey(_tokenType);
+
+        public bool IsEndOfLine => _tokenType == TokenType.EndOfLine;
+
+        public bool IsIndent => _tokenType == TokenType.Indent;
 
         public bool IsAnyString => _tokenType == TokenType.AnyString;
 
@@ -958,6 +962,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         {
             if (!IsAnyString)
             {
+                // TODO: exception message
                 throw new ArgumentException();
             }
 

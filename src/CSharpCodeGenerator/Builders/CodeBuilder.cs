@@ -7,7 +7,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
     {
         public override ICodeBuilder AppendIndent()
         {
-            Append(TokenType.Indent);
+            for (int i = 0; i < IndentDepth; i++)
+            {
+                Append(TokenType.Indent);
+            }
 
             return this;
         }
@@ -66,7 +69,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
 
             // TODO: remove space token
-            Append(TokenType.Namespace).Append(TokenType.Space).Append(namespaceString).Append(TokenType.Semicolon);
+            Append(TokenType.Using).Append(TokenType.Space).Append(namespaceString).Append(TokenType.Semicolon);
 
             return this;
         }

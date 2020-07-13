@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -41,7 +42,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         public int IndentDepth
         {
             get => _indentDepth;
-            set => _indentSize = value < 0 ? 0 : value;
+            set => _indentDepth = value < 0 ? 0 : value;
         }
 
         public EndOfLine EndOfLine
@@ -122,12 +123,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public ICodeBuilder Append(TokenType tokenType)
         {
-            if (!Enum.IsDefined(typeof(EndOfLine), tokenType))
+            if (!Enum.IsDefined(typeof(TokenType), tokenType))
             {
                 throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokenType));
             }
 
-            Tokens.Append(new Token(tokenType));
+            Tokens.Add(new Token(tokenType));
 
             return this;
         }
@@ -139,7 +140,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
-            Append(value);
+            Tokens.Add(new Token(value));
 
             return this;
         }
@@ -177,7 +178,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override string ToString()
         {
-            return string.Concat(Tokens.Select(t => t.ToString()));
+            var builder = new StringBuilder();
+
+            foreach (var token in Tokens)
+            {
+                // TODO: to switch
+                if (token.IsEndOfLine)
+                {
+                    builder.Append(CurrentEndOfLineString);
+                }
+                else if (token.IsIndent)
+                {
+                    builder.Append(CurrentIndentString);
+                }
+                else
+                {
+                    builder.Append(token.ToString());
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

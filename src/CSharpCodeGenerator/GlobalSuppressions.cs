@@ -8,3 +8,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Naming", "CA1720:IdentifiersShouldNotContainTypeNames", Justification = "Justification", Scope = "type", Target = "KoyashiroKohaku.CSharpCodeGenerator.ContextualKeyword")]
 [assembly: SuppressMessage("Naming", "CA1720:IdentifiersShouldNotContainTypeNames", Justification = "Justification", Scope = "type", Target = "KoyashiroKohaku.CSharpCodeGenerator.Keyword")]
 [assembly: SuppressMessage("Naming", "CA1720:IdentifiersShouldNotContainTypeNames", Justification = "Justification", Scope = "type", Target = "KoyashiroKohaku.CSharpCodeGenerator.Builders.Token")]
+[assembly: SuppressMessage("Naming", "CA1720:IdentifiersShouldNotContainTypeNames", Justification = "Justification", Scope = "type", Target = "KoyashiroKohaku.CSharpCodeGenerator.Builders.TokenType")]

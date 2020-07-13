@@ -77,7 +77,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             if (propertySetting.Nullable)
             {
-                Append(TokenType.Space);
+                Append(TokenType.QuestionMark);
             }
 
             Append(TokenType.Space).Append(propertySetting.PropertyName);

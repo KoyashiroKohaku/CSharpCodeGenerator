@@ -100,7 +100,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
         /// <summary>
         /// =
         /// </summary>
-        Equals,
+        EqualSign,
 
         /// <summary>
         /// &gt;

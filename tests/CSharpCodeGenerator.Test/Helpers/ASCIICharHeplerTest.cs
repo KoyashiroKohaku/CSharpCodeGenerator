@@ -95,7 +95,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
             },
             new TestCase
             {
-                ASCIIChar = ASCIIChar.Equals, TestChar = '=', IsASCIIChar = true
+                ASCIIChar = ASCIIChar.EqualSign, TestChar = '=', IsASCIIChar = true
             },
             new TestCase
             {

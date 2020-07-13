@@ -27,7 +27,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Helpers
             { ASCIIChar.Colon, ':' },
             { ASCIIChar.Semicolon, ';' },
             { ASCIIChar.LessThanSign, '<' },
-            { ASCIIChar.Equals, '=' },
+            { ASCIIChar.EqualSign, '=' },
             { ASCIIChar.GreaterThanSign, '>' },
             { ASCIIChar.QuestionMark, '?' },
             { ASCIIChar.AtSign, '@' },
