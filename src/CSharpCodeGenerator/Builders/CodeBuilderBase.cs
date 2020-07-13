@@ -8,6 +8,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public abstract class CodeBuilderBase : ICodeBuilder
     {
+        private readonly List<Token> _tokens = new List<Token>();
         private IndentStyle _indentStyle = IndentStyle.Space;
         private int _indentSize = 4;
         private int _indentDepth = 0;
@@ -59,7 +60,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
         }
 
-        public List<Token> Tokens { get; } = new List<Token>();
+        public IReadOnlyList<Token> Tokens => _tokens;
 
         public static string GetIndentString(IndentStyle indentStyle, int indentSize)
         {
@@ -128,7 +129,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokenType));
             }
 
-            Tokens.Add(new Token(tokenType));
+            _tokens.Add(new Token(tokenType));
 
             return this;
         }
@@ -140,7 +141,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
-            Tokens.Add(new Token(value));
+            _tokens.Add(new Token(value));
 
             return this;
         }

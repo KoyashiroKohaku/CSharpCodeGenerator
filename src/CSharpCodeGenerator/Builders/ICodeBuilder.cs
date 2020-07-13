@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public interface ICodeBuilder
@@ -15,6 +17,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         int IndentDepth { get; set; }
 
         EndOfLine EndOfLine { get; set; }
+
+        IReadOnlyList<Token> Tokens { get; }
 
         ICodeBuilder Indent();
 
