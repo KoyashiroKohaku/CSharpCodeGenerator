@@ -1,4 +1,6 @@
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -7,10 +9,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public abstract class CodeBuilderBase : ICodeBuilder
     {
-        private readonly StringBuilder _builder = new StringBuilder();
+        private readonly List<Token> _tokens = new List<Token>();
         private IndentStyle _indentStyle = IndentStyle.Space;
         private int _indentSize = 4;
         private int _indentDepth = 0;
+        private EndOfLine _endOfLine = EndOfLine.CRLF;
 
         public string CurrentIndentString => GetIndentString(IndentStyle, IndentSize);
 
@@ -23,21 +26,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             get => _indentStyle;
             set
             {
-                var oldValue = IndentStyle switch
+                if (!Enum.IsDefined(typeof(IndentStyle), value))
                 {
-                    IndentStyle.Space => GetIndentString(IndentStyle.Space, IndentSize),
-                    IndentStyle.Tab => "\t",
-                    _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
-                };
-
-                var newValue = value switch
-                {
-                    IndentStyle.Space => GetIndentString(IndentStyle.Space, IndentSize),
-                    IndentStyle.Tab => "\t",
-                    _ => throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle))
-                };
-
-                _builder.Replace(oldValue, newValue);
+                    throw new InvalidEnumArgumentException(nameof(IndentStyle), (int)IndentStyle, typeof(IndentStyle));
+                }
 
                 _indentStyle = value;
             }
@@ -46,38 +38,30 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         public int IndentSize
         {
             get => _indentSize;
-            set
-            {
-                if (IndentStyle == IndentStyle.Space)
-                {
-                    var oldValue = GetIndentString(IndentStyle.Space, IndentSize);
-
-                    var newValue = GetIndentString(IndentStyle.Space, value);
-
-                    _builder.Replace(oldValue, newValue);
-                }
-
-                _indentSize = value < 0 ? 0 : value;
-            }
+            set => _indentSize = value < 0 ? 0 : value;
         }
 
         public int IndentDepth
         {
             get => _indentDepth;
+            set => _indentDepth = value < 0 ? 0 : value;
+        }
+
+        public EndOfLine EndOfLine
+        {
+            get => _endOfLine;
             set
             {
-                if (value < 0)
+                if (!Enum.IsDefined(typeof(EndOfLine), value))
                 {
-                    _indentDepth = 0;
+                    throw new InvalidEnumArgumentException(nameof(EndOfLine), (int)EndOfLine, typeof(EndOfLine));
                 }
-                else
-                {
-                    _indentDepth = value;
-                }
+
+                _endOfLine = value;
             }
         }
 
-        public EndOfLine EndOfLine { get; set; } = EndOfLine.CRLF;
+        public IReadOnlyList<Token> Tokens => _tokens;
 
         public static string GetIndentString(IndentStyle indentStyle, int indentSize)
         {
@@ -100,7 +84,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public static string GetIndentStringWithDepth(string indentString, int indentDepth)
         {
-            if (indentString == null)
+            if (indentString is null)
             {
                 throw new ArgumentNullException(nameof(indentString));
             }
@@ -139,47 +123,45 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public ICodeBuilder Append(string value)
+        public ICodeBuilder Append(TokenType tokenType)
         {
-            if (value == null)
+            if (!Enum.IsDefined(typeof(TokenType), tokenType))
             {
-                throw new ArgumentNullException(nameof(value));
+                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokenType));
             }
 
-            _builder.Append(value);
+            _tokens.Add(new Token(tokenType));
 
             return this;
         }
 
-        public ICodeBuilder Append(ReadOnlySpan<char> value)
+        public ICodeBuilder Append(string value)
         {
-            _builder.Append(value);
+            if (string.IsNullOrEmpty(value))
+            {
+                return this;
+            }
+
+            _tokens.Add(new Token(value));
 
             return this;
         }
 
         public ICodeBuilder AppendLine()
         {
-            Append(CurrentEndOfLineString);
+            Append(TokenType.EndOfLine);
 
             return this;
         }
 
         public ICodeBuilder AppendLine(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException(nameof(value));
+                return this;
             }
 
-            Append(value).Append(CurrentEndOfLineString);
-
-            return this;
-        }
-
-        public ICodeBuilder AppendLine(ReadOnlySpan<char> value)
-        {
-            Append(value).Append(CurrentEndOfLineString);
+            Append(value).AppendLine();
 
             return this;
         }
@@ -198,7 +180,49 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override string ToString()
         {
-            return _builder.ToString();
+            var builder = new StringBuilder();
+
+            foreach (var token in Tokens)
+            {
+                // TODO: to switch
+                if (token.IsEndOfLine)
+                {
+                    builder.Append(CurrentEndOfLineString);
+                    continue;
+                }
+
+                if (token.IsIndent)
+                {
+                    builder.Append(CurrentIndentString);
+                    continue;
+                }
+
+                if (token.IsKeyword)
+                {
+                    builder.Append(KeywordHelper.GetValue(token.GetKeyword()));
+                    continue;
+                }
+
+                if (token.IsContextualKeyword)
+                {
+                    builder.Append(ContextualKeywordHelper.GetValue(token.GetContextualKeyword()));
+                    continue;
+                }
+
+                if (token.IsASCIIChar)
+                {
+                    builder.Append(ASCIICharHelper.GetValue(token.GetASCIIChar()));
+                    continue;
+                }
+
+                if (token.IsAnyString)
+                {
+                    builder.Append(token.GetAnyString());
+                    continue;
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

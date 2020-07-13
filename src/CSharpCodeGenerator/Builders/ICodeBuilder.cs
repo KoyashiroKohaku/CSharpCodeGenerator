@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -18,19 +18,19 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         EndOfLine EndOfLine { get; set; }
 
+        IReadOnlyList<Token> Tokens { get; }
+
         ICodeBuilder Indent();
 
         ICodeBuilder Unindent();
 
-        ICodeBuilder Append(string value);
+        ICodeBuilder Append(TokenType tokenType);
 
-        ICodeBuilder Append(ReadOnlySpan<char> value);
+        ICodeBuilder Append(string value);
 
         ICodeBuilder AppendLine();
 
         ICodeBuilder AppendLine(string value);
-
-        ICodeBuilder AppendLine(ReadOnlySpan<char> value);
 
         ICodeBuilder AppendIndent();
 

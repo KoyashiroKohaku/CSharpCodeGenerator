@@ -7,7 +7,10 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
     {
         public override ICodeBuilder AppendIndent()
         {
-            Append(CurrentIndentStringWithDepth);
+            for (int i = 0; i < IndentDepth; i++)
+            {
+                Append(TokenType.Indent);
+            }
 
             return this;
         }
@@ -21,8 +24,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
             _ = curlyBracket switch
             {
-                CurlyBracket.Left => Append("{"),
-                CurlyBracket.Right => Append("}"),
+                CurlyBracket.Left => Append(TokenType.LeftCurlyBracket),
+                CurlyBracket.Right => Append(TokenType.RightCurlyBracket),
                 _ => throw new InvalidEnumArgumentException(nameof(curlyBracket), (int)curlyBracket, typeof(CurlyBracket))
             };
 
@@ -38,7 +41,7 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override ICodeBuilder AppendXmlCommentTag(string tagName, XmlCommentTag xmlCommentTag)
         {
-            if (tagName == null)
+            if (tagName is null)
             {
                 throw new ArgumentNullException(nameof(tagName));
             }
@@ -60,12 +63,13 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override ICodeBuilder AppendUsingDirective(string namespaceString)
         {
-            if (namespaceString == null)
+            if (namespaceString is null)
             {
                 throw new ArgumentNullException(nameof(namespaceString));
             }
 
-            Append("using ").Append(namespaceString).Append(";");
+            // TODO: remove space token
+            Append(TokenType.Using).Append(TokenType.Space).Append(namespaceString).Append(TokenType.Semicolon);
 
             return this;
         }
@@ -77,7 +81,8 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 return this;
             }
 
-            Append("namespace ").Append(namespaceName);
+            // TODO: remove space token
+            Append(TokenType.Namespace).Append(TokenType.Space).Append(namespaceName);
 
             return this;
         }

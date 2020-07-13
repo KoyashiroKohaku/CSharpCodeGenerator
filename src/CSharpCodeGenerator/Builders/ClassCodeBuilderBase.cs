@@ -1,5 +1,3 @@
-using System;
-
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
     public abstract class ClassCodeBuilderBase : CodeBuilder, IClassCodeBuilder
@@ -25,13 +23,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return this;
         }
 
-        public new IClassCodeBuilder Append(ReadOnlySpan<char> value)
-        {
-            base.Append(value);
-
-            return this;
-        }
-
         public new IClassCodeBuilder AppendLine()
         {
             base.AppendLine();
@@ -40,13 +31,6 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         }
 
         public new IClassCodeBuilder AppendLine(string value)
-        {
-            base.AppendLine(value);
-
-            return this;
-        }
-
-        public new IClassCodeBuilder AppendLine(ReadOnlySpan<char> value)
         {
             base.AppendLine(value);
 

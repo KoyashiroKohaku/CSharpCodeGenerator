@@ -1,6 +1,7 @@
 # CSharpCodeGenerator
 
-[<img alt="Build and Test" src="https://github.com/KoyashiroKohaku/CSharpCodeGenerator/workflows/Build%20and%20Test/badge.svg">](https://github.com/KoyashiroKohaku/CSharpCodeGenerator/actions?query=workflow%3Abuild-and-test)
+[<img alt="Build and Test" src="https://github.com/KoyashiroKohaku/CSharpCodeGenerator/workflows/Build%20and%20Test%20%28master%29/badge.svg">](https://github.com/KoyashiroKohaku/CSharpCodeGenerator/actions?query=workflow%3Abuild-and-test-master)
+[<img alt="Build and Test" src="https://github.com/KoyashiroKohaku/CSharpCodeGenerator/workflows/Build%20and%20Test%20%28develop%29/badge.svg">](https://github.com/KoyashiroKohaku/CSharpCodeGenerator/actions?query=workflow%3Abuild-and-test-develop)
 
 ## Example
 

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator.Test
+namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Builders
 {
     [TestClass]
     public class ClassCodeBuilderTest

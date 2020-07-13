@@ -9,11 +9,11 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
     {
         private readonly string _value;
 
-        private readonly TokendType _tokenType;
+        private readonly TokenType _tokenType;
 
         public Token(string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -25,17 +25,17 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
 
             _value = value;
-            _tokenType = TokendType.AnyString;
+            _tokenType = TokenType.AnyString;
         }
 
-        internal Token(TokendType tokenType)
+        internal Token(TokenType tokenType)
         {
-            if (!System.Enum.IsDefined(typeof(TokendType), tokenType))
+            if (!System.Enum.IsDefined(typeof(TokenType), tokenType))
             {
-                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokendType));
+                throw new InvalidEnumArgumentException(nameof(tokenType), (int)tokenType, typeof(TokenType));
             }
 
-            if (tokenType == TokendType.AnyString)
+            if (tokenType == TokenType.AnyString)
             {
                 // TODO: exception message
                 throw new ArgumentException(string.Empty, nameof(tokenType));
@@ -46,896 +46,900 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
         }
 
         /// <summary>
+        /// ASCII chars set
+        /// </summary>
+        private static Dictionary<TokenType, ASCIIChar> ASCIIChars => new Dictionary<TokenType, ASCIIChar>
+        {
+            { TokenType.Space, ASCIIChar.Space },
+            { TokenType.ExclamationMark, ASCIIChar.ExclamationMark },
+            { TokenType.QuotationMark, ASCIIChar.QuotationMark },
+            { TokenType.NumberSign, ASCIIChar.NumberSign },
+            { TokenType.DollarSign, ASCIIChar.DollarSign },
+            { TokenType.PercentSign, ASCIIChar.PercentSign },
+            { TokenType.Ampersand, ASCIIChar.Ampersand },
+            { TokenType.Apostrophe, ASCIIChar.Apostrophe },
+            { TokenType.LeftParentheses, ASCIIChar.LeftParentheses },
+            { TokenType.RightParentheses, ASCIIChar.RightParentheses },
+            { TokenType.Asterisk, ASCIIChar.Asterisk },
+            { TokenType.PlusSign, ASCIIChar.PlusSign },
+            { TokenType.Commma, ASCIIChar.Commma },
+            { TokenType.HyphenMinus, ASCIIChar.HyphenMinus },
+            { TokenType.FullStop, ASCIIChar.FullStop },
+            { TokenType.Slash, ASCIIChar.Slash },
+            { TokenType.Colon, ASCIIChar.Colon },
+            { TokenType.Semicolon, ASCIIChar.Semicolon },
+            { TokenType.LessThanSign, ASCIIChar.LessThanSign },
+            { TokenType.EqualSign, ASCIIChar.EqualSign },
+            { TokenType.GreaterThanSign, ASCIIChar.GreaterThanSign },
+            { TokenType.QuestionMark, ASCIIChar.QuestionMark },
+            { TokenType.AtSign, ASCIIChar.AtSign },
+            { TokenType.LeftSquareBracket, ASCIIChar.LeftSquareBracket },
+            { TokenType.Backslash, ASCIIChar.Backslash },
+            { TokenType.RightSquareBracket, ASCIIChar.RightSquareBracket },
+            { TokenType.CircumflexAccent, ASCIIChar.CircumflexAccent },
+            { TokenType.LowLine, ASCIIChar.LowLine },
+            { TokenType.GraveAccent, ASCIIChar.GraveAccent },
+            { TokenType.LeftCurlyBracket, ASCIIChar.LeftCurlyBracket },
+            { TokenType.VerticalBar, ASCIIChar.VerticalBar },
+            { TokenType.RightCurlyBracket, ASCIIChar.RightCurlyBracket },
+            { TokenType.Tilde, ASCIIChar.Tilde }
+        };
+
+        /// <summary>
         /// Keywords dictionary.
         /// </summary>
-        private static Dictionary<TokendType, Keyword> Keywords => new Dictionary<TokendType, Keyword>
+        private static Dictionary<TokenType, Keyword> Keywords => new Dictionary<TokenType, Keyword>
         {
-            { TokendType.Abstract, Keyword.Abstract },
-            { TokendType.As, Keyword.As },
-            { TokendType.Base, Keyword.Base },
-            { TokendType.Bool, Keyword.Bool },
-            { TokendType.Break, Keyword.Break },
-            { TokendType.Byte, Keyword.Byte },
-            { TokendType.Case, Keyword.Case },
-            { TokendType.Catch, Keyword.Catch },
-            { TokendType.Char, Keyword.Char },
-            { TokendType.Checked, Keyword.Checked },
-            { TokendType.Class, Keyword.Class },
-            { TokendType.Const, Keyword.Const },
-            { TokendType.Continue, Keyword.Continue },
-            { TokendType.Decimal, Keyword.Decimal },
-            { TokendType.Default, Keyword.Default },
-            { TokendType.Delegate, Keyword.Delegate },
-            { TokendType.Do, Keyword.Do },
-            { TokendType.Double, Keyword.Double },
-            { TokendType.Else, Keyword.Else },
-            { TokendType.Enum, Keyword.Enum },
-            { TokendType.Event, Keyword.Event },
-            { TokendType.Explicit, Keyword.Explicit },
-            { TokendType.Extern, Keyword.Extern },
-            { TokendType.False, Keyword.False },
-            { TokendType.Finally, Keyword.Finally },
-            { TokendType.Fixed, Keyword.Fixed },
-            { TokendType.Float, Keyword.Float },
-            { TokendType.For, Keyword.For },
-            { TokendType.Foreach, Keyword.Foreach },
-            { TokendType.Goto, Keyword.Goto },
-            { TokendType.If, Keyword.If },
-            { TokendType.Implicit, Keyword.Implicit },
-            { TokendType.In, Keyword.In },
-            { TokendType.Int, Keyword.Int },
-            { TokendType.Interface, Keyword.Interface },
-            { TokendType.Internal, Keyword.Internal },
-            { TokendType.Is, Keyword.Is },
-            { TokendType.Lock, Keyword.Lock },
-            { TokendType.Long, Keyword.Long },
-            { TokendType.Namespace, Keyword.Namespace },
-            { TokendType.New, Keyword.New },
-            { TokendType.Null, Keyword.Null },
-            { TokendType.Object, Keyword.Object },
-            { TokendType.Operator, Keyword.Operator },
-            { TokendType.Out, Keyword.Out },
-            { TokendType.Override, Keyword.Override },
-            { TokendType.Params, Keyword.Params },
-            { TokendType.Private, Keyword.Private },
-            { TokendType.Protected, Keyword.Protected },
-            { TokendType.Public, Keyword.Public },
-            { TokendType.Readonly, Keyword.Readonly },
-            { TokendType.Ref, Keyword.Ref },
-            { TokendType.Return, Keyword.Return },
-            { TokendType.Sbyte, Keyword.Sbyte },
-            { TokendType.Sealed, Keyword.Sealed },
-            { TokendType.Short, Keyword.Short },
-            { TokendType.Sizeof, Keyword.Sizeof },
-            { TokendType.Stackalloc, Keyword.Stackalloc },
-            { TokendType.Static, Keyword.Static },
-            { TokendType.String, Keyword.String },
-            { TokendType.Struct, Keyword.Struct },
-            { TokendType.Switch, Keyword.Switch },
-            { TokendType.This, Keyword.This },
-            { TokendType.Throw, Keyword.Throw },
-            { TokendType.True, Keyword.True },
-            { TokendType.Try, Keyword.Try },
-            { TokendType.Typeof, Keyword.Typeof },
-            { TokendType.Uint, Keyword.Uint },
-            { TokendType.Ulong, Keyword.Ulong },
-            { TokendType.Unchecked, Keyword.Unchecked },
-            { TokendType.Unsafe, Keyword.Unsafe },
-            { TokendType.Ushort, Keyword.Ushort },
-            { TokendType.Using, Keyword.Using },
-            { TokendType.Virtual, Keyword.Virtual },
-            { TokendType.Void, Keyword.Void },
-            { TokendType.Volatile, Keyword.Volatile },
-            { TokendType.While, Keyword.While }
+            { TokenType.Abstract, Keyword.Abstract },
+            { TokenType.As, Keyword.As },
+            { TokenType.Base, Keyword.Base },
+            { TokenType.Bool, Keyword.Bool },
+            { TokenType.Break, Keyword.Break },
+            { TokenType.Byte, Keyword.Byte },
+            { TokenType.Case, Keyword.Case },
+            { TokenType.Catch, Keyword.Catch },
+            { TokenType.Char, Keyword.Char },
+            { TokenType.Checked, Keyword.Checked },
+            { TokenType.Class, Keyword.Class },
+            { TokenType.Const, Keyword.Const },
+            { TokenType.Continue, Keyword.Continue },
+            { TokenType.Decimal, Keyword.Decimal },
+            { TokenType.Default, Keyword.Default },
+            { TokenType.Delegate, Keyword.Delegate },
+            { TokenType.Do, Keyword.Do },
+            { TokenType.Double, Keyword.Double },
+            { TokenType.Else, Keyword.Else },
+            { TokenType.Enum, Keyword.Enum },
+            { TokenType.Event, Keyword.Event },
+            { TokenType.Explicit, Keyword.Explicit },
+            { TokenType.Extern, Keyword.Extern },
+            { TokenType.False, Keyword.False },
+            { TokenType.Finally, Keyword.Finally },
+            { TokenType.Fixed, Keyword.Fixed },
+            { TokenType.Float, Keyword.Float },
+            { TokenType.For, Keyword.For },
+            { TokenType.Foreach, Keyword.Foreach },
+            { TokenType.Goto, Keyword.Goto },
+            { TokenType.If, Keyword.If },
+            { TokenType.Implicit, Keyword.Implicit },
+            { TokenType.In, Keyword.In },
+            { TokenType.Int, Keyword.Int },
+            { TokenType.Interface, Keyword.Interface },
+            { TokenType.Internal, Keyword.Internal },
+            { TokenType.Is, Keyword.Is },
+            { TokenType.Lock, Keyword.Lock },
+            { TokenType.Long, Keyword.Long },
+            { TokenType.Namespace, Keyword.Namespace },
+            { TokenType.New, Keyword.New },
+            { TokenType.Null, Keyword.Null },
+            { TokenType.Object, Keyword.Object },
+            { TokenType.Operator, Keyword.Operator },
+            { TokenType.Out, Keyword.Out },
+            { TokenType.Override, Keyword.Override },
+            { TokenType.Params, Keyword.Params },
+            { TokenType.Private, Keyword.Private },
+            { TokenType.Protected, Keyword.Protected },
+            { TokenType.Public, Keyword.Public },
+            { TokenType.Readonly, Keyword.Readonly },
+            { TokenType.Ref, Keyword.Ref },
+            { TokenType.Return, Keyword.Return },
+            { TokenType.Sbyte, Keyword.Sbyte },
+            { TokenType.Sealed, Keyword.Sealed },
+            { TokenType.Short, Keyword.Short },
+            { TokenType.Sizeof, Keyword.Sizeof },
+            { TokenType.Stackalloc, Keyword.Stackalloc },
+            { TokenType.Static, Keyword.Static },
+            { TokenType.String, Keyword.String },
+            { TokenType.Struct, Keyword.Struct },
+            { TokenType.Switch, Keyword.Switch },
+            { TokenType.This, Keyword.This },
+            { TokenType.Throw, Keyword.Throw },
+            { TokenType.True, Keyword.True },
+            { TokenType.Try, Keyword.Try },
+            { TokenType.Typeof, Keyword.Typeof },
+            { TokenType.Uint, Keyword.Uint },
+            { TokenType.Ulong, Keyword.Ulong },
+            { TokenType.Unchecked, Keyword.Unchecked },
+            { TokenType.Unsafe, Keyword.Unsafe },
+            { TokenType.Ushort, Keyword.Ushort },
+            { TokenType.Using, Keyword.Using },
+            { TokenType.Virtual, Keyword.Virtual },
+            { TokenType.Void, Keyword.Void },
+            { TokenType.Volatile, Keyword.Volatile },
+            { TokenType.While, Keyword.While }
         };
 
         /// <summary>
         /// ContextualKeywords dictionary.
         /// </summary>
-        private static Dictionary<TokendType, ContextualKeyword> ContextualKeywords => new Dictionary<TokendType, ContextualKeyword>
+        private static Dictionary<TokenType, ContextualKeyword> ContextualKeywords => new Dictionary<TokenType, ContextualKeyword>
         {
-            { TokendType.Add, ContextualKeyword.Add },
-            { TokendType.Alias, ContextualKeyword.Alias },
-            { TokendType.Ascending, ContextualKeyword.Ascending },
-            { TokendType.Async, ContextualKeyword.Async },
-            { TokendType.Await, ContextualKeyword.Await },
-            { TokendType.By, ContextualKeyword.By },
-            { TokendType.Descending, ContextualKeyword.Descending },
-            { TokendType.Dynamic, ContextualKeyword.Dynamic },
-            { TokendType.Equals, ContextualKeyword.Equals },
-            { TokendType.From, ContextualKeyword.From },
-            { TokendType.Get, ContextualKeyword.Get },
-            { TokendType.Global, ContextualKeyword.Global },
-            { TokendType.Group, ContextualKeyword.Group },
-            { TokendType.Into, ContextualKeyword.Into },
-            { TokendType.Join, ContextualKeyword.Join },
-            { TokendType.Let, ContextualKeyword.Let },
-            { TokendType.Nameof, ContextualKeyword.Nameof },
-            { TokendType.On, ContextualKeyword.On },
-            { TokendType.Orderby, ContextualKeyword.Orderby },
-            { TokendType.PartialType, ContextualKeyword.PartialType },
-            { TokendType.PartialMethod, ContextualKeyword.PartialMethod },
-            { TokendType.Remove, ContextualKeyword.Remove },
-            { TokendType.Select, ContextualKeyword.Select },
-            { TokendType.Set, ContextualKeyword.Set },
-            { TokendType.UnmanagedGenericTypeConstraint, ContextualKeyword.UnmanagedGenericTypeConstraint },
-            { TokendType.Value, ContextualKeyword.Value },
-            { TokendType.Var, ContextualKeyword.Var },
-            { TokendType.WhenFilterCondition, ContextualKeyword.WhenFilterCondition },
-            { TokendType.WhereGenericTypeConstraint, ContextualKeyword.WhereGenericTypeConstraint },
-            { TokendType.WhereQueryClause, ContextualKeyword.WhereQueryClause },
-            { TokendType.Yield, ContextualKeyword.Yield }
-        };
-
-        /// <summary>
-        /// ASCII chars set
-        /// </summary>
-        private static HashSet<TokendType> ASCIIChars => new HashSet<TokendType>
-        {
-            TokendType.Space,
-            TokendType.ExclamationMark,
-            TokendType.QuotationMark,
-            TokendType.NumberSign,
-            TokendType.DollarSign,
-            TokendType.PercentSign,
-            TokendType.Ampersand,
-            TokendType.Apostrophe,
-            TokendType.LeftParentheses,
-            TokendType.RightParentheses,
-            TokendType.Asterisk,
-            TokendType.PlusSign,
-            TokendType.Commma,
-            TokendType.HyphenMinus,
-            TokendType.FullStop,
-            TokendType.Slash,
-            TokendType.Colon,
-            TokendType.Semicolon,
-            TokendType.LessThanSign,
-            TokendType.Equals,
-            TokendType.GreaterThanSign,
-            TokendType.QuestionMark,
-            TokendType.AtSign,
-            TokendType.LeftSquareBracket,
-            TokendType.Backslash,
-            TokendType.RightSquareBracket,
-            TokendType.CircumflexAccent,
-            TokendType.LowLine,
-            TokendType.GraveAccent,
-            TokendType.LeftCurlyBracket,
-            TokendType.VerticalBar,
-            TokendType.RightCurlyBracket,
-            TokendType.Tilde,
+            { TokenType.Add, ContextualKeyword.Add },
+            { TokenType.Alias, ContextualKeyword.Alias },
+            { TokenType.Ascending, ContextualKeyword.Ascending },
+            { TokenType.Async, ContextualKeyword.Async },
+            { TokenType.Await, ContextualKeyword.Await },
+            { TokenType.By, ContextualKeyword.By },
+            { TokenType.Descending, ContextualKeyword.Descending },
+            { TokenType.Dynamic, ContextualKeyword.Dynamic },
+            { TokenType.Equals, ContextualKeyword.Equals },
+            { TokenType.From, ContextualKeyword.From },
+            { TokenType.Get, ContextualKeyword.Get },
+            { TokenType.Global, ContextualKeyword.Global },
+            { TokenType.Group, ContextualKeyword.Group },
+            { TokenType.Into, ContextualKeyword.Into },
+            { TokenType.Join, ContextualKeyword.Join },
+            { TokenType.Let, ContextualKeyword.Let },
+            { TokenType.Nameof, ContextualKeyword.Nameof },
+            { TokenType.On, ContextualKeyword.On },
+            { TokenType.Orderby, ContextualKeyword.Orderby },
+            { TokenType.PartialType, ContextualKeyword.PartialType },
+            { TokenType.PartialMethod, ContextualKeyword.PartialMethod },
+            { TokenType.Remove, ContextualKeyword.Remove },
+            { TokenType.Select, ContextualKeyword.Select },
+            { TokenType.Set, ContextualKeyword.Set },
+            { TokenType.UnmanagedGenericTypeConstraint, ContextualKeyword.UnmanagedGenericTypeConstraint },
+            { TokenType.Value, ContextualKeyword.Value },
+            { TokenType.Var, ContextualKeyword.Var },
+            { TokenType.WhenFilterCondition, ContextualKeyword.WhenFilterCondition },
+            { TokenType.WhereGenericTypeConstraint, ContextualKeyword.WhereGenericTypeConstraint },
+            { TokenType.WhereQueryClause, ContextualKeyword.WhereQueryClause },
+            { TokenType.Yield, ContextualKeyword.Yield }
         };
 
         public bool IsKeyword => Keywords.ContainsKey(_tokenType);
 
         public bool IsContextualKeyword => ContextualKeywords.ContainsKey(_tokenType);
 
-        public bool IsASCIIChar => ASCIIChars.Contains(_tokenType);
+        public bool IsASCIIChar => ASCIIChars.ContainsKey(_tokenType);
 
-        public bool IsAnyString => _tokenType == TokendType.AnyString;
+        public bool IsEndOfLine => _tokenType == TokenType.EndOfLine;
+
+        public bool IsIndent => _tokenType == TokenType.Indent;
+
+        public bool IsAnyString => _tokenType == TokenType.AnyString;
 
         #region ASCII Chars
         /// <summary>
         /// &nbsp;
         /// </summary>
-        public static Token Space => new Token(TokendType.Space);
+        public static Token Space => new Token(TokenType.Space);
 
         /// <summary>
         /// !
         /// </summary>
-        public static Token ExclamationMark => new Token(TokendType.ExclamationMark);
+        public static Token ExclamationMark => new Token(TokenType.ExclamationMark);
 
         /// <summary>
         /// "
         /// </summary>
-        public static Token QuotationMark => new Token(TokendType.QuotationMark);
+        public static Token QuotationMark => new Token(TokenType.QuotationMark);
 
         /// <summary>
         /// #
         /// </summary>
-        public static Token NumberSign => new Token(TokendType.NumberSign);
+        public static Token NumberSign => new Token(TokenType.NumberSign);
 
         /// <summary>
         /// $
         /// </summary>
-        public static Token DollarSign => new Token(TokendType.DollarSign);
+        public static Token DollarSign => new Token(TokenType.DollarSign);
 
         /// <summary>
         /// %
         /// </summary>
-        public static Token PercentSign => new Token(TokendType.PercentSign);
+        public static Token PercentSign => new Token(TokenType.PercentSign);
 
         /// <summary>
         /// &amp;
         /// </summary>
-        public static Token Ampersand => new Token(TokendType.Ampersand);
+        public static Token Ampersand => new Token(TokenType.Ampersand);
 
         /// <summary>
         /// '
         /// </summary>
-        public static Token Apostrophe => new Token(TokendType.Apostrophe);
+        public static Token Apostrophe => new Token(TokenType.Apostrophe);
 
         /// <summary>
         /// (
         /// </summary>
-        public static Token LeftParentheses => new Token(TokendType.LeftParentheses);
+        public static Token LeftParentheses => new Token(TokenType.LeftParentheses);
 
         /// <summary>
         /// )
         /// </summary>
-        public static Token RightParentheses => new Token(TokendType.RightParentheses);
+        public static Token RightParentheses => new Token(TokenType.RightParentheses);
 
         /// <summary>
         /// *
         /// </summary>
-        public static Token Asterisk => new Token(TokendType.Asterisk);
+        public static Token Asterisk => new Token(TokenType.Asterisk);
 
         /// <summary>
         /// +
         /// </summary>
-        public static Token PlusSign => new Token(TokendType.PlusSign);
+        public static Token PlusSign => new Token(TokenType.PlusSign);
 
         /// <summary>
         /// ,
         /// </summary>
-        public static Token Commma => new Token(TokendType.Commma);
+        public static Token Commma => new Token(TokenType.Commma);
 
         /// <summary>
         /// -
         /// </summary>
-        public static Token HyphenMinus => new Token(TokendType.HyphenMinus);
+        public static Token HyphenMinus => new Token(TokenType.HyphenMinus);
 
         /// <summary>
         /// .
         /// </summary>
-        public static Token FullStop => new Token(TokendType.FullStop);
+        public static Token FullStop => new Token(TokenType.FullStop);
 
         /// <summary>
         /// /
         /// </summary>
-        public static Token Slash => new Token(TokendType.Slash);
+        public static Token Slash => new Token(TokenType.Slash);
 
         /// <summary>
         /// :
         /// </summary>
-        public static Token Colon => new Token(TokendType.Colon);
+        public static Token Colon => new Token(TokenType.Colon);
 
         /// <summary>
         /// ;
         /// </summary>
-        public static Token Semicolon => new Token(TokendType.Semicolon);
+        public static Token Semicolon => new Token(TokenType.Semicolon);
 
         /// <summary>
         /// &lt;
         /// </summary>
-        public static Token LessThanSign => new Token(TokendType.LessThanSign);
+        public static Token LessThanSign => new Token(TokenType.LessThanSign);
 
         /// <summary>
         /// =
         /// </summary>
-        public static Token EqualSign => new Token(TokendType.EqualSign);
+        public static Token EqualSign => new Token(TokenType.EqualSign);
 
         /// <summary>
         /// &gt;
         /// </summary>
-        public static Token GreaterThanSign => new Token(TokendType.GreaterThanSign);
+        public static Token GreaterThanSign => new Token(TokenType.GreaterThanSign);
 
         /// <summary>
         /// ?
         /// </summary>
-        public static Token QuestionMark => new Token(TokendType.QuestionMark);
+        public static Token QuestionMark => new Token(TokenType.QuestionMark);
 
         /// <summary>
         /// @
         /// </summary>
-        public static Token AtSign => new Token(TokendType.AtSign);
+        public static Token AtSign => new Token(TokenType.AtSign);
 
         /// <summary>
         /// [
         /// </summary>
-        public static Token LeftSquareBracket => new Token(TokendType.LeftSquareBracket);
+        public static Token LeftSquareBracket => new Token(TokenType.LeftSquareBracket);
 
         /// <summary>
         /// \
         /// </summary>
-        public static Token Backslash => new Token(TokendType.Backslash);
+        public static Token Backslash => new Token(TokenType.Backslash);
 
         /// <summary>
         /// ]
         /// </summary>
-        public static Token RightSquareBracket => new Token(TokendType.RightSquareBracket);
+        public static Token RightSquareBracket => new Token(TokenType.RightSquareBracket);
 
         /// <summary>
         /// ^
         /// </summary>
-        public static Token CircumflexAccent => new Token(TokendType.CircumflexAccent);
+        public static Token CircumflexAccent => new Token(TokenType.CircumflexAccent);
 
         /// <summary>
         /// _
         /// </summary>
-        public static Token LowLine => new Token(TokendType.LowLine);
+        public static Token LowLine => new Token(TokenType.LowLine);
 
         /// <summary>
         /// `
         /// </summary>
-        public static Token GraveAccent => new Token(TokendType.GraveAccent);
+        public static Token GraveAccent => new Token(TokenType.GraveAccent);
 
         /// <summary>
         /// {
         /// </summary>
-        public static Token LeftCurlyBracket => new Token(TokendType.LeftCurlyBracket);
+        public static Token LeftCurlyBracket => new Token(TokenType.LeftCurlyBracket);
 
         /// <summary>
         /// |
         /// </summary>
-        public static Token VerticalBar => new Token(TokendType.VerticalBar);
+        public static Token VerticalBar => new Token(TokenType.VerticalBar);
 
         /// <summary>
         /// }
         /// </summary>
-        public static Token RightCurlyBracket => new Token(TokendType.RightCurlyBracket);
+        public static Token RightCurlyBracket => new Token(TokenType.RightCurlyBracket);
 
         /// <summary>
         /// ~
         /// </summary>
-        public static Token Tilde => new Token(TokendType.Tilde);
+        public static Token Tilde => new Token(TokenType.Tilde);
         #endregion
 
         #region Separator other than spaces
         /// <summary>
         /// End of line.
         /// </summary>
-        public static Token EndOfLine => new Token(TokendType.EndOfLine);
+        public static Token EndOfLine => new Token(TokenType.EndOfLine);
 
         /// <summary>
         /// Indent.
         /// </summary>
-        public static Token Indent => new Token(TokendType.Indent);
+        public static Token Indent => new Token(TokenType.Indent);
         #endregion
 
         #region Keywords
         /// <summary>
         /// abstract
         /// </summary>
-        public static Token Abstract => new Token(TokendType.Abstract);
+        public static Token Abstract => new Token(TokenType.Abstract);
 
         /// <summary>
         /// as
         /// </summary>
-        public static Token As => new Token(TokendType.As);
+        public static Token As => new Token(TokenType.As);
 
         /// <summary>
         /// base
         /// </summary>
-        public static Token Base => new Token(TokendType.Base);
+        public static Token Base => new Token(TokenType.Base);
 
         /// <summary>
         /// bool
         /// </summary>
-        public static Token Bool => new Token(TokendType.Bool);
+        public static Token Bool => new Token(TokenType.Bool);
 
         /// <summary>
         /// break
         /// </summary>
-        public static Token Break => new Token(TokendType.Break);
+        public static Token Break => new Token(TokenType.Break);
 
         /// <summary>
         /// byte
         /// </summary>
-        public static Token Byte => new Token(TokendType.Byte);
+        public static Token Byte => new Token(TokenType.Byte);
 
         /// <summary>
         /// case
         /// </summary>
-        public static Token Case => new Token(TokendType.Case);
+        public static Token Case => new Token(TokenType.Case);
 
         /// <summary>
         /// catch
         /// </summary>
-        public static Token Catch => new Token(TokendType.Catch);
+        public static Token Catch => new Token(TokenType.Catch);
 
         /// <summary>
         /// char
         /// </summary>
-        public static Token Char => new Token(TokendType.Char);
+        public static Token Char => new Token(TokenType.Char);
 
         /// <summary>
         /// checked
         /// </summary>
-        public static Token Checked => new Token(TokendType.Checked);
+        public static Token Checked => new Token(TokenType.Checked);
 
         /// <summary>
         /// class
         /// </summary>
-        public static Token Class => new Token(TokendType.Class);
+        public static Token Class => new Token(TokenType.Class);
 
         /// <summary>
         /// const
         /// </summary>
-        public static Token Const => new Token(TokendType.Const);
+        public static Token Const => new Token(TokenType.Const);
 
         /// <summary>
         /// continue
         /// </summary>
-        public static Token Continue => new Token(TokendType.Continue);
+        public static Token Continue => new Token(TokenType.Continue);
 
         /// <summary>
         /// decimal
         /// </summary>
-        public static Token Decimal => new Token(TokendType.Decimal);
+        public static Token Decimal => new Token(TokenType.Decimal);
 
         /// <summary>
         /// default
         /// </summary>
-        public static Token Default => new Token(TokendType.Default);
+        public static Token Default => new Token(TokenType.Default);
 
         /// <summary>
         /// delegate
         /// </summary>
-        public static Token Delegate => new Token(TokendType.Delegate);
+        public static Token Delegate => new Token(TokenType.Delegate);
 
         /// <summary>
         /// do
         /// </summary>
-        public static Token Do => new Token(TokendType.Do);
+        public static Token Do => new Token(TokenType.Do);
 
         /// <summary>
         /// double
         /// </summary>
-        public static Token Double => new Token(TokendType.Double);
+        public static Token Double => new Token(TokenType.Double);
 
         /// <summary>
         /// else
         /// </summary>
-        public static Token Else => new Token(TokendType.Else);
+        public static Token Else => new Token(TokenType.Else);
 
         /// <summary>
         /// enum
         /// </summary>
-        public static Token Enum => new Token(TokendType.Enum);
+        public static Token Enum => new Token(TokenType.Enum);
 
         /// <summary>
         /// event
         /// </summary>
-        public static Token Event => new Token(TokendType.Event);
+        public static Token Event => new Token(TokenType.Event);
 
         /// <summary>
         /// explicit
         /// </summary>
-        public static Token Explicit => new Token(TokendType.Explicit);
+        public static Token Explicit => new Token(TokenType.Explicit);
 
         /// <summary>
         /// extern
         /// </summary>
-        public static Token Extern => new Token(TokendType.Extern);
+        public static Token Extern => new Token(TokenType.Extern);
 
         /// <summary>
         /// false
         /// </summary>
-        public static Token False => new Token(TokendType.False);
+        public static Token False => new Token(TokenType.False);
 
         /// <summary>
         /// finally
         /// </summary>
-        public static Token Finally => new Token(TokendType.Finally);
+        public static Token Finally => new Token(TokenType.Finally);
 
         /// <summary>
         /// fixed
         /// </summary>
-        public static Token Fixed => new Token(TokendType.Fixed);
+        public static Token Fixed => new Token(TokenType.Fixed);
 
         /// <summary>
         /// float
         /// </summary>
-        public static Token Float => new Token(TokendType.Float);
+        public static Token Float => new Token(TokenType.Float);
 
         /// <summary>
         /// for
         /// </summary>
-        public static Token For => new Token(TokendType.For);
+        public static Token For => new Token(TokenType.For);
 
         /// <summary>
         /// foreach
         /// </summary>
-        public static Token Foreach => new Token(TokendType.Foreach);
+        public static Token Foreach => new Token(TokenType.Foreach);
 
         /// <summary>
         /// goto
         /// </summary>
-        public static Token Goto => new Token(TokendType.Goto);
+        public static Token Goto => new Token(TokenType.Goto);
 
         /// <summary>
         /// if
         /// </summary>
-        public static Token If => new Token(TokendType.If);
+        public static Token If => new Token(TokenType.If);
 
         /// <summary>
         /// implicit
         /// </summary>
-        public static Token Implicit => new Token(TokendType.Implicit);
+        public static Token Implicit => new Token(TokenType.Implicit);
 
         /// <summary>
         /// in
         /// </summary>
-        public static Token In => new Token(TokendType.In);
+        public static Token In => new Token(TokenType.In);
 
         /// <summary>
         /// int
         /// </summary>
-        public static Token Int => new Token(TokendType.Int);
+        public static Token Int => new Token(TokenType.Int);
 
         /// <summary>
         /// interface
         /// </summary>
-        public static Token Interface => new Token(TokendType.Interface);
+        public static Token Interface => new Token(TokenType.Interface);
 
         /// <summary>
         /// internal
         /// </summary>
-        public static Token Internal => new Token(TokendType.Internal);
+        public static Token Internal => new Token(TokenType.Internal);
 
         /// <summary>
         /// is
         /// </summary>
-        public static Token Is => new Token(TokendType.Is);
+        public static Token Is => new Token(TokenType.Is);
 
         /// <summary>
         /// lock
         /// </summary>
-        public static Token Lock => new Token(TokendType.Lock);
+        public static Token Lock => new Token(TokenType.Lock);
 
         /// <summary>
         /// long
         /// </summary>
-        public static Token Long => new Token(TokendType.Long);
+        public static Token Long => new Token(TokenType.Long);
 
         /// <summary>
         /// namespace
         /// </summary>
-        public static Token Namespace => new Token(TokendType.Namespace);
+        public static Token Namespace => new Token(TokenType.Namespace);
 
         /// <summary>
         /// new
         /// </summary>
-        public static Token New => new Token(TokendType.New);
+        public static Token New => new Token(TokenType.New);
 
         /// <summary>
         /// null
         /// </summary>
-        public static Token Null => new Token(TokendType.Null);
+        public static Token Null => new Token(TokenType.Null);
 
         /// <summary>
         /// object
         /// </summary>
-        public static Token Object => new Token(TokendType.Object);
+        public static Token Object => new Token(TokenType.Object);
 
         /// <summary>
         /// operator
         /// </summary>
-        public static Token Operator => new Token(TokendType.Operator);
+        public static Token Operator => new Token(TokenType.Operator);
 
         /// <summary>
         /// out
         /// </summary>
-        public static Token Out => new Token(TokendType.Out);
+        public static Token Out => new Token(TokenType.Out);
 
         /// <summary>
         /// override
         /// </summary>
-        public static Token Override => new Token(TokendType.Override);
+        public static Token Override => new Token(TokenType.Override);
 
         /// <summary>
         /// params
         /// </summary>
-        public static Token Params => new Token(TokendType.Params);
+        public static Token Params => new Token(TokenType.Params);
 
         /// <summary>
         /// private
         /// </summary>
-        public static Token Private => new Token(TokendType.Private);
+        public static Token Private => new Token(TokenType.Private);
 
         /// <summary>
         /// protected
         /// </summary>
-        public static Token Protected => new Token(TokendType.Protected);
+        public static Token Protected => new Token(TokenType.Protected);
 
         /// <summary>
         /// public
         /// </summary>
-        public static Token Public => new Token(TokendType.Public);
+        public static Token Public => new Token(TokenType.Public);
 
         /// <summary>
         /// readonly
         /// </summary>
-        public static Token Readonly => new Token(TokendType.Readonly);
+        public static Token Readonly => new Token(TokenType.Readonly);
 
         /// <summary>
         /// ref
         /// </summary>
-        public static Token Ref => new Token(TokendType.Ref);
+        public static Token Ref => new Token(TokenType.Ref);
 
         /// <summary>
         /// return
         /// </summary>
-        public static Token Return => new Token(TokendType.Return);
+        public static Token Return => new Token(TokenType.Return);
 
         /// <summary>
         /// sbyte
         /// </summary>
-        public static Token Sbyte => new Token(TokendType.Sbyte);
+        public static Token Sbyte => new Token(TokenType.Sbyte);
 
         /// <summary>
         /// sealed
         /// </summary>
-        public static Token Sealed => new Token(TokendType.Sealed);
+        public static Token Sealed => new Token(TokenType.Sealed);
 
         /// <summary>
         /// short
         /// </summary>
-        public static Token Short => new Token(TokendType.Short);
+        public static Token Short => new Token(TokenType.Short);
 
         /// <summary>
         /// sizeof
         /// </summary>
-        public static Token Sizeof => new Token(TokendType.Sizeof);
+        public static Token Sizeof => new Token(TokenType.Sizeof);
 
         /// <summary>
         /// stackalloc
         /// </summary>
-        public static Token Stackalloc => new Token(TokendType.Stackalloc);
+        public static Token Stackalloc => new Token(TokenType.Stackalloc);
 
         /// <summary>
         /// static
         /// </summary>
-        public static Token Static => new Token(TokendType.Static);
+        public static Token Static => new Token(TokenType.Static);
 
         /// <summary>
         /// string
         /// </summary>
-        public static Token String => new Token(TokendType.String);
+        public static Token String => new Token(TokenType.String);
 
         /// <summary>
         /// struct
         /// </summary>
-        public static Token Struct => new Token(TokendType.Struct);
+        public static Token Struct => new Token(TokenType.Struct);
 
         /// <summary>
         /// switch
         /// </summary>
-        public static Token Switch => new Token(TokendType.Switch);
+        public static Token Switch => new Token(TokenType.Switch);
 
         /// <summary>
         /// this
         /// </summary>
-        public static Token This => new Token(TokendType.This);
+        public static Token This => new Token(TokenType.This);
 
         /// <summary>
         /// throw
         /// </summary>
-        public static Token Throw => new Token(TokendType.Throw);
+        public static Token Throw => new Token(TokenType.Throw);
 
         /// <summary>
         /// true
         /// </summary>
-        public static Token True => new Token(TokendType.True);
+        public static Token True => new Token(TokenType.True);
 
         /// <summary>
         /// try
         /// </summary>
-        public static Token Try => new Token(TokendType.Try);
+        public static Token Try => new Token(TokenType.Try);
 
         /// <summary>
         /// typeof
         /// </summary>
-        public static Token Typeof => new Token(TokendType.Typeof);
+        public static Token Typeof => new Token(TokenType.Typeof);
 
         /// <summary>
         /// uint
         /// </summary>
-        public static Token Uint => new Token(TokendType.Uint);
+        public static Token Uint => new Token(TokenType.Uint);
 
         /// <summary>
         /// ulong
         /// </summary>
-        public static Token Ulong => new Token(TokendType.Ulong);
+        public static Token Ulong => new Token(TokenType.Ulong);
 
         /// <summary>
         /// unchecked
         /// </summary>
-        public static Token Unchecked => new Token(TokendType.Unchecked);
+        public static Token Unchecked => new Token(TokenType.Unchecked);
 
         /// <summary>
         /// unsafe
         /// </summary>
-        public static Token Unsafe => new Token(TokendType.Unsafe);
+        public static Token Unsafe => new Token(TokenType.Unsafe);
 
         /// <summary>
         /// ushort
         /// </summary>
-        public static Token Ushort => new Token(TokendType.Ushort);
+        public static Token Ushort => new Token(TokenType.Ushort);
 
         /// <summary>
         /// using
         /// </summary>
-        public static Token Using => new Token(TokendType.Using);
+        public static Token Using => new Token(TokenType.Using);
 
         /// <summary>
         /// virtual
         /// </summary>
-        public static Token Virtual => new Token(TokendType.Virtual);
+        public static Token Virtual => new Token(TokenType.Virtual);
 
         /// <summary>
         /// void
         /// </summary>
-        public static Token Void => new Token(TokendType.Void);
+        public static Token Void => new Token(TokenType.Void);
 
         /// <summary>
         /// volatile
         /// </summary>
-        public static Token Volatile => new Token(TokendType.Volatile);
+        public static Token Volatile => new Token(TokenType.Volatile);
 
         /// <summary>
         /// while
         /// </summary>
-        public static Token While => new Token(TokendType.While);
+        public static Token While => new Token(TokenType.While);
         #endregion
 
         #region ContextualKeywords
         /// <summary>
         /// add
         /// </summary>
-        public static Token Add => new Token(TokendType.Add);
+        public static Token Add => new Token(TokenType.Add);
 
         /// <summary>
         /// alias
         /// </summary>
-        public static Token Alias => new Token(TokendType.Alias);
+        public static Token Alias => new Token(TokenType.Alias);
 
         /// <summary>
         /// ascending
         /// </summary>
-        public static Token Ascending => new Token(TokendType.Ascending);
+        public static Token Ascending => new Token(TokenType.Ascending);
 
         /// <summary>
         /// async
         /// </summary>
-        public static Token Async => new Token(TokendType.Async);
+        public static Token Async => new Token(TokenType.Async);
 
         /// <summary>
         /// await
         /// </summary>
-        public static Token Await => new Token(TokendType.Await);
+        public static Token Await => new Token(TokenType.Await);
 
         /// <summary>
         /// by
         /// </summary>
-        public static Token By => new Token(TokendType.By);
+        public static Token By => new Token(TokenType.By);
 
         /// <summary>
         /// descending
         /// </summary>
-        public static Token Descending => new Token(TokendType.Descending);
+        public static Token Descending => new Token(TokenType.Descending);
 
         /// <summary>
         /// dynamic
         /// </summary>
-        public static Token Dynamic => new Token(TokendType.Dynamic);
+        public static Token Dynamic => new Token(TokenType.Dynamic);
 
         /// <summary>
         /// equals
         /// </summary>
-        public static Token EqualsKeyword => new Token(TokendType.Equals);
+        public static Token EqualsKeyword => new Token(TokenType.Equals);
 
         /// <summary>
         /// from
         /// </summary>
-        public static Token From => new Token(TokendType.From);
+        public static Token From => new Token(TokenType.From);
 
         /// <summary>
         /// get
         /// </summary>
-        public static Token Get => new Token(TokendType.Get);
+        public static Token Get => new Token(TokenType.Get);
 
         /// <summary>
         /// global
         /// </summary>
-        public static Token Global => new Token(TokendType.Global);
+        public static Token Global => new Token(TokenType.Global);
 
         /// <summary>
         /// group
         /// </summary>
-        public static Token Group => new Token(TokendType.Group);
+        public static Token Group => new Token(TokenType.Group);
 
         /// <summary>
         /// into
         /// </summary>
-        public static Token Into => new Token(TokendType.Into);
+        public static Token Into => new Token(TokenType.Into);
 
         /// <summary>
         /// join
         /// </summary>
-        public static Token Join => new Token(TokendType.Join);
+        public static Token Join => new Token(TokenType.Join);
 
         /// <summary>
         /// let
         /// </summary>
-        public static Token Let => new Token(TokendType.Let);
+        public static Token Let => new Token(TokenType.Let);
 
         /// <summary>
         /// nameof
         /// </summary>
-        public static Token Nameof => new Token(TokendType.Nameof);
+        public static Token Nameof => new Token(TokenType.Nameof);
 
         /// <summary>
         /// on
         /// </summary>
-        public static Token On => new Token(TokendType.On);
+        public static Token On => new Token(TokenType.On);
 
         /// <summary>
         /// orderby
         /// </summary>
-        public static Token Orderby => new Token(TokendType.Orderby);
+        public static Token Orderby => new Token(TokenType.Orderby);
 
         /// <summary>
         /// partial (type)
         /// </summary>
-        public static Token PartialType => new Token(TokendType.PartialType);
+        public static Token PartialType => new Token(TokenType.PartialType);
 
         /// <summary>
         /// partial (method)
         /// </summary>
-        public static Token PartialMethod => new Token(TokendType.PartialMethod);
+        public static Token PartialMethod => new Token(TokenType.PartialMethod);
 
         /// <summary>
         /// remove
         /// </summary>
-        public static Token Remove => new Token(TokendType.Remove);
+        public static Token Remove => new Token(TokenType.Remove);
 
         /// <summary>
         /// select
         /// </summary>
-        public static Token Select => new Token(TokendType.Select);
+        public static Token Select => new Token(TokenType.Select);
 
         /// <summary>
         /// set
         /// </summary>
-        public static Token Set => new Token(TokendType.Set);
+        public static Token Set => new Token(TokenType.Set);
 
         /// <summary>
         /// unmanaged (generic type constraint)
         /// </summary>
-        public static Token UnmanagedGenericTypeConstraint => new Token(TokendType.UnmanagedGenericTypeConstraint);
+        public static Token UnmanagedGenericTypeConstraint => new Token(TokenType.UnmanagedGenericTypeConstraint);
 
         /// <summary>
         /// value
         /// </summary>
-        public static Token Value => new Token(TokendType.Value);
+        public static Token Value => new Token(TokenType.Value);
 
         /// <summary>
         /// var
         /// </summary>
-        public static Token Var => new Token(TokendType.Var);
+        public static Token Var => new Token(TokenType.Var);
 
         /// <summary>
         /// when (filter condition)
         /// </summary>
-        public static Token WhenFilterCondition => new Token(TokendType.WhenFilterCondition);
+        public static Token WhenFilterCondition => new Token(TokenType.WhenFilterCondition);
 
         /// <summary>
         /// when where (generic type constraint)
         /// </summary>
-        public static Token WhereGenericTypeConstraint => new Token(TokendType.WhereGenericTypeConstraint);
+        public static Token WhereGenericTypeConstraint => new Token(TokenType.WhereGenericTypeConstraint);
 
         /// <summary>
         /// where (query clause)
         /// </summary>
-        public static Token WhereQueryClause => new Token(TokendType.WhereQueryClause);
+        public static Token WhereQueryClause => new Token(TokenType.WhereQueryClause);
 
         /// <summary>
         /// yield
         /// </summary>
-        public static Token Yield => new Token(TokendType.Yield);
+        public static Token Yield => new Token(TokenType.Yield);
         #endregion
 
         public bool TryGetAnyString([MaybeNullWhen(false)] out string value)
@@ -952,10 +956,26 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
         }
 
+        public Keyword GetKeyword()
+        {
+            return Keywords[_tokenType];
+        }
+
+        public ContextualKeyword GetContextualKeyword()
+        {
+            return ContextualKeywords[_tokenType];
+        }
+
+        public ASCIIChar GetASCIIChar()
+        {
+            return ASCIIChars[_tokenType];
+        }
+
         public string GetAnyString()
         {
             if (!IsAnyString)
             {
+                // TODO: exception message
                 throw new ArgumentException();
             }
 
@@ -992,735 +1012,16 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             return (_value == other._value) && (_tokenType == other._tokenType);
         }
 
-        internal enum TokendType
+        public override string ToString()
         {
-            #region ASCIIChars
-            /// <summary>
-            /// &nbsp;
-            /// </summary>
-            Space,
-
-            /// <summary>
-            /// !
-            /// </summary>
-            ExclamationMark,
-
-            /// <summary>
-            /// "
-            /// </summary>
-            QuotationMark,
-
-            /// <summary>
-            /// #
-            /// </summary>
-            NumberSign,
-
-            /// <summary>
-            /// $
-            /// </summary>
-            DollarSign,
-
-            /// <summary>
-            /// %
-            /// </summary>
-            PercentSign,
-
-            /// <summary>
-            /// &amp;
-            /// </summary>
-            Ampersand,
-
-            /// <summary>
-            /// '
-            /// </summary>
-            Apostrophe,
-
-            /// <summary>
-            /// (
-            /// </summary>
-            LeftParentheses,
-
-            /// <summary>
-            /// )
-            /// </summary>
-            RightParentheses,
-
-            /// <summary>
-            /// *
-            /// </summary>
-            Asterisk,
-
-            /// <summary>
-            /// +
-            /// </summary>
-            PlusSign,
-
-            /// <summary>
-            /// ,
-            /// </summary>
-            Commma,
-
-            /// <summary>
-            /// -
-            /// </summary>
-            HyphenMinus,
-
-            /// <summary>
-            /// .
-            /// </summary>
-            FullStop,
-
-            /// <summary>
-            /// /
-            /// </summary>
-            Slash,
-
-            /// <summary>
-            /// :
-            /// </summary>
-            Colon,
-
-            /// <summary>
-            /// ;
-            /// </summary>
-            Semicolon,
-
-            /// <summary>
-            /// &lt;
-            /// </summary>
-            LessThanSign,
-
-            /// <summary>
-            /// =
-            /// </summary>
-            EqualSign,
-
-            /// <summary>
-            /// &gt;
-            /// </summary>
-            GreaterThanSign,
-
-            /// <summary>
-            /// ?
-            /// </summary>
-            QuestionMark,
-
-            /// <summary>
-            /// @
-            /// </summary>
-            AtSign,
-
-            /// <summary>
-            /// [
-            /// </summary>
-            LeftSquareBracket,
-
-            /// <summary>
-            /// \
-            /// </summary>
-            Backslash,
-
-            /// <summary>
-            /// ]
-            /// </summary>
-            RightSquareBracket,
-
-            /// <summary>
-            /// ^
-            /// </summary>
-            CircumflexAccent,
-
-            /// <summary>
-            /// _
-            /// </summary>
-            LowLine,
-
-            /// <summary>
-            /// `
-            /// </summary>
-            GraveAccent,
-
-            /// <summary>
-            /// {
-            /// </summary>
-            LeftCurlyBracket,
-
-            /// <summary>
-            /// |
-            /// </summary>
-            VerticalBar,
-
-            /// <summary>
-            /// }
-            /// </summary>
-            RightCurlyBracket,
-
-            /// <summary>
-            /// ~
-            /// </summary>
-            Tilde,
-            #endregion
-
-            #region Separator other than spaces
-            /// <summary>
-            /// End of line
-            /// </summary>
-            EndOfLine,
-
-            /// <summary>
-            /// Indent.
-            /// </summary>
-            Indent,
-            #endregion
-
-            #region Keywords
-            /// <summary>
-            /// abstract
-            /// </summary>
-            Abstract,
-
-            /// <summary>
-            /// as
-            /// </summary>
-            As,
-
-            /// <summary>
-            /// base
-            /// </summary>
-            Base,
-
-            /// <summary>
-            /// bool
-            /// </summary>
-            Bool,
-
-            /// <summary>
-            /// break
-            /// </summary>
-            Break,
-
-            /// <summary>
-            /// byte
-            /// </summary>
-            Byte,
-
-            /// <summary>
-            /// case
-            /// </summary>
-            Case,
-
-            /// <summary>
-            /// catch
-            /// </summary>
-            Catch,
-
-            /// <summary>
-            /// char
-            /// </summary>
-            Char,
-
-            /// <summary>
-            /// checked
-            /// </summary>
-            Checked,
-
-            /// <summary>
-            /// class
-            /// </summary>
-            Class,
-
-            /// <summary>
-            /// const
-            /// </summary>
-            Const,
-
-            /// <summary>
-            /// continue
-            /// </summary>
-            Continue,
-
-            /// <summary>
-            /// decimal
-            /// </summary>
-            Decimal,
-
-            /// <summary>
-            /// default
-            /// </summary>
-            Default,
-
-            /// <summary>
-            /// delegate
-            /// </summary>
-            Delegate,
-
-            /// <summary>
-            /// do
-            /// </summary>
-            Do,
-
-            /// <summary>
-            /// double
-            /// </summary>
-            Double,
-
-            /// <summary>
-            /// else
-            /// </summary>
-            Else,
-
-            /// <summary>
-            /// enum
-            /// </summary>
-            Enum,
-
-            /// <summary>
-            /// event
-            /// </summary>
-            Event,
-
-            /// <summary>
-            /// explicit
-            /// </summary>
-            Explicit,
-
-            /// <summary>
-            /// extern
-            /// </summary>
-            Extern,
-
-            /// <summary>
-            /// false
-            /// </summary>
-            False,
-
-            /// <summary>
-            /// finally
-            /// </summary>
-            Finally,
-
-            /// <summary>
-            /// fixed
-            /// </summary>
-            Fixed,
-
-            /// <summary>
-            /// float
-            /// </summary>
-            Float,
-
-            /// <summary>
-            /// for
-            /// </summary>
-            For,
-
-            /// <summary>
-            /// foreach
-            /// </summary>
-            Foreach,
-
-            /// <summary>
-            /// goto
-            /// </summary>
-            Goto,
-
-            /// <summary>
-            /// if
-            /// </summary>
-            If,
-
-            /// <summary>
-            /// implicit
-            /// </summary>
-            Implicit,
-
-            /// <summary>
-            /// in
-            /// </summary>
-            In,
-
-            /// <summary>
-            /// int
-            /// </summary>
-            Int,
-
-            /// <summary>
-            /// interface
-            /// </summary>
-            Interface,
-
-            /// <summary>
-            /// internal
-            /// </summary>
-            Internal,
-
-            /// <summary>
-            /// is
-            /// </summary>
-            Is,
-
-            /// <summary>
-            /// lock
-            /// </summary>
-            Lock,
-
-            /// <summary>
-            /// long
-            /// </summary>
-            Long,
-
-            /// <summary>
-            /// namespace
-            /// </summary>
-            Namespace,
-
-            /// <summary>
-            /// new
-            /// </summary>
-            New,
-
-            /// <summary>
-            /// null
-            /// </summary>
-            Null,
-
-            /// <summary>
-            /// object
-            /// </summary>
-            Object,
-
-            /// <summary>
-            /// operator
-            /// </summary>
-            Operator,
-
-            /// <summary>
-            /// out
-            /// </summary>
-            Out,
-
-            /// <summary>
-            /// override
-            /// </summary>
-            Override,
-
-            /// <summary>
-            /// params
-            /// </summary>
-            Params,
-
-            /// <summary>
-            /// private
-            /// </summary>
-            Private,
-
-            /// <summary>
-            /// protected
-            /// </summary>
-            Protected,
-
-            /// <summary>
-            /// public
-            /// </summary>
-            Public,
-
-            /// <summary>
-            /// readonly
-            /// </summary>
-            Readonly,
-
-            /// <summary>
-            /// ref
-            /// </summary>
-            Ref,
-
-            /// <summary>
-            /// return
-            /// </summary>
-            Return,
-
-            /// <summary>
-            /// sbyte
-            /// </summary>
-            Sbyte,
-
-            /// <summary>
-            /// sealed
-            /// </summary>
-            Sealed,
-
-            /// <summary>
-            /// short
-            /// </summary>
-            Short,
-
-            /// <summary>
-            /// sizeof
-            /// </summary>
-            Sizeof,
-
-            /// <summary>
-            /// stackalloc
-            /// </summary>
-            Stackalloc,
-
-            /// <summary>
-            /// static
-            /// </summary>
-            Static,
-
-            /// <summary>
-            /// string
-            /// </summary>
-            String,
-
-            /// <summary>
-            /// struct
-            /// </summary>
-            Struct,
-
-            /// <summary>
-            /// switch
-            /// </summary>
-            Switch,
-
-            /// <summary>
-            /// this
-            /// </summary>
-            This,
-
-            /// <summary>
-            /// throw
-            /// </summary>
-            Throw,
-
-            /// <summary>
-            /// true
-            /// </summary>
-            True,
-
-            /// <summary>
-            /// try
-            /// </summary>
-            Try,
-
-            /// <summary>
-            /// typeof
-            /// </summary>
-            Typeof,
-
-            /// <summary>
-            /// uint
-            /// </summary>
-            Uint,
-
-            /// <summary>
-            /// ulong
-            /// </summary>
-            Ulong,
-
-            /// <summary>
-            /// unchecked
-            /// </summary>
-            Unchecked,
-
-            /// <summary>
-            /// unsafe
-            /// </summary>
-            Unsafe,
-
-            /// <summary>
-            /// ushort
-            /// </summary>
-            Ushort,
-
-            /// <summary>
-            /// using
-            /// </summary>
-            Using,
-
-            /// <summary>
-            /// virtual
-            /// </summary>
-            Virtual,
-
-            /// <summary>
-            /// void
-            /// </summary>
-            Void,
-
-            /// <summary>
-            /// volatile
-            /// </summary>
-            Volatile,
-
-            /// <summary>
-            /// while
-            /// </summary>
-            While,
-            #endregion
-
-            #region ContextualKeyword
-            /// <summary>
-            /// add
-            /// </summary>
-            Add,
-
-            /// <summary>
-            /// alias
-            /// </summary>
-            Alias,
-
-            /// <summary>
-            /// ascending
-            /// </summary>
-            Ascending,
-
-            /// <summary>
-            /// async
-            /// </summary>
-            Async,
-
-            /// <summary>
-            /// await
-            /// </summary>
-            Await,
-
-            /// <summary>
-            /// by
-            /// </summary>
-            By,
-
-            /// <summary>
-            /// descending
-            /// </summary>
-            Descending,
-
-            /// <summary>
-            /// dynamic
-            /// </summary>
-            Dynamic,
-
-            /// <summary>
-            /// equals
-            /// </summary>
-            Equals,
-
-            /// <summary>
-            /// from
-            /// </summary>
-            From,
-
-            /// <summary>
-            /// get
-            /// </summary>
-            Get,
-
-            /// <summary>
-            /// global
-            /// </summary>
-            Global,
-
-            /// <summary>
-            /// group
-            /// </summary>
-            Group,
-
-            /// <summary>
-            /// into
-            /// </summary>
-            Into,
-
-            /// <summary>
-            /// join
-            /// </summary>
-            Join,
-
-            /// <summary>
-            /// let
-            /// </summary>
-            Let,
-
-            /// <summary>
-            /// nameof
-            /// </summary>
-            Nameof,
-
-            /// <summary>
-            /// on
-            /// </summary>
-            On,
-
-            /// <summary>
-            /// orderby
-            /// </summary>
-            Orderby,
-
-            /// <summary>
-            /// partial (type)
-            /// </summary>
-            PartialType,
-
-            /// <summary>
-            /// partial (method)
-            /// </summary>
-            PartialMethod,
-
-            /// <summary>
-            /// remove
-            /// </summary>
-            Remove,
-
-            /// <summary>
-            /// select
-            /// </summary>
-            Select,
-
-            /// <summary>
-            /// set
-            /// </summary>
-            Set,
-
-            /// <summary>
-            /// unmanaged (generic type constraint)
-            /// </summary>
-            UnmanagedGenericTypeConstraint,
-
-            /// <summary>
-            /// value
-            /// </summary>
-            Value,
-
-            /// <summary>
-            /// var
-            /// </summary>
-            Var,
-
-            /// <summary>
-            /// when (filter condition)
-            /// </summary>
-            WhenFilterCondition,
-
-            /// <summary>
-            /// when where (generic type constraint)
-            /// </summary>
-            WhereGenericTypeConstraint,
-
-            /// <summary>
-            /// where (query clause)
-            /// </summary>
-            WhereQueryClause,
-
-            /// <summary>
-            /// yield
-            /// </summary>
-            Yield,
-            #endregion
-
-            /// <summary>
-            /// any string.
-            /// </summary>
-            AnyString
+            if (_tokenType == TokenType.AnyString)
+            {
+                return $"{_tokenType}: {GetAnyString()}";
+            }
+            else
+            {
+                return $"{_tokenType}";
+            }
         }
     }
 }

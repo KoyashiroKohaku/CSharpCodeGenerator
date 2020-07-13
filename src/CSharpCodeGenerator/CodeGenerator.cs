@@ -15,12 +15,12 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
         public static string Generate(ClassSetting classSetting, GenerateOption generateOption)
         {
-            if (classSetting == null)
+            if (classSetting is null)
             {
                 throw new ArgumentNullException(nameof(classSetting));
             }
 
-            if (generateOption == null)
+            if (generateOption is null)
             {
                 throw new ArgumentNullException(nameof(generateOption));
             }
@@ -132,9 +132,31 @@ namespace KoyashiroKohaku.CSharpCodeGenerator
 
                         classCodeBuilder.Indent();
 
-                        classCodeBuilder.AppendIndent().Append("get => ").Append(fieldName).Append(";").AppendLine();
+                        classCodeBuilder
+                            .AppendIndent()
+                            .Append(TokenType.Get)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.GreaterThanSign)
+                            .Append(TokenType.Space)
+                            .Append(fieldName)
+                            .Append(TokenType.Semicolon)
+                            .AppendLine();
 
-                        classCodeBuilder.AppendIndent().Append("set => value = ").Append(fieldName).Append(";").AppendLine();
+                        classCodeBuilder
+                            .AppendIndent()
+                            .Append(TokenType.Set)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.GreaterThanSign)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.Value)
+                            .Append(TokenType.Space)
+                            .Append(TokenType.EqualSign)
+                            .Append(TokenType.Space)
+                            .Append(fieldName)
+                            .Append(TokenType.Semicolon)
+                            .AppendLine();
 
                         classCodeBuilder.Unindent();
 
