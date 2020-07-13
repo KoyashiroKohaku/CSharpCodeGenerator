@@ -1,7 +1,7 @@
 using KoyashiroKohaku.CSharpCodeGenerator.Builders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator.Test
+namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Builders
 {
     [TestClass]
     public class CodeBuilderTest

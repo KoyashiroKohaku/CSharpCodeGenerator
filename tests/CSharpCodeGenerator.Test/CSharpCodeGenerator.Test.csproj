@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\src\CSharpCodeGenerator\CSharpCodeGenerator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Builders\" />
+  </ItemGroup>
+
 </Project>

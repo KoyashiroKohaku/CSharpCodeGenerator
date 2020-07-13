@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 
-namespace KoyashiroKohaku.CSharpCodeGenerator.Test
+namespace KoyashiroKohaku.CSharpCodeGenerator.Test.Helpers
 {
     [TestClass]
     public class ContextualKeywordHelperTest
