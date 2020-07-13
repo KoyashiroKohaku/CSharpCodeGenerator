@@ -1,9 +1,7 @@
-using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 
 namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 {
@@ -958,6 +956,21 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
             }
         }
 
+        public Keyword GetKeyword()
+        {
+            return Keywords[_tokenType];
+        }
+
+        public ContextualKeyword GetContextualKeyword()
+        {
+            return ContextualKeywords[_tokenType];
+        }
+
+        public ASCIIChar GetASCIIChar()
+        {
+            return ASCIIChars[_tokenType];
+        }
+
         public string GetAnyString()
         {
             if (!IsAnyString)
@@ -1001,22 +1014,14 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
 
         public override string ToString()
         {
-            if (IsKeyword)
+            if (_tokenType == TokenType.AnyString)
             {
-                return KeywordHelper.GetValue(Keywords[_tokenType]);
+                return $"{_tokenType}: {GetAnyString()}";
             }
-
-            if (IsContextualKeyword)
+            else
             {
-                return ContextualKeywordHelper.GetValue(ContextualKeywords[_tokenType]);
+                return $"{_tokenType}";
             }
-
-            if (IsASCIIChar)
-            {
-                return ASCIICharHelper.GetValue(ASCIIChars[_tokenType]).ToString(new CultureInfo("en-US"));
-            }
-
-            return GetAnyString();
         }
     }
 }

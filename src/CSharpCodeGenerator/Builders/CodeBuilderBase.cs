@@ -1,3 +1,4 @@
+using KoyashiroKohaku.CSharpCodeGenerator.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -187,14 +188,37 @@ namespace KoyashiroKohaku.CSharpCodeGenerator.Builders
                 if (token.IsEndOfLine)
                 {
                     builder.Append(CurrentEndOfLineString);
+                    continue;
                 }
-                else if (token.IsIndent)
+
+                if (token.IsIndent)
                 {
                     builder.Append(CurrentIndentString);
+                    continue;
                 }
-                else
+
+                if (token.IsKeyword)
                 {
-                    builder.Append(token.ToString());
+                    builder.Append(KeywordHelper.GetValue(token.GetKeyword()));
+                    continue;
+                }
+
+                if (token.IsContextualKeyword)
+                {
+                    builder.Append(ContextualKeywordHelper.GetValue(token.GetContextualKeyword()));
+                    continue;
+                }
+
+                if (token.IsASCIIChar)
+                {
+                    builder.Append(ASCIICharHelper.GetValue(token.GetASCIIChar()));
+                    continue;
+                }
+
+                if (token.IsAnyString)
+                {
+                    builder.Append(token.GetAnyString());
+                    continue;
                 }
             }
 
